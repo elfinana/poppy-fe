@@ -1,32 +1,75 @@
-# Turborepo react-native starter
+# **Poppy(FE)**
+![image](https://github.com/user-attachments/assets/1e918b9b-322e-4357-86e3-defa1d9e2e27)
 
-This is an official starter Turborepo.
+### **프로젝트 설명**
+>*"오늘은 어디서 Pop? Poppy가 알려줄게!"*
 
-## Using this example
+다양한 팝업 스토어의 소개와 예약 기능을 제공하는 모바일 앱 Poppy의 프론트 엔드입니다!
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest -e with-react-native-web
+## **목차**
+1. [프로젝트 개요](#프로젝트-개요)
+2. [기술 스택](#기술-스택)
+3. [설치 및 실행 방법](#설치-및-실행-방법)
+4. [팀 구성원](#팀-구성원)
+5. [라이선스](#라이선스)
+
+---
+
+## **프로젝트 개요**
+- 팝업 스토어 조회 기능  
+- 팝업 스토어 예약 기능
+- 팝업 스토어 추천 기능
+- 팝업 스토어 리뷰 기능
+- 기타 등등
+
+---
+
+## **기술 스택**
+프로젝트에서 사용한 주요 기술을 나열합니다.  
+- **프론트엔드**: React Native, Next.js
+- **CSS**: SCSS, Tailwind, Styled Component
+- **상태 관리**: Redux, Zustand
+- **기타**: Turbo, Expo, Vercel, Jira, Github Actions
+- **패키지 메니저**: yarn
+
+---
+
+## **설치 및 실행 방법**
+
+### **사전 요구사항**
+- Node.js (v18 이상)
+- yarn
+
+### **설치 과정**
+```bash
+# 프로젝트 클론
+git clone https://github.com/Pop-py/poppy-fe.git
+
+# 디렉토리 이동
+cd poppy-fe
+
+# 의존성 설치
+yarn install
+
+# 개발 서버 실행
+yarn dev
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## **팀 구성원**
+**디자이너**
+- 신민경
 
-### Apps and Packages
+**개발자**
+- 호범
+- 오세원
+- 이동규
 
-- `native`: a [react-native](https://reactnative.dev/) app built with [expo](https://docs.expo.dev/)
-- `web`: a [Next.js](https://nextjs.org/) app built with [react-native-web](https://necolas.github.io/react-native-web/)
-- `@repo/ui`: a stub [react-native](https://reactnative.dev/) component library shared by both `web` and `native` applications
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+---
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [Expo](https://docs.expo.dev/) for native development
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Prettier](https://prettier.io) for code formatting
+## **라이선스**
+이 프로젝트는 MIT 라이선스를 따릅니다.  
+[LICENSE 파일](./LICENSE)을 참고하세요.
