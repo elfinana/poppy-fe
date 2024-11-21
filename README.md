@@ -1,5 +1,5 @@
 # **Poppy(FE)**
-![image](https://github.com/user-attachments/assets/1e918b9b-322e-4357-86e3-defa1d9e2e27)
+![image](https://cdn.discordapp.com/attachments/1303232654111674409/1309082679848861736/Poppy.png?ex=674049c0&is=673ef840&hm=71b1f5fd9b8267160e9139a3d8f996010e8d52cfbd504598c455e292845a1a60&)
 
 ### **프로젝트 설명**
 >*"오늘은 어디서 Pop? Poppy가 알려줄게!"*
