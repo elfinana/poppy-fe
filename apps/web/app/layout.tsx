@@ -1,3 +1,4 @@
+import '../styles/globals.css';
 import { HomeLayout } from "../src/widgets/export";
 
 export default function RootLayout({
