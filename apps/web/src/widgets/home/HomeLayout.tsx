@@ -1,3 +1,7 @@
-export function HomeLayout() {
-  return <div>HomeLayout</div>;
+export function HomeLayout({ children }: { children: React.ReactNode }) {
+	return (
+		<html lang="en">
+      <body>{children}</body>
+		</html>
+	);
 }
