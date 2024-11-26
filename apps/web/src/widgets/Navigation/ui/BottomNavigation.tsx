@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/src/shared/components/ui/button';
 import { Home, MyPage, Plan, Search } from '@/public/index';
 
 const navArr = [
