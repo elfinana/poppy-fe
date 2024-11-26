@@ -1,9 +1,10 @@
-"use client";
-
-import { Home } from "../src/pages/export";
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function page() {
   return (
-    <Home />
+    <Button>
+      <Link href="/design">Go to Design</Link>
+    </Button>
   );
 }
