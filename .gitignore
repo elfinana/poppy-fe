@@ -38,3 +38,7 @@ yarn-error.log*
 
 # SystemDrive
 apps/native/%SystemDrive%
+
+# yarn.lock
+
+yarn.lock
