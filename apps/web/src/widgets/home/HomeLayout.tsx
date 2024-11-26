@@ -1,7 +1,9 @@
 export function HomeLayout({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang="en">
-      <body>{children}</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body className="flex flex-col px-4 m-auto h-screen w-mobile">
+        {children}
+      </body>
+    </html>
+  );
 }
