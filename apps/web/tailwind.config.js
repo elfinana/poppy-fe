@@ -143,6 +143,12 @@ module.exports = {
       },
       width: {
         mobile: '375px',
+        343: '343px',
+        300: '300px',
+        240: '240px',
+      },
+      height: {
+        primaryButton: '48px',
       },
     },
   },
