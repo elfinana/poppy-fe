@@ -148,7 +148,7 @@ module.exports = {
         240: '240px',
       },
       height: {
-        primaryButton: '48px',
+        48: '48px',
       },
     },
   },
