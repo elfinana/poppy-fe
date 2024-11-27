@@ -8,48 +8,42 @@ module.exports = {
   ],
   theme: {
     extend: {
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
       colors: {
         white: '#ffffff',
-        gray50: '#f7f8fa',
-        gray100: '#ebedf4',
-        gray200: '#d7d8db',
-        gray300: '#c0c2c5',
-        gray400: '#a1a4a9',
-        gray500: '#898c8e',
-        gray600: '#78797c',
-        gray700: '#616264',
-        gray800: '#424242',
-        gray900: '#212121',
+        gray: {
+          50: '#f7f8fa',
+          100: '#ebedf4',
+          200: '#d7d8db',
+          300: '#c0c2c5',
+          400: '#a1a4a9',
+          500: '#898c8e',
+          600: '#78797c',
+          700: '#616264',
+          800: '#424242',
+          900: '#212121',
+        },
         black: '#000000',
-        blue100: '#f3f6ff',
-        blue200: '#e0e8ff',
-        blue300: '#b3c6fc',
-        blue400: '#9bb6ff',
-        blue500: '#7c9df8',
-        blue600: '#698df3',
-        blue700: '#5885fc',
-        blue800: '#5c7add',
-        purple500: '#b99af7', // use 90% of opacity
-        purple600: '#b199e2',
-        purple700: '#9b7cd9',
+        blue: {
+          100: '#f3f6ff',
+          200: '#e0e8ff',
+          300: '#b3c6fc',
+          400: '#9bb6ff',
+          500: '#7c9df8',
+          600: '#698df3',
+          700: '#5885fc',
+          800: '#5c7add',
+        },
+        purple: {
+          500: '#b99af7', // use 90% of opacity
+          600: '#b199e2',
+          700: '#9b7cd9',
+        },
         yellow: '#faca60',
         warning: '#eb535d',
         informative: '#5599ff',
         background: 'hsl(var(--background))', // required
         foreground: 'hsl(var(--foreground))', // required
         border: 'hsl(var(--border))', // required
-        chart: {
-          1: 'hsl(var(--chart-1))',
-          2: 'hsl(var(--chart-2))',
-          3: 'hsl(var(--chart-3))',
-          4: 'hsl(var(--chart-4))',
-          5: 'hsl(var(--chart-5))',
-        },
       },
       fontSize: {
         h1: [
@@ -143,6 +137,9 @@ module.exports = {
             fontWeight: '500',
           },
         ],
+      },
+      borderRadius: {
+        DEFAULT: '8px',
       },
       width: {
         mobile: '375px',
