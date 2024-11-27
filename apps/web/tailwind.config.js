@@ -40,9 +40,9 @@ module.exports = {
         yellow: '#faca60',
         warning: '#eb535d',
         informative: '#5599ff',
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))', // required
+        foreground: 'hsl(var(--foreground))', // required
+        border: 'hsl(var(--border))', // required
         chart: {
           1: 'hsl(var(--chart-1))',
           2: 'hsl(var(--chart-2))',
