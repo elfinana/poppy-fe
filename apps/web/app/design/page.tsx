@@ -1,8 +1,8 @@
-import BottomNavigation from "@/src/widgets/Navigation/ui/BottomNavigation";
-import React from "react";
+import { DatePicker } from '@/src/shared';
+import React from 'react';
 
 const page = () => {
-  return <BottomNavigation />;
+  return <DatePicker />;
 };
 
 export default page;
