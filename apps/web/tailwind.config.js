@@ -150,6 +150,9 @@ module.exports = {
       height: {
         48: '48px',
       },
+      fontFamily: {
+        pretendard: ['var(--font-pretendard)'],
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
