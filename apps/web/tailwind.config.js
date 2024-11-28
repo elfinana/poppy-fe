@@ -9,42 +9,72 @@ module.exports = {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
       colors: {
-        white: '#ffffff',
-        gray: {
-          50: '#f7f8fa',
-          100: '#ebedf4',
-          200: '#d7d8db',
-          300: '#c0c2c5',
-          400: '#a1a4a9',
-          500: '#898c8e',
-          600: '#78797c',
-          700: '#616264',
-          800: '#424242',
-          900: '#212121',
+        blue100: '#F3F6FF',
+        blue300: '#B3C6FC',
+        blue400: '#7C9DF8',
+        blue500: '#698DF3',
+        blue600: '#698DF3',
+        blue700: '#5885FC',
+        blue800: '#5C7ADD',
+        gray50: '#F7F8FA',
+        gray100: '#EBEDF4',
+        gray200: '#DBDFE8',
+        gray300: '#C1C5CD',
+        gray400: '#A3A8B2',
+        gray500: '#8B9097',
+        gray600: '#787B85',
+        gray700: '#646670',
+        gray800: '#4A4D51',
+        gray900: '#212121',
+        red: '#EB535D',
+        blue: '#5599FF',
+        purple: '#B99AF790',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
-        black: '#000000',
-        blue: {
-          100: '#f3f6ff',
-          200: '#e0e8ff',
-          300: '#b3c6fc',
-          400: '#9bb6ff',
-          500: '#7c9df8',
-          600: '#698df3',
-          700: '#5885fc',
-          800: '#5c7add',
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
-        purple: {
-          500: '#b99af7', // use 90% of opacity
-          600: '#b199e2',
-          700: '#9b7cd9',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
-        yellow: '#faca60',
-        warning: '#eb535d',
-        informative: '#5599ff',
-        background: 'hsl(var(--background))', // required
-        foreground: 'hsl(var(--foreground))', // required
-        border: 'hsl(var(--border))', // required
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        chart: {
+          1: 'hsl(var(--chart-1))',
+          2: 'hsl(var(--chart-2))',
+          3: 'hsl(var(--chart-3))',
+          4: 'hsl(var(--chart-4))',
+          5: 'hsl(var(--chart-5))',
+        },
       },
       fontSize: {
         h1: [
@@ -76,7 +106,7 @@ module.exports = {
           },
         ],
         b1: [
-          '15px',
+          '14px',
           {
             lineHeight: '20px',
             fontWeight: '500',
@@ -135,21 +165,12 @@ module.exports = {
           '11px',
           {
             lineHeight: '14px',
-            fontWeight: '500',
+            fontWeight: '600',
           },
         ],
       },
-      borderRadius: {
-        DEFAULT: '8px',
-      },
       width: {
         mobile: '375px',
-        343: '343px',
-        300: '300px',
-        240: '240px',
-      },
-      height: {
-        48: '48px',
       },
     },
   },
