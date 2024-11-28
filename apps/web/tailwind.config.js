@@ -138,17 +138,33 @@ module.exports = {
           },
         ],
       },
+      borderWidth: {
+        DEFAULT: '1px',
+        '.5': '0.5px',
+      },
       borderRadius: {
         DEFAULT: '8px',
+        20: '20px',
+        4: '4px',
       },
       width: {
         mobile: '375px',
         343: '343px',
         300: '300px',
         240: '240px',
+        95: '95px',
       },
       height: {
         48: '48px',
+        32: '32px',
+        24: '24px',
+      },
+      padding: {
+        14: '14px',
+        10: '10px',
+        8: '8px',
+        5: '5px',
+        4: '4px',
       },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],
