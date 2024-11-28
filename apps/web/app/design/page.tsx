@@ -1,8 +1,8 @@
-import { DatePicker } from '@/src/shared';
+import { PlanSheet } from '@/src/shared';
 import React from 'react';
 
 const page = () => {
-  return <DatePicker />;
+  return <PlanSheet />;
 };
 
 export default page;
