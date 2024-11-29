@@ -21,6 +21,7 @@ const WebViewScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginVertical: 30, // 위아래 마진 추가
   },
   webview: {
     flex: 1,
