@@ -3,6 +3,10 @@ export { Button, buttonVariants } from './button';
 export { PrimaryButton } from './buttons/PrimaryButton';
 export { SecondaryButton } from './buttons/SecondaryButton';
 export { SecondaryXSButton } from './buttons/SecondaryXSButton';
+export { TextButton } from './buttons/TextButton';
+export { FilterIconButton } from './buttons/FilterIconButton';
+export { FocusIconButton } from './buttons/FocusIconButton';
+export { ToggleButton } from './buttons/ToggleButton';
 
 export { Calendar } from './calendar';
 export { DatePicker } from './datePicker';

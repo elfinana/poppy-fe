@@ -153,18 +153,35 @@ module.exports = {
         300: '300px',
         240: '240px',
         95: '95px',
+        56: '56px',
+        40: '40px',
+        32: '32px',
+        26: '26px',
       },
       height: {
         48: '48px',
+        40: '40px',
         32: '32px',
+        28: '28px',
+        26: '26px',
         24: '24px',
       },
       padding: {
         14: '14px',
         10: '10px',
         8: '8px',
+        6: '6px',
         5: '5px',
         4: '4px',
+      },
+      margin: {
+        4: '4px',
+      },
+      boxShadow: {
+        '16dp': '0px 4px 30px -10px rgba(0, 0, 0, 0.25)',
+      },
+      translate: {
+        25: '25px',
       },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],

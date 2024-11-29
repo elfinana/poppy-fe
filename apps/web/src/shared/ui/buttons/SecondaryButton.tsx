@@ -10,7 +10,7 @@ const buttonVariants = cva('inline-flex items-center justify-center', {
   variants: {
     variant: {
       default: 'bg-white border border-blue-300 text-blue-500 hover:bg-blue-100 active:bg-blue-400 active:text-white',
-      disabled: 'bg-white border border-gray-200 text-gray-300',
+      disabled: 'bg-white border border-gray-200 text-gray-300 cursor-not-allowed',
     },
     size: {
       md: 'h-48 w-95 px-10 py-14 rounded text-h3',
