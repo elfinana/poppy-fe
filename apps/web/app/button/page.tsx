@@ -164,14 +164,8 @@ const page = (props: Props) => {
             <td className={tdStyle}>
               <ToggleButton />
             </td>
-            <td className={tdStyle}>
+            <td className={`${tdStyle} justify-items-center`}>
               <CheckboxButton />
-            </td>
-            <td className={tdStyle}>
-              <CheckboxButton />
-            </td>
-            <td className={tdStyle}>
-              <Checkbox />
             </td>
           </tr>
         </tbody>
