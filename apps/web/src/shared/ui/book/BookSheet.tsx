@@ -2,11 +2,21 @@ import React from 'react';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './sheet';
 import { DatePicker } from './datePicker';
 import { SheetLayout } from './SheetLayout';
-import { Button } from './button';
+import { Button } from '../button';
+import { FormData, Select, Selectable } from '../../lib/types';
+import { TimeList } from './TimeList';
+import { CountVisitors } from './CountVisitors';
 
-type Props = {};
+type Props = {
+  formData: FormData;
+  onSelect: Select;
+  selectable: Selectable;
+};
 
-export const PlanSheet = (props: Props) => {
+export const BookSheet = (props: Props) => {
+  const { formData, onSelect, selectable } = props;
+  console.log(formData);
+
   return (
     <Sheet>
       <SheetTrigger>예약하기</SheetTrigger>
@@ -16,11 +26,19 @@ export const PlanSheet = (props: Props) => {
             <div className="mx-auto w-10 h-1 mt-2.5 mb-4 bg-gray-100 rounded-xl" />
             <SheetTitle>예약 정보</SheetTitle>
             <SheetDescription className="px-2 pt-6 pb-5">
-              <DatePicker />
+              <DatePicker selectedDate={formData.date} onSelect={onSelect.date} />
             </SheetDescription>
-            <Button className="p-0 w-full h-11 text-gray-700 bg-gray-50 text-b3_com" variant={'default'}>
-              날짜를 선택해주세요.
-            </Button>
+            {!selectable.time && (
+              <Button className="p-0 w-full h-11 text-gray-700 bg-gray-50 text-b3_com" variant={'default'}>
+                날짜를 선택해주세요.
+              </Button>
+            )}
+            {selectable.time && (
+              <div className="flex flex-col">
+                <TimeList />
+                <CountVisitors />
+              </div>
+            )}
             {/* 높이에 따라 마진 오토 적용해야 됌 */}
             <div className="flex gap-2 py-2 mt-[110px]">
               <Button className="px-[26.5px] py-3.5 h-11 text-gray-300 bg-white border-[1px] border-gray-200 rounded-xl text-b3_com">
