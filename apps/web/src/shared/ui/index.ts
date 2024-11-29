@@ -7,6 +7,8 @@ export { TextButton } from './buttons/TextButton';
 export { FilterIconButton } from './buttons/FilterIconButton';
 export { FocusIconButton } from './buttons/FocusIconButton';
 export { ToggleButton } from './buttons/ToggleButton';
+export { LikeIconButton } from './buttons/LikeIconButton';
+export { CheckboxButton } from './buttons/CheckboxButton';
 
 export { Calendar } from './calendar';
 export { DatePicker } from './datePicker';

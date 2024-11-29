@@ -157,6 +157,8 @@ module.exports = {
         40: '40px',
         32: '32px',
         26: '26px',
+        24: '24px',
+        20: '20px',
       },
       height: {
         48: '48px',
@@ -165,6 +167,7 @@ module.exports = {
         28: '28px',
         26: '26px',
         24: '24px',
+        20: '20px',
       },
       padding: {
         14: '14px',
@@ -176,6 +179,7 @@ module.exports = {
       },
       margin: {
         4: '4px',
+        2: '2px',
       },
       boxShadow: {
         '16dp': '0px 4px 30px -10px rgba(0, 0, 0, 0.25)',

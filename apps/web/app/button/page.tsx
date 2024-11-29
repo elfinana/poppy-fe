@@ -1,4 +1,3 @@
-import { Plan } from '@/public';
 import {
   PrimaryButton,
   SecondaryButton,
@@ -7,15 +6,17 @@ import {
   FilterIconButton,
   FocusIconButton,
   ToggleButton,
+  LikeIconButton,
+  CheckboxButton,
 } from '@/src/shared';
-import { LikeIconButton } from '@/src/shared/ui/buttons/LikeIconButton';
+import { Checkbox } from '@/src/shared/ui/checkbox';
 import React from 'react';
 
 type Props = {};
 
 const tdStyle = 'p-8 text-center';
 
-const Page = (props: Props) => {
+const page = (props: Props) => {
   return (
     <div className="bg-gray-50 border border-gray-200 rounded p-8">
       <table className="table-auto">
@@ -163,6 +164,15 @@ const Page = (props: Props) => {
             <td className={tdStyle}>
               <ToggleButton />
             </td>
+            <td className={tdStyle}>
+              <CheckboxButton />
+            </td>
+            <td className={tdStyle}>
+              <CheckboxButton />
+            </td>
+            <td className={tdStyle}>
+              <Checkbox />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -170,4 +180,4 @@ const Page = (props: Props) => {
   );
 };
 
-export default Page;
+export default page;

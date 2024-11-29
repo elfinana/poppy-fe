@@ -15,4 +15,5 @@ import FocusActive from './buttons/focusActive.svg';
 import FocusInactive from './buttons/focusInactive.svg';
 import LikeActive from './buttons/likeActive.svg';
 import LikeInactive from './buttons/likeInactive.svg';
-export { FilterActive, FilterInactive, FocusActive, FocusInactive, LikeActive, LikeInactive };
+import Check from './buttons/check.svg';
+export { FilterActive, FilterInactive, FocusActive, FocusInactive, LikeActive, LikeInactive, Check };
