@@ -155,5 +155,6 @@ module.exports = {
       },
     },
   },
+  safelist: ['w-[160px]', 'w-[168px]', 'w-[192px]'],
   plugins: [require('tailwindcss-animate')],
 };
