@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '../shadcn/sheet';
 import { DatePicker } from './datePicker';
 import { SheetLayout } from './SheetLayout';
 import { Button } from '../button';
