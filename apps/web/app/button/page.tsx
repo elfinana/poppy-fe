@@ -8,6 +8,7 @@ import {
   ToggleButton,
   LikeIconButton,
   CheckboxButton,
+  DropdownButton,
 } from '@/src/shared';
 import { Checkbox } from '@/src/shared/ui/checkbox';
 import React from 'react';
@@ -162,10 +163,25 @@ const page = (props: Props) => {
           <tr>
             <td className={tdStyle}>Active</td>
             <td className={tdStyle}>
+              <ToggleButton checked={true} />
+            </td>
+            <td className={`${tdStyle} justify-items-center`}>
+              <CheckboxButton checked={true} />
+            </td>
+            <td className={tdStyle}>
+              <DropdownButton value="11.21(목)" variant="active" />
+            </td>
+          </tr>
+          <tr>
+            <td className={tdStyle}>Inactive</td>
+            <td className={tdStyle}>
               <ToggleButton />
             </td>
             <td className={`${tdStyle} justify-items-center`}>
               <CheckboxButton />
+            </td>
+            <td className={tdStyle}>
+              <DropdownButton value="날짜" variant="inactive" />
             </td>
           </tr>
         </tbody>
