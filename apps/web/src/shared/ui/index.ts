@@ -12,6 +12,10 @@ export { CheckboxButton } from './buttons/CheckboxButton';
 export { DropdownButton } from './buttons/DropdownButton';
 export { RadioGroup, RadioGroupItem } from './buttons/RadioButton';
 
+// Labels
+export { DateLabel } from './labels/DateLabel';
+export { StatusLabel } from './labels/StatusLabel';
+
 export { Calendar } from './calendar';
 export { DatePicker } from './datePicker';
 export { ItemCard } from './ItemCard';

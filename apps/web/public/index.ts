@@ -33,3 +33,7 @@ export {
   Radio20Active,
   Radio16Active,
 };
+
+// Labels
+import ClockOutlined from './labels/clockOutlined.svg';
+export { ClockOutlined };
