@@ -34,6 +34,7 @@ module.exports = {
           800: '#5c7add',
         },
         purple: {
+          100: '#faf7ff',
           500: '#b99af7', // use 90% of opacity
           600: '#b199e2',
           700: '#9b7cd9',
