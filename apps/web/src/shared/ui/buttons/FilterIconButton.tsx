@@ -14,6 +14,9 @@ const buttonVariants = cva('inline-flex items-center justify-center w-32 h-32 bo
       inactive: 'bg-white text-gray-400 border-gray-200',
     },
   },
+  defaultVariants: {
+    variant: 'inactive',
+  },
 });
 
 export interface ButtonProps

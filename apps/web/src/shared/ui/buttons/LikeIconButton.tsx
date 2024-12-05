@@ -16,6 +16,9 @@ const buttonVariants = cva(
         inactive: 'bg-white text-gray-400',
       },
     },
+    defaultVariants: {
+      variant: 'inactive',
+    },
   },
 );
 

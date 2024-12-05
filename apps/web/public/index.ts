@@ -18,6 +18,8 @@ import LikeInactive from './buttons/likeInactive.svg';
 import Check from './buttons/check.svg';
 import DropdownActive from './buttons/dropdownActive.svg';
 import DropdownInactive from './buttons/dropdownInactive.svg';
+import Radio20Active from './buttons/radio20Active.svg';
+import Radio16Active from './buttons/radio16Active.svg';
 export {
   FilterActive,
   FilterInactive,
@@ -28,4 +30,6 @@ export {
   Check,
   DropdownActive,
   DropdownInactive,
+  Radio20Active,
+  Radio16Active,
 };

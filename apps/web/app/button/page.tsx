@@ -9,6 +9,8 @@ import {
   LikeIconButton,
   CheckboxButton,
   DropdownButton,
+  RadioGroup,
+  RadioGroupItem,
 } from '@/src/shared';
 import { Checkbox } from '@/src/shared/ui/checkbox';
 import React from 'react';
@@ -171,6 +173,16 @@ const page = (props: Props) => {
             <td className={tdStyle}>
               <DropdownButton value="11.21(목)" variant="active" />
             </td>
+            <td className={`${tdStyle} justify-items-center`}>
+              <RadioGroup>
+                <RadioGroupItem value="prop1" size="sm" checked />
+              </RadioGroup>
+            </td>
+            <td className={`${tdStyle} justify-items-center`}>
+              <RadioGroup>
+                <RadioGroupItem value="prop1" size="lg" checked />
+              </RadioGroup>
+            </td>
           </tr>
           <tr>
             <td className={tdStyle}>Inactive</td>
@@ -182,6 +194,16 @@ const page = (props: Props) => {
             </td>
             <td className={tdStyle}>
               <DropdownButton value="날짜" variant="inactive" />
+            </td>
+            <td className={`${tdStyle} justify-items-center`}>
+              <RadioGroup>
+                <RadioGroupItem value="prop2" size="sm" />
+              </RadioGroup>
+            </td>
+            <td className={`${tdStyle} justify-items-center`}>
+              <RadioGroup>
+                <RadioGroupItem value="prop2" size="lg" />
+              </RadioGroup>
             </td>
           </tr>
         </tbody>

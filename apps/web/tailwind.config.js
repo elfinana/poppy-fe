@@ -141,6 +141,7 @@ module.exports = {
       borderWidth: {
         DEFAULT: '1px',
         '.5': '0.5px',
+        1.5: '1.5px',
       },
       borderRadius: {
         DEFAULT: '8px',
@@ -159,6 +160,7 @@ module.exports = {
         26: '26px',
         24: '24px',
         20: '20px',
+        16: '16px',
       },
       height: {
         48: '48px',
@@ -168,6 +170,7 @@ module.exports = {
         26: '26px',
         24: '24px',
         20: '20px',
+        16: '16px',
       },
       padding: {
         14: '14px',

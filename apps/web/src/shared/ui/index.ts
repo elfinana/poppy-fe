@@ -10,6 +10,7 @@ export { ToggleButton } from './buttons/ToggleButton';
 export { LikeIconButton } from './buttons/LikeIconButton';
 export { CheckboxButton } from './buttons/CheckboxButton';
 export { DropdownButton } from './buttons/DropdownButton';
+export { RadioGroup, RadioGroupItem } from './buttons/RadioButton';
 
 export { Calendar } from './calendar';
 export { DatePicker } from './datePicker';
