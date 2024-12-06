@@ -6,9 +6,10 @@ type Props = {
   width?: number;
   height?: number;
   className?: string;
+  onClick?: () => void;
 };
 
-export const Icon = ({ className, icon, width = 16, height = 16 }: Props) => {
+export const Icon = ({ className, icon, width = 16, height = 16, onClick }: Props) => {
   return (
     <>
       <span
@@ -18,6 +19,7 @@ export const Icon = ({ className, icon, width = 16, height = 16 }: Props) => {
           height: `${height}px`,
           background: `url('/icons/${icon}.svg')`,
         }}
+        onClick={onClick}
       />
     </>
   );
