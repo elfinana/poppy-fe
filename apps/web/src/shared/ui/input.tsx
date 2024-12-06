@@ -9,6 +9,7 @@ type InputProps = React.ComponentProps<'input'> & {
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, label, ...props }, ref) => {
+  const [inputValue, setInputValue] = React.useState();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const warningRef = React.useRef<HTMLDivElement>(null);
   const [charCount, setCharCount] = React.useState(0);
@@ -27,6 +28,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
     }
   };
 
+  const valueHandler = (value: string) => {};
+
   return (
     <div className="w-full">
       {label && (
@@ -39,6 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
           type={type || 'text'}
           ref={ref || inputRef}
           onChange={handleChange}
+          value={inputValue}
           className={cn(
             'flex h-[48px] w-full placeholder-gray-300 rounded-md    pl-[12px] pr-[34px] py-[14px] border border-gray-200 focus-visible:outline-none    focus-visible:border-blue-500  md:text-sm',
             className,

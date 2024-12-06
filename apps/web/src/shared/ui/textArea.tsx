@@ -40,7 +40,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<'tex
 
           <div className="text-gray-300 text-c2">
             <span className={charCount <= 20 ? 'text-blue-500' : 'text-warning'}>{charCount}</span>
-            /최소 20자
+            &nbsp;/ 최소 20자
           </div>
         </div>
       </div>
