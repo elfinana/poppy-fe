@@ -175,7 +175,9 @@ module.exports = {
       },
       padding: {
         14: '14px',
+        12: '12px',
         10: '10px',
+        9: '9px',
         8: '8px',
         7: '7px',
         6: '6px',

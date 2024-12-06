@@ -4,8 +4,6 @@ import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 
 import { cn } from '@/src/shared/lib/utils';
-import { cva, VariantProps } from 'class-variance-authority';
-import { Radio16Active, Radio20Active } from '@/public';
 
 const ChoiceChipGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,

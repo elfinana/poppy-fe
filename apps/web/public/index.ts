@@ -37,3 +37,7 @@ export {
 // Labels
 import ClockOutlined from './labels/clockOutlined.svg';
 export { ClockOutlined };
+
+// Chips
+import Delete from './chips/delete.svg';
+export { Delete };
