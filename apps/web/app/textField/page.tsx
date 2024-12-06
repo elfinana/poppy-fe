@@ -18,9 +18,7 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full gap-4">
       <Input label="닉네임" existingName={data.nickName} />
-
       <Textarea />
-
       <Input variantType="search" onClick={handleClick} />
     </div>
   );
