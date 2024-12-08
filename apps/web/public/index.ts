@@ -7,3 +7,6 @@ export { MyPage, Home, Search, Plan };
 import ChevronLeft from './datePicker/chevronLeft.svg';
 import ChevronRight from './datePicker/chevronRight.svg';
 export { ChevronLeft, ChevronRight };
+
+import star from './sheet/star.png';
+export { star };

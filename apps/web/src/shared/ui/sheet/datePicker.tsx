@@ -1,7 +1,7 @@
 'use client';
-import { Calendar } from '@/src/shared/ui/book/calendar';
 import { ko } from 'date-fns/locale';
 import { format } from 'date-fns';
+import { Calendar } from './calendar';
 
 type Props = {
   selectedDate: Date | undefined;

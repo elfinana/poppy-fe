@@ -15,3 +15,11 @@ export type Select = {
   time: (time: string) => void;
   visitors: (visitors: number) => void;
 };
+
+export type SheetType = {
+  title: string;
+  period: string;
+  rating: number;
+  visitorReview: number;
+  instaReview: number;
+};
