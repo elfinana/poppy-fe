@@ -33,31 +33,25 @@ const page = (props: Props) => {
           <tr>
             <td className={tdStyle}>Default</td>
             <td className={tdStyle}>
-              <PrimaryButton size="xl">예약하기</PrimaryButton>
+              <PrimaryButton variant="enabled">예약하기</PrimaryButton>
             </td>
             <td className={tdStyle}>
-              <PrimaryButton size="lg">예약하기</PrimaryButton>
+              <PrimaryButton variant="enabled">예약하기</PrimaryButton>
             </td>
             <td className={tdStyle}>
-              <PrimaryButton size="md">예약하기</PrimaryButton>
+              <PrimaryButton variant="enabled">예약하기</PrimaryButton>
             </td>
           </tr>
           <tr>
             <td className={tdStyle}>Disabled</td>
             <td className={tdStyle}>
-              <PrimaryButton variant="disabled" size="xl">
-                예약하기
-              </PrimaryButton>
+              <PrimaryButton variant="disabled">예약하기</PrimaryButton>
             </td>
             <td className={tdStyle}>
-              <PrimaryButton variant="disabled" size="lg">
-                예약하기
-              </PrimaryButton>
+              <PrimaryButton variant="disabled">예약하기</PrimaryButton>
             </td>
             <td className={tdStyle}>
-              <PrimaryButton variant="disabled" size="md">
-                예약하기
-              </PrimaryButton>
+              <PrimaryButton variant="disabled">예약하기</PrimaryButton>
             </td>
           </tr>
         </tbody>

@@ -1,37 +1,62 @@
 'use client';
-import { Button } from '@/src/shared/ui/button';
-import { Home, MyPage, Plan, Search } from '@/public/index';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Home, AcHome, Search, AcSearch, Myplan, MyPage, AcMyPage, AcMyPlan } from '@/public';
 
 const navArr = [
   {
     text: '홈',
     image: Home,
+    activeImg: AcHome,
+    action: '/',
   },
   {
     text: '검색',
     image: Search,
+    activeImg: AcSearch,
+    action: '/',
   },
-
   {
     text: '예약',
-    image: Plan,
+    image: Myplan,
+    activeImg: AcMyPlan,
+    action: '/login',
   },
   {
     text: '마이페이지',
     image: MyPage,
+    activeImg: AcMyPage,
+    action: '/',
   },
 ];
-const BottomNavigation = () => {
+
+export const BottomNavigation = () => {
+  const router = useRouter();
+  const [active, setActive] = useState('홈');
+
   return (
-    <div className="flex w-full h-[56px] pt-2 pb-1">
-      {navArr.map(({ text, image: Icon }) => (
-        <Button key={text} className="flex flex-col gap-1 w-full text-gray-500 bg-white hover:text-gray800 group">
-          <Icon className="text-gray-500 fill-none group-hover:text-gray800 group-hover:fill-gray800 group-hover:stroke-gray800" />
-          <span className="text-c2 group-hover:text-c1">{text}</span>
-        </Button>
+    <div className="flex fixed bottom-0 w-full max-w-[375px] h-[56px] pt-2 pb-1">
+      {navArr.map(({ text, image: Icon, activeImg: ActiveIcon, action }) => (
+        <button
+          key={text}
+          onClick={() => {
+            setActive(text);
+            if (action) {
+              router.push(action);
+            }
+          }}
+          className="flex flex-col items-center w-full gap-1">
+          {active === text ? (
+            <ActiveIcon className="w-6 h-6 text-gray-800" />
+          ) : (
+            <Icon className="w-6 h-6 text-gray-500" />
+          )}
+          <span className={`text-c2 group-hover:text-c1 ${active === text ? 'text-gray-800' : 'text-gray-500'}`}>
+            {text}
+          </span>
+        </button>
       ))}
     </div>
   );
 };
-
-export default BottomNavigation;

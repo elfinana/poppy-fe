@@ -147,12 +147,14 @@ module.exports = {
       borderRadius: {
         DEFAULT: '8px',
         20: '20px',
+        16: '16px',
         4: '4px',
       },
       width: {
-        mobile: '375px',
+        mobile: '',
         343: '343px',
         300: '300px',
+        272: '272px',
         240: '240px',
         95: '95px',
         56: '56px',
@@ -174,6 +176,7 @@ module.exports = {
         16: '16px',
       },
       padding: {
+        28: '28px',
         14: '14px',
         12: '12px',
         10: '10px',
@@ -190,6 +193,7 @@ module.exports = {
       },
       boxShadow: {
         '16dp': '0px 4px 30px -10px rgba(0, 0, 0, 0.25)',
+        '24dp': '0px 10px 60px -10px rgba(0, 0, 0, 0.25)',
       },
       translate: {
         25: '25px',

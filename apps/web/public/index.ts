@@ -1,8 +1,12 @@
-import Home from './navigation/home.svg';
-import MyPage from './navigation/myPage.svg';
-import Search from './navigation/search.svg';
-import Plan from './navigation/plan.svg';
-export { MyPage, Home, Search, Plan };
+import Home from './icons/home.svg';
+import MyPage from './icons/myPage.svg';
+import Search from './icons/search.svg';
+import Myplan from './icons/myPlan.svg';
+import AcHome from './icons/AcHome.svg';
+import AcMyPage from './icons/AcMyPage.svg';
+import AcMyPlan from './icons/AcMyPlan.svg';
+import AcSearch from './icons/AcSearch.svg';
+export { MyPage, Home, Search, Myplan, AcHome, AcMyPage, AcMyPlan, AcSearch };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
 import ChevronRight from './datePicker/chevronRight.svg';

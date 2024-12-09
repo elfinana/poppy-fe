@@ -71,11 +71,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             {...props}
           />
+
           <Icon
             className={`absolute transform -translate-y-1/2 top-1/2 right-[12px] cursor-pointer  ${variantType === 'search' || charCount > 0 ? '' : 'invisible'}`}
             icon={variantType === 'default' ? 'ic-delete' : 'ic-search'}
-            width={variantType === 'search' ? 24 : 16}
-            height={variantType === 'search' ? 24 : 16}
+            size={variantType === 'search' ? 'md' : 'sm'}
             onClick={handleClear}
           />
         </div>
