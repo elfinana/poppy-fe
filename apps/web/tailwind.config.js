@@ -147,6 +147,7 @@ module.exports = {
       borderRadius: {
         DEFAULT: '8px',
         20: '20px',
+        16: '16px',
         4: '4px',
       },
       width: {
@@ -190,6 +191,7 @@ module.exports = {
       },
       boxShadow: {
         '16dp': '0px 4px 30px -10px rgba(0, 0, 0, 0.25)',
+        '24dp': '0px 10px 60px -10px rgba(0, 0, 0, 0.25)',
       },
       translate: {
         25: '25px',

@@ -8,9 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-  CheckboxButton,
-  LikeIconButton,
-  PrimaryButton,
 } from '@/src/shared';
 import React from 'react';
 
@@ -31,7 +28,7 @@ const page = (props: Props) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogAction variant="informative">Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
