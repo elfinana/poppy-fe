@@ -17,7 +17,7 @@ const page = (props: Props) => {
   return (
     <div>
       <AlertDialog>
-        <AlertDialogTrigger>로그인</AlertDialogTrigger>
+        <AlertDialogTrigger variant="enabled">로그인</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>로그인 필요</AlertDialogTitle>

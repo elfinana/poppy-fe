@@ -14,15 +14,12 @@ export interface DialogTriggerProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Trigger>,
     VariantProps<typeof primaryButtonVariants> {
   asChild?: boolean;
+  variant: 'enabled' | 'disabled';
 }
 
 const AlertDialogTrigger = React.forwardRef<React.ElementRef<typeof AlertDialogPrimitive.Trigger>, DialogTriggerProps>(
-  ({ className, variant, size, ...props }, ref) => (
-    <AlertDialogPrimitive.Trigger
-      className={cn(primaryButtonVariants({ variant, size, className }))}
-      ref={ref}
-      {...props}
-    />
+  ({ className, variant, ...props }, ref) => (
+    <AlertDialogPrimitive.Trigger className={cn(primaryButtonVariants({ variant, className }))} ref={ref} {...props} />
   ),
 );
 AlertDialogTrigger.displayName = AlertDialogPrimitive.Trigger.displayName;
