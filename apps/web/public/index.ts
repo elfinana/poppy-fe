@@ -6,7 +6,8 @@ import AcHome from './icons/AcHome.svg';
 import AcMyPage from './icons/AcMyPage.svg';
 import AcMyPlan from './icons/AcMyPlan.svg';
 import AcSearch from './icons/AcSearch.svg';
-export { MyPage, Home, Search, Myplan, AcHome, AcMyPage, AcMyPlan, AcSearch };
+import NotificationOutlined from './icons/notificationOutlined.svg';
+export { MyPage, Home, Search, Myplan, AcHome, AcMyPage, AcMyPlan, AcSearch, NotificationOutlined };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
 import ChevronRight from './datePicker/chevronRight.svg';
@@ -45,3 +46,7 @@ export { ClockOutlined };
 // Chips
 import Delete from './chips/delete.svg';
 export { Delete };
+
+// Headers
+import PoppyHomeHeader from './header/Poppy_HomeHeader.svg';
+export { PoppyHomeHeader };

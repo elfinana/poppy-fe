@@ -23,17 +23,28 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  icon?: string;
+  icon:
+    | 'AcHome'
+    | 'AcMyPage'
+    | 'AcMyPlan'
+    | 'AcSearch'
+    | 'home'
+    | 'ic-delete'
+    | 'ic-search'
+    | 'myPage'
+    | 'myPlan'
+    | 'notificationOutlined'
+    | 'search';
 }
 
-const Icon = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, size, asChild = false, icon, onClick, ...props }, ref) => {
+const IconButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, size, asChild = false, icon, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     return (
-      <Comp className={cn(buttonVariants({ size, className }))} ref={ref} onClick={onClick} {...props}>
+      <Comp className={cn(buttonVariants({ size, className }))} ref={ref} {...props}>
         {icon && (
           <span
-            className={`block w-full h-full   bg-center bg-no-repeat bg-cover`}
+            className={`block w-full h-full bg-center bg-no-repeat bg-cover`}
             style={{
               backgroundImage: `url('/icons/${icon}.svg')`,
             }}
@@ -44,6 +55,6 @@ const Icon = React.forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-Icon.displayName = 'Button';
+IconButton.displayName = 'Button';
 
-export { Icon, buttonVariants };
+export { IconButton, buttonVariants };

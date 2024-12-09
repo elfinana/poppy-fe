@@ -11,7 +11,7 @@ export { LikeIconButton } from './buttons/LikeIconButton';
 export { CheckboxButton } from './buttons/CheckboxButton';
 export { DropdownButton } from './buttons/DropdownButton';
 export { RadioGroup, RadioGroupItem } from './buttons/RadioButton';
-export { Icon } from './icon';
+export { IconButton } from './buttons/IconButton';
 
 // Labels
 export { DateLabel } from './labels/DateLabel';

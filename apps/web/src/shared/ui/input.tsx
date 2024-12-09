@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '@/src/shared/lib/utils';
-import { Icon } from './icon';
+import { IconButton } from './buttons/IconButton';
 
 type InputProps = React.ComponentProps<'input'> & {
   label?: string;
@@ -72,7 +72,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
 
-          <Icon
+          <IconButton
             className={`absolute transform -translate-y-1/2 top-1/2 right-[12px] cursor-pointer  ${variantType === 'search' || charCount > 0 ? '' : 'invisible'}`}
             icon={variantType === 'default' ? 'ic-delete' : 'ic-search'}
             size={variantType === 'search' ? 'md' : 'sm'}
