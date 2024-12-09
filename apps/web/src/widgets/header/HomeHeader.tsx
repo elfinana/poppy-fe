@@ -11,8 +11,8 @@ export const HomeHeader = (props: Props) => {
         <PoppyHomeHeader />
       </div>
       <div className="flex">
-        <div>
-          <IconButton size="md" icon="ic-search" />
+        <div className="mr-24">
+          <IconButton size="md" icon="searchLarge" />
         </div>
         <div>
           <IconButton size="md" icon="notificationOutlined" />

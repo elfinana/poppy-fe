@@ -189,6 +189,7 @@ module.exports = {
         4: '4px',
       },
       margin: {
+        24: '24px',
         4: '4px',
         2: '2px',
       },
