@@ -21,6 +21,20 @@ export { StatusLabel } from './labels/StatusLabel';
 export { ChoiceChipGroup, ChoiceChipGroupItem } from './chips/ChoiceChip';
 export { FilterChipGroup, FilterChipGroupItem } from './chips/FilterChip';
 
+// Dialog
+export {
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from './dialog/Dialog';
+
 export { Calendar } from './calendar';
 export { DatePicker } from './datePicker';
 export { ItemCard } from './ItemCard';
