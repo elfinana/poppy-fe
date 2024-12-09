@@ -24,10 +24,7 @@ export { StatusLabel } from './labels/StatusLabel';
 export { ChoiceChipGroup, ChoiceChipGroupItem } from './chips/ChoiceChip';
 export { FilterChipGroup, FilterChipGroupItem } from './chips/FilterChip';
 
-export { Calendar } from './calendar';
-export { DatePicker } from './datePicker';
 export { ItemCard } from './ItemCard';
 export { Textarea } from './textArea';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
-
