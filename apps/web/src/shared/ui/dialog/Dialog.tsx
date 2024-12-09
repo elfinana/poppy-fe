@@ -53,7 +53,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed rounded-16 justify-center left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 bg-white shadow-24dp duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
+        'fixed rounded-16 justify-center w-272 left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] bg-white shadow-24dp duration-200 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
         className,
       )}
       {...props}
@@ -63,12 +63,12 @@ const AlertDialogContent = React.forwardRef<
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
 const AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
+  <div className={cn('flex flex-col w-full py-28 text-center border-b border-gray-200', className)} {...props} />
 );
 AlertDialogHeader.displayName = 'AlertDialogHeader';
 
 const AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)} {...props} />
+  <div className={cn('flex flex-row w-full justify-center', className)} {...props} />
 );
 AlertDialogFooter.displayName = 'AlertDialogFooter';
 
@@ -76,7 +76,7 @@ const AlertDialogTitle = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Title ref={ref} className={cn('text-lg font-semibold', className)} {...props} />
+  <AlertDialogPrimitive.Title ref={ref} className={cn('text-h3 text-gray-900', className)} {...props} />
 ));
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 
@@ -84,11 +84,11 @@ const AlertDialogDescription = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Description ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
+  <AlertDialogPrimitive.Description ref={ref} className={cn('text-b3 text-gray-700', className)} {...props} />
 ));
 AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
 
-const actionButtonVariants = cva('text-b1', {
+const actionButtonVariants = cva('text-b1 px-10 py-12 w-fit', {
   variants: {
     variant: {
       informative: 'text-informative',
@@ -108,22 +108,40 @@ const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
   AlertDialogActionProps
 >(({ className, variant, ...props }, ref) => (
-  <AlertDialogPrimitive.Action ref={ref} className={cn(actionButtonVariants({ variant }), className)} {...props}>
-    확인
-  </AlertDialogPrimitive.Action>
+  <div className="w-full text-center border-l border-gray-200">
+    <AlertDialogPrimitive.Action ref={ref} className={cn(actionButtonVariants({ variant }), className)} {...props}>
+      확인
+    </AlertDialogPrimitive.Action>
+  </div>
 ));
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName;
 
+const cancelButtonVariants = cva('text-b1 px-10 py-12 w-fit', {
+  variants: {
+    variant: {
+      ghost: 'text-b1 text-gray-400',
+    },
+  },
+});
+
+export interface CancelDialogActionProps
+  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>,
+    VariantProps<typeof cancelButtonVariants> {
+  asChild?: boolean;
+}
+
 const AlertDialogCancel = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
+  CancelDialogActionProps
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Cancel
-    ref={ref}
-    className={cn(buttonVariants({ variant: 'ghost' }), 'text-b1 text-gray-400', className)}
-    {...props}>
-    취소
-  </AlertDialogPrimitive.Cancel>
+  <div className="w-full text-center">
+    <AlertDialogPrimitive.Cancel
+      ref={ref}
+      className={cn(cancelButtonVariants({ variant: 'ghost' }), className)}
+      {...props}>
+      취소
+    </AlertDialogPrimitive.Cancel>
+  </div>
 ));
 AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName;
 

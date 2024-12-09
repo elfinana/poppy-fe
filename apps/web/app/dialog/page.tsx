@@ -17,14 +17,11 @@ const page = (props: Props) => {
   return (
     <div>
       <AlertDialog>
-        <AlertDialogTrigger>예약 취소하기</AlertDialogTrigger>
+        <AlertDialogTrigger>로그인</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your account and remove your data from our
-              servers.
-            </AlertDialogDescription>
+            <AlertDialogTitle>로그인 필요</AlertDialogTitle>
+            <AlertDialogDescription>로그인 후 이용하실 수 있습니다.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
