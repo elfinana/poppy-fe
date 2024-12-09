@@ -10,7 +10,9 @@ const pretendard = localFont({
 export function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${pretendard.variable} font-pretendard`}>{children}</body>
+      <body className={`flex flex-col h-full px-4 m-auto max-w-[375px] ${pretendard.variable} font-pretendard`}>
+        {children}
+      </body>
     </html>
   );
 }
