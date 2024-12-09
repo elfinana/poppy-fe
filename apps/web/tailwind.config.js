@@ -151,7 +151,7 @@ module.exports = {
         4: '4px',
       },
       width: {
-        mobile: '375px',
+        mobile: '',
         343: '343px',
         300: '300px',
         272: '272px',
