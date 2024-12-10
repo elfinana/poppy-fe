@@ -191,10 +191,15 @@ module.exports = {
         4: '4px',
       },
       margin: {
+        48: '48px',
         24: '24px',
         12: '12px',
         4: '4px',
         2: '2px',
+      },
+      gap: {
+        12: '12px',
+        4: '4px',
       },
       boxShadow: {
         '16dp': '0px 4px 30px -10px rgba(0, 0, 0, 0.25)',

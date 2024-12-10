@@ -5,7 +5,7 @@ import { cn } from '@/src/shared/lib/utils';
 
 const operational = 'bg-blue-100 text-blue-600';
 
-const badgeVariants = cva('inline-flex items-center rounded-4 px-4 py-4 text-c2', {
+const badgeVariants = cva('inline-flex items-center w-fit rounded-4 px-4 py-4 text-c2', {
   variants: {
     status: {
       operational: operational,

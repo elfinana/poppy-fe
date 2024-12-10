@@ -1,3 +1,4 @@
+// Icons
 import Home from './icons/home.svg';
 import MyPage from './icons/myPage.svg';
 import Search from './icons/search.svg';
@@ -8,7 +9,20 @@ import AcMyPlan from './icons/AcMyPlan.svg';
 import AcSearch from './icons/AcSearch.svg';
 import NotificationOutlined from './icons/notificationOutlined.svg';
 import SearchLarge from './icons/searchLarge.svg';
-export { MyPage, Home, Search, Myplan, AcHome, AcMyPage, AcMyPlan, AcSearch, NotificationOutlined, SearchLarge };
+import ArrowRightSmall from './icons/arrow_r_sm.svg';
+export {
+  MyPage,
+  Home,
+  Search,
+  Myplan,
+  AcHome,
+  AcMyPage,
+  AcMyPlan,
+  AcSearch,
+  NotificationOutlined,
+  SearchLarge,
+  ArrowRightSmall,
+};
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
 import ChevronRight from './datePicker/chevronRight.svg';
