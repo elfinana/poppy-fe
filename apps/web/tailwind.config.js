@@ -166,6 +166,8 @@ module.exports = {
         16: '16px',
       },
       height: {
+        264: '264px',
+        56: '56px',
         48: '48px',
         40: '40px',
         32: '32px',
@@ -190,6 +192,7 @@ module.exports = {
       },
       margin: {
         24: '24px',
+        12: '12px',
         4: '4px',
         2: '2px',
       },

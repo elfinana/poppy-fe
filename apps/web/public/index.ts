@@ -51,3 +51,11 @@ export { Delete };
 // Headers
 import PoppyHomeHeader from './header/Poppy_HomeHeader.svg';
 export { PoppyHomeHeader };
+
+// 3d images
+import Art from './3d/art.webp';
+import Fb from './3d/fb.webp';
+import Food from './3d/food.webp';
+import Goods from './3d/goods.webp';
+import Life from './3d/life.webp';
+export { Art, Fb, Food, Goods, Life };
