@@ -6,7 +6,7 @@ type Props = {};
 
 export const HomeHeader = (props: Props) => {
   return (
-    <div className="flex justify-between w-full">
+    <div className="px-16 py-12 flex justify-between w-full fixed top-0 bg-white z-50">
       <div>
         <PoppyHomeHeader />
       </div>

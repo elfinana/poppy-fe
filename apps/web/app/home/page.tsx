@@ -1,5 +1,12 @@
 import { ItemCard } from '@/src/shared';
-import { CategoryIconList, HomeHeader, ImageSlider, PopupSlider } from '@/src/widgets';
+import {
+  CategoryIconList,
+  HomeHeader,
+  PopupCarouselL,
+  PopupSlider,
+  BottomNavigation,
+  PopupCarouselXL,
+} from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/home/model';
 import React from 'react';
 
@@ -8,11 +15,11 @@ type Props = {};
 const page = (props: Props) => {
   return (
     <div>
-      <div className="w-full px-16 py-12">
+      <div className="w-full h-48">
         <HomeHeader />
       </div>
       <div className="w-full">
-        <ImageSlider />
+        <PopupCarouselL />
       </div>
       <div className="w-full px-16">
         <CategoryIconList />
@@ -26,6 +33,17 @@ const page = (props: Props) => {
       <div className="w-full px-16 mt-48">
         <PopupSlider variant="list" text1="예전에 방문했던 " text2={`성동구`} text3=" 팝업" data={recommandData} />
       </div>
+      <div className="w-full mt-48">
+        <PopupCarouselXL text1="지금 주목해야 할 " text2="패션" text3=" 팝업" />
+      </div>
+      <div className="w-full px-16 mt-48">
+        <PopupSlider variant="list" text1="따끈따끈, 새로 오픈한 팝업" data={recommandData} />
+      </div>
+      <div className="w-full px-16 mt-48">
+        <PopupSlider variant="list" text1="오픈 예정인 팝업" data={recommandData} />
+      </div>
+      <div className="mt-100"></div>
+      <BottomNavigation />
     </div>
   );
 };
@@ -35,7 +53,7 @@ export default page;
 const recommandData: Array<ItemCardData> = [
   {
     id: 1,
-    img: '/images/img-card-1.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 영등포구',
     title: '골든볼 팝업스토어',
     day: '05.21(금) - 12.31(일)',
@@ -44,7 +62,7 @@ const recommandData: Array<ItemCardData> = [
   },
   {
     id: 2,
-    img: '/images/img-card-2.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 성동구',
     title: '어노브 이터널 아우라 성수 팝업스토어',
     day: '11.08(금) - 11.24(일)',
@@ -53,7 +71,7 @@ const recommandData: Array<ItemCardData> = [
   },
   {
     id: 3,
-    img: '/images/img-card-2.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 성동구',
     title: '어노브 이터널 아우라 성수 팝업스토어',
     day: '11.08(금) - 11.24(일)',
@@ -62,7 +80,7 @@ const recommandData: Array<ItemCardData> = [
   },
   {
     id: 4,
-    img: '/images/img-card-2.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 성동구',
     title: '어노브 이터널 아우라 성수 팝업스토어',
     day: '11.08(금) - 11.24(일)',
@@ -74,7 +92,7 @@ const recommandData: Array<ItemCardData> = [
 const popularData = [
   {
     id: 1,
-    img: '/images/img-card-3.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 영등포구',
     title: '골든볼 팝업스토어',
     day: '05.21(금) - 12.31(일)',
@@ -83,7 +101,7 @@ const popularData = [
   },
   {
     id: 2,
-    img: '/images/img-card-4.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 성동구',
     title: '어노브 이터널 아우라 성수 팝업스토어',
     day: '11.08(금) - 11.24(일)',
@@ -92,7 +110,7 @@ const popularData = [
   },
   {
     id: 3,
-    img: '/images/img-card-3.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 성동구',
     title: '어노브 이터널 아우라 성수 팝업스토어',
     day: '11.08(금) - 11.24(일)',
@@ -101,7 +119,7 @@ const popularData = [
   },
   {
     id: 4,
-    img: '/images/img-card-4.png',
+    img: 'https://placehold.co/500/webp',
     location: '서울 성동구',
     title: '어노브 이터널 아우라 성수 팝업스토어',
     day: '11.08(금) - 11.24(일)',
