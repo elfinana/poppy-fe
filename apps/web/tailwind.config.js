@@ -141,6 +141,8 @@ module.exports = {
       },
       borderWidth: {
         DEFAULT: '1px',
+        3: '3px',
+        2: '2px',
         '.5': '0.5px',
         1.5: '1.5px',
       },
@@ -164,8 +166,10 @@ module.exports = {
         24: '24px',
         20: '20px',
         16: '16px',
+        1: '1px',
       },
       height: {
+        343: '343px',
         264: '264px',
         56: '56px',
         48: '48px',
@@ -191,9 +195,12 @@ module.exports = {
         4: '4px',
       },
       margin: {
+        100: '100px',
         48: '48px',
         24: '24px',
+        16: '16px',
         12: '12px',
+        8: '8px',
         4: '4px',
         2: '2px',
       },

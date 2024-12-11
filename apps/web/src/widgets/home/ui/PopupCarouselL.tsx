@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '../../../shared/ui/carousel';
+import Image from 'next/image';
 
 type Props = {};
 
@@ -20,7 +21,7 @@ const carouselItems = [
   },
 ];
 
-const ImageSlider = (props: Props) => {
+const PopupCarouselL = (props: Props) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
 
@@ -39,14 +40,14 @@ const ImageSlider = (props: Props) => {
       <CarouselContent>
         {carouselItems.map((item, idx) => (
           <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">
-            <div className="flex justify-center items-center text-4xl font-semibold h-264 bg-gray-100">
-              {item.content}
+            <div className="relative flex justify-center items-center h-264 bg-gray-100">
+              <Image src={`https://placehold.co/500/webp`} alt={`ITEM_${item.id}`} layout="fill" objectFit="cover" />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
       <div className="absolute bottom-0 flex justify-center w-full mb-12 px-16">
-        {carouselItems.map((item, idx) =>
+        {carouselItems.map((_, idx) =>
           current === idx ? (
             <button key={`CAROUSEL_INDC_ITEM${idx}`} className={`w-full border border-white cursor`} />
           ) : (
@@ -58,4 +59,4 @@ const ImageSlider = (props: Props) => {
   );
 };
 
-export { ImageSlider };
+export { PopupCarouselL };
