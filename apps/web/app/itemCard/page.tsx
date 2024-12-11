@@ -11,7 +11,7 @@ export default function page({}: Props) {
       location: '서울 영등포구',
       title: '골든볼 팝업스토어',
       day: '05.21(금) - 12.31(일)',
-      deadLine: 'D-40',
+      deadLine: 40,
       isCount: true,
     },
     {
@@ -20,7 +20,7 @@ export default function page({}: Props) {
       location: '서울 성동구',
       title: '어노브 이터널 아우라 성수 팝업스토어',
       day: '11.08(금) - 11.24(일)',
-      deadLine: 'D-3',
+      deadLine: 3,
       isCount: false,
     },
     {
@@ -29,7 +29,7 @@ export default function page({}: Props) {
       location: '서울 성동구',
       title: '어노브 이터널 아우라 성수 팝업스토어',
       day: '11.08(금) - 11.24(일)',
-      deadLine: 'D-3',
+      deadLine: 3,
       isCount: false,
     },
     {
@@ -38,7 +38,7 @@ export default function page({}: Props) {
       location: '서울 성동구',
       title: '어노브 이터널 아우라 성수 팝업스토어',
       day: '11.08(금) - 11.24(일)',
-      deadLine: 'D-3',
+      deadLine: 3,
       isCount: false,
     },
   ];
@@ -49,7 +49,7 @@ export default function page({}: Props) {
       location: '서울 영등포구',
       title: '골든볼 팝업스토어',
       day: '05.21(금) - 12.31(일)',
-      deadLine: 'D-40',
+      deadLine: 40,
       isCount: true,
     },
     {
@@ -58,7 +58,7 @@ export default function page({}: Props) {
       location: '서울 성동구',
       title: '어노브 이터널 아우라 성수 팝업스토어',
       day: '11.08(금) - 11.24(일)',
-      deadLine: 'D-3',
+      deadLine: 3,
       isCount: false,
     },
     {
@@ -67,7 +67,7 @@ export default function page({}: Props) {
       location: '서울 성동구',
       title: '어노브 이터널 아우라 성수 팝업스토어',
       day: '11.08(금) - 11.24(일)',
-      deadLine: 'D-3',
+      deadLine: 3,
       isCount: false,
     },
     {
@@ -76,7 +76,7 @@ export default function page({}: Props) {
       location: '서울 성동구',
       title: '어노브 이터널 아우라 성수 팝업스토어',
       day: '11.08(금) - 11.24(일)',
-      deadLine: 'D-3',
+      deadLine: 3,
       isCount: false,
     },
   ];

@@ -36,7 +36,7 @@ export const BottomNavigation = () => {
   const [active, setActive] = useState('홈');
 
   return (
-    <div className="flex fixed bottom-0 w-full max-w-[375px] h-[56px] pt-2 pb-1">
+    <div className="flex fixed bg-white bottom-0 w-full pt-8 pb-4 border border-t-gray-100 rounded-t-20">
       {navArr.map(({ text, image: Icon, activeImg: ActiveIcon, action }) => (
         <button
           key={text}
