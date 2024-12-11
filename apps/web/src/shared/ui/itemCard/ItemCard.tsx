@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { DateLabel } from '../..';
 
 type VariantType = 'list' | 'gallary' | 'rank';
 
@@ -8,7 +9,7 @@ type Props = {
   location: string;
   title: string;
   day: string;
-  deadLine: string;
+  deadLine: number;
   rank: number;
   isCount: boolean;
 };
@@ -30,7 +31,7 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
   const { width, height } = getDimensions(variant);
 
   return (
-    <div className={`flex flex-col w-[${width}px] gap-2`}>
+    <div className={`flex shrink-0 flex-col w-[${width}px] gap-2`}>
       {/* 이미지 섹션 */}
       <div className="relative overflow-hidden">
         <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
@@ -48,17 +49,13 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
 
       {/* 텍스트 섹션 */}
       <div className="flex flex-col ">
-        <span className="text-sm text-gray-600">{location}</span>
-        <span
-          className={`overflow-hidden text-base font-bold max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
+        <span className="text-b4 text-gray-600">{location}</span>
+        <span className={`overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
           {title}
         </span>
-        <span className="text-sm text-gray-500">{day}</span>
+        <span className="text-b5 text-gray-500">{day}</span>
       </div>
-
-      <div className="flex justify-center items-center w-[64px] h-[24px] text-xs text-blue-600 bg-blue-100 rounded-sm">
-        종료 {deadLine}
-      </div>
+      <DateLabel status="operational" daysLeft={deadLine} />
     </div>
   );
 };
