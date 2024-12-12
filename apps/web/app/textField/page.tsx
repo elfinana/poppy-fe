@@ -20,9 +20,6 @@ export default function Page() {
       <Input label="닉네임" existingName={data.nickName} />
       <Textarea />
       <Input variantType="search" onClick={handleClick} />
-      <IconButton size="lg" icon="ic-delete" />
-
-      <Calendar />
     </div>
   );
 }
