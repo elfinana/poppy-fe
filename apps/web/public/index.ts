@@ -1,3 +1,4 @@
+// Icons
 import Home from './icons/home.svg';
 import MyPage from './icons/myPage.svg';
 import Search from './icons/search.svg';
@@ -6,7 +7,22 @@ import AcHome from './icons/AcHome.svg';
 import AcMyPage from './icons/AcMyPage.svg';
 import AcMyPlan from './icons/AcMyPlan.svg';
 import AcSearch from './icons/AcSearch.svg';
-export { MyPage, Home, Search, Myplan, AcHome, AcMyPage, AcMyPlan, AcSearch };
+import NotificationOutlined from './icons/notificationOutlined.svg';
+import SearchLarge from './icons/searchLarge.svg';
+import ArrowRightSmall from './icons/arrow_r_sm.svg';
+export {
+  MyPage,
+  Home,
+  Search,
+  Myplan,
+  AcHome,
+  AcMyPage,
+  AcMyPlan,
+  AcSearch,
+  NotificationOutlined,
+  SearchLarge,
+  ArrowRightSmall,
+};
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
 import ChevronRight from './datePicker/chevronRight.svg';
@@ -45,3 +61,15 @@ export { ClockOutlined };
 // Chips
 import Delete from './chips/delete.svg';
 export { Delete };
+
+// Headers
+import PoppyHomeHeader from './header/Poppy_HomeHeader.svg';
+export { PoppyHomeHeader };
+
+// 3d images
+import Art from './3d/art.webp';
+import Fb from './3d/fb.webp';
+import Food from './3d/food.webp';
+import Goods from './3d/goods.webp';
+import Life from './3d/life.webp';
+export { Art, Fb, Food, Goods, Life };

@@ -11,7 +11,8 @@ export { LikeIconButton } from './buttons/LikeIconButton';
 export { CheckboxButton } from './buttons/CheckboxButton';
 export { DropdownButton } from './buttons/DropdownButton';
 export { RadioGroup, RadioGroupItem } from './buttons/RadioButton';
-export { Icon } from './icon';
+export { IconButton } from './buttons/IconButton';
+export { CategoryIconButton } from './buttons/CategoryIconButton';
 
 // Labels
 export { DateLabel } from './labels/DateLabel';
@@ -37,7 +38,7 @@ export {
 
 export { Calendar } from './calendar';
 export { DatePicker } from './datePicker';
-export { ItemCard } from './ItemCard';
+export { ItemCard } from './itemCard/ItemCard';
 export { Textarea } from './textArea';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
