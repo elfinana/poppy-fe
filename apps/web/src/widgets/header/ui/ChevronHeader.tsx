@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
-import { BackDark, PoppyHomeHeader } from '@/public';
-import { IconButton } from '@/src/shared';
+import { BackDark } from '@/public';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   title: string;
@@ -8,10 +10,12 @@ type Props = {
 };
 
 export const ChevronHeader = (props: Props) => {
+  const router = useRouter();
+
   return (
-    <div className="flex px-16 py-12 w-full fixed top-0 bg-white z-50">
+    <div className="flex px-16 py-12 w-full relative top-0 bg-white z-50">
       <div className="inline-flex w-40">
-        <button>
+        <button onClick={() => router.back()}>
           <BackDark />
         </button>
       </div>

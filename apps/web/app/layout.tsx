@@ -12,7 +12,7 @@ const pretendard = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`min-w-[320px] max-w-[780px] ${pretendard.variable} font-pretendard`}>{children}</body>
+      <body className={`min-w-[320px] h-screen max-w-[780px] ${pretendard.variable} font-pretendard`}>{children}</body>
     </html>
   );
 }
