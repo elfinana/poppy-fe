@@ -12,7 +12,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex w-full h-1 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',
+      'inline-flex w-full items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',
       className,
     )}
     {...props}
@@ -20,19 +20,23 @@ const TabsList = React.forwardRef<
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      'inline-flex w-full h-full text-h3 text-gray-300 items-center pb-[12px] justify-center whitespace-nowrap border-b-[1px] data-[state=active]:text-gray-900 data-[state=active]: border-gray-300 data-[state=active]:border-b-[2px] data-[state=active]:border-gray-900  ',
-      className,
-    )}
-    {...props}
-  />
-));
+interface TabsTriggerProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
+  children: React.ReactNode;
+}
+
+const TabsTrigger = React.forwardRef<React.ElementRef<typeof TabsPrimitive.Trigger>, TabsTriggerProps>(
+  ({ className, children, ...props }, ref) => (
+    <TabsPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        'inline-flex w-full h-fit text-h3 text-gray-300 items-center pb-[12px] justify-center whitespace-nowrap border-b-[1px] data-[state=active]:text-gray-900 data-[state=active]: border-gray-300 data-[state=active]:border-b-[2px] data-[state=active]:border-gray-900  ',
+        className,
+      )}
+      {...props}>
+      <span>{children}</span>
+    </TabsPrimitive.Trigger>
+  ),
+);
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
 const TabsContent = React.forwardRef<
