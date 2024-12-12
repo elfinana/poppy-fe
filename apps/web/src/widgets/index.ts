@@ -1,7 +1,9 @@
-export { LoginLayout } from './login/LoginLayout';
+import { SubHeader } from './subHeader/SubHeader';
 export { BottomNavigation } from './Navigation/ui/BottomNavigation';
 
 export { HomeHeader } from './header/ui/HomeHeader';
+
+export { SubHeader } from './subHeader/SubHeader';
 
 // PopupCarouselL
 export { PopupCarouselL } from './home/ui/PopupCarouselL';

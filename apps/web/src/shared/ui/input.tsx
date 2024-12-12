@@ -9,10 +9,11 @@ type InputProps = React.ComponentProps<'input'> & {
   variantType?: 'default' | 'search';
   existingName?: string;
   onClick?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = 'text', label, variantType = 'default', onClick, existingName, ...props }, ref) => {
+  ({ className, type = 'text', label, variantType = 'default', onClick, onChange, existingName, ...props }, ref) => {
     const [inputValue, setInputValue] = React.useState<string>('');
     const [charCount, setCharCount] = React.useState<number>(0);
     const [message, setMessage] = React.useState<string>('');
@@ -24,6 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       const value = e.target.value;
       setInputValue(value);
       setCharCount(value.length);
+      onChange?.(e);
 
       if (value.length > 10) {
         setMessage('10자 이내로 입력해 주세요.');
@@ -83,7 +85,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div className="flex items-center justify-between mt-[8px]">
             <div className={`text-sm ${messageColor}`}>{message && <span>{message}</span>}</div>
             <div className="text-sm text-gray-300 text-c2">
-              <span className={` ${charCount <= 10 ? 'text-blue-500' : 'text-warning'}`}>{charCount}</span>
+              <span className={` ${!charCount ? 'text-gray-300' : charCount <= 10 ? 'text-blue-500' : 'text-warning'}`}>
+                {charCount}
+              </span>
               /10
             </div>
           </div>

@@ -1,8 +1,16 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-export default function page() {
+export default function Page() {
+  const router = useRouter();
+
+  // 네이버 로그인 이벤트
+  const handleButtonClick = () => {
+    router.push('signup');
+  };
+
   return (
     <div className="flex flex-col items-center w-full h-full">
       {/* header logo */}
@@ -27,10 +35,7 @@ export default function page() {
 
         <div className=" mb-[64px] w-full">
           <div className="w-full px-[16px]">
-            <button
-              type="button"
-              className="w-full h-[48px] rounded-xl bg-green relative"
-              onClick={() => alert('Button clicked!')}>
+            <button type="button" className="w-full h-[48px] rounded-xl bg-green relative" onClick={handleButtonClick}>
               <Image
                 className="absolute top-[4px] left-[8px] "
                 width={40}
