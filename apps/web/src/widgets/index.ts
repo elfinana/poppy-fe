@@ -9,6 +9,9 @@ export { SubHeader } from './subHeader/SubHeader';
 // ChevronHeader
 export { ChevronHeader } from './header/ui/ChevronHeader';
 
+// NoChevronHeader
+export { NoChevronHeader } from './header/ui/NoChevronHeader';
+
 // PopupCarouselL
 export { PopupCarouselL } from './home/ui/PopupCarouselL';
 
