@@ -15,7 +15,7 @@ export const HomeHeader = (props: Props) => {
   };
 
   return (
-    <div className="px-16 py-12 flex justify-between items-center w-full fixed top-0 bg-white z-50">
+    <div className="px-16 py-12 flex justify-between items-center w-full relative bg-white z-50">
       <div>
         <PoppyHomeHeader />
       </div>

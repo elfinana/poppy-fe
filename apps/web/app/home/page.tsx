@@ -14,7 +14,7 @@ type Props = {};
 const Page = (props: Props) => {
   return (
     <div>
-      <div className="w-full h-48">
+      <div className="w-full sticky top-0 z-50">
         <HomeHeader />
       </div>
       <div className="w-full">
@@ -23,25 +23,25 @@ const Page = (props: Props) => {
       <div className="w-full px-16">
         <CategoryIconList />
       </div>
-      <div className="w-full px-16 mt-48">
+      <div className="w-full mt-48">
         <PopupSlider variant="list" text1="OOO님을 위한 추천 팝업" data={recommandData} />
       </div>
-      <div className="w-full px-16 mt-48">
+      <div className="w-full mt-48">
         <PopupSlider variant="rank" text1="지금 많이 찾는 팝업" data={popularData} />
       </div>
-      <div className="w-full px-16 mt-48">
+      <div className="w-full mt-48">
         <PopupSlider variant="list" text1="예전에 방문했던 " text2={`성동구`} text3=" 팝업" data={recommandData} />
       </div>
       <div className="w-full mt-48">
         <PopupCarouselXL text1="지금 주목해야 할 " text2="패션" text3=" 팝업" />
       </div>
-      <div className="w-full px-16 mt-48">
+      <div className="w-full mt-48">
         <PopupSlider variant="list" text1="따끈따끈, 새로 오픈한 팝업" data={recommandData} />
       </div>
-      <div className="w-full px-16 mt-48">
+      <div className="w-full mt-48">
         <PopupSlider variant="list" text1="오픈 예정인 팝업" data={recommandData} />
       </div>
-      <div className="mt-100"></div>
+      <div className="h-58 mt-bottomMargin"></div>
       <BottomNavigation />
     </div>
   );
