@@ -36,7 +36,7 @@ const PopupCarouselL = (props: Props) => {
   }, [api]);
 
   return (
-    <Carousel setApi={setApi}>
+    <Carousel setApi={setApi} opts={{ loop: true }}>
       <CarouselContent>
         {carouselItems.map((item, idx) => (
           <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">

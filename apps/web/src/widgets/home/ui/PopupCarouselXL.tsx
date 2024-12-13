@@ -54,7 +54,7 @@ const PopupCarouselXL = (props: Props) => {
         </div>
       </div>
       <div>
-        <Carousel setApi={setApi}>
+        <Carousel setApi={setApi} opts={{ loop: true }}>
           <CarouselContent className="ml-0">
             {carouselItems.map((item, idx) => (
               <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-16">
@@ -85,7 +85,7 @@ const PopupCarouselXL = (props: Props) => {
             current === idx ? (
               <button key={`CAROUSEL_INDC_ITEM${idx}`} className={`border-3 rounded-full border-blue-500 cursor`} />
             ) : (
-              <button key={`CAROUSEL_INDC_ITEM${idx}`} className={`border-2 rounded-full border-gray-200 cursor`} />
+              <button key={`CAROUSEL_INDC_ITEM${idx}`} className={`border-3 rounded-full border-gray-200 cursor`} />
             ),
           )}
         </div>
