@@ -6,7 +6,7 @@ import {
   BottomNavigation,
   PopupCarouselXL,
 } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/home/model';
+import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
 
 type Props = {};

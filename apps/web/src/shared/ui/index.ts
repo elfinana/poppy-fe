@@ -21,6 +21,7 @@ export { StatusLabel } from './labels/StatusLabel';
 // Chips
 export { ChoiceChipGroup, ChoiceChipGroupItem } from './chips/ChoiceChip';
 export { FilterChipGroup, FilterChipGroupItem } from './chips/FilterChip';
+export { InputChip } from './chips/InputChip';
 
 // Dialog
 export {

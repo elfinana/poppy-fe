@@ -6,13 +6,13 @@ import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@/src/shared/lib/utils';
 import { Delete } from '@/public';
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface InputChipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
   value: string;
   text: string;
 }
 
-const InputChip = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const InputChip = React.forwardRef<HTMLButtonElement, InputChipProps>(
   ({ className, value, text, asChild = false, ...props }, ref) => {
     const chipRef = React.useRef<HTMLButtonElement | null>(null);
 
@@ -36,7 +36,7 @@ const InputChip = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className,
         )}
         {...props}>
-        <span className="mr-4">{text}</span>
+        <div className="mr-4 text-nowrap">{text}</div>
         <span onClick={handleDeleteClick} className="cursor-pointer">
           <Delete />
         </span>

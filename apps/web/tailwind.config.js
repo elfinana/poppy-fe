@@ -201,6 +201,7 @@ module.exports = {
         100: '100px',
         48: '48px',
         24: '24px',
+        20: '20px',
         16: '16px',
         12: '12px',
         8: '8px',
@@ -209,6 +210,7 @@ module.exports = {
       },
       gap: {
         12: '12px',
+        8: '8px',
         4: '4px',
       },
       boxShadow: {
