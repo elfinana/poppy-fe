@@ -15,7 +15,7 @@ const navArr = [
     text: '검색',
     image: Search,
     activeImg: AcSearch,
-    action: '/',
+    action: '/search',
   },
   {
     text: '예약',

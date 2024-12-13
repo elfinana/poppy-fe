@@ -12,6 +12,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/src/shared';
+import { MapSearchButton } from '@/src/shared/ui/buttons/MapSearchButton';
 import { Checkbox } from '@/src/shared/ui/checkbox';
 import React from 'react';
 
@@ -130,6 +131,11 @@ const page = (props: Props) => {
             </td>
             <td className={tdStyle}>
               <LikeIconButton variant="active" value={1} />
+            </td>
+            <td className={tdStyle}>
+              <MapSearchButton size="sm" variant="default">
+                이 지역에서 검색
+              </MapSearchButton>
             </td>
           </tr>
           <tr>
