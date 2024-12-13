@@ -20,7 +20,7 @@ type Props = {};
 
 const Page = (props: Props) => {
   const mapRef = React.useRef<HTMLDivElement>(null);
-  const mapInstance = React.useRef<naver.maps.Map | undefined>(undefined);
+  const mapInstance = React.useRef<naver.maps.Map | null>(null);
 
   React.useEffect(() => {
     const initMap = () => {

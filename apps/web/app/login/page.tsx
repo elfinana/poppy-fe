@@ -1,3 +1,65 @@
-export default function page() {
-  return <>login</>;
+'use client';
+
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
+export default function Page() {
+  const router = useRouter();
+
+  // 네이버 로그인 이벤트
+  const handleButtonClick = () => {
+    router.push('signup');
+  };
+
+  return (
+    <div className="flex flex-col items-center w-full h-full">
+      {/* header logo */}
+      <header className="w-full flex h-[48px] mb-[40px] items-center justify-center">
+        <Image width={80} height={24} src="/login/img-login-logo.svg" alt="login-logo" />
+      </header>
+
+      {/* market img */}
+      <div className="flex flex-col items-center justify-between w-full h-full">
+        <div>
+          <div className="">
+            <Image width={240} height={240} src="/login/img-login-1.svg" alt="login-img" />
+          </div>
+
+          <p className="text-center text-gray-900 text-h2">오늘은 어디서 Pop?</p>
+          <p className="text-center text-gray-800 text-b3">
+            놓치기 싫은 팝업스토어,
+            <br />
+            지금 Poppy에서 만나보세요.
+          </p>
+        </div>
+
+        <div className=" mb-[64px] w-full">
+          <div className="w-full px-[16px]">
+            <button type="button" className="w-full h-[48px] rounded-xl bg-green relative" onClick={handleButtonClick}>
+              <Image
+                className="absolute top-[4px] left-[8px] "
+                width={40}
+                height={40}
+                src="/login/img-login-naver.svg"
+                alt="login-img"
+              />
+              <span className="text-white text-h3">네이버로 시작하기</span>
+            </button>
+          </div>
+
+          <div className="text-center mt-[20px] text-gray-300 text-c2 ">
+            계속 진행함에 따라 POPPY의 &nbsp;
+            <a className="text-gray-500 underline" href="">
+              이용약관
+            </a>
+            과<br />
+            <a className="text-gray-500 underline" href="">
+              개인정보 수집 · 이용
+            </a>
+            에 동의합니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
