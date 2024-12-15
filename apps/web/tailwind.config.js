@@ -209,6 +209,7 @@ module.exports = {
         2: '2px',
       },
       gap: {
+        32: '32px',
         12: '12px',
         8: '8px',
         4: '4px',

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { DateLabel } from '../..';
 import { useRouter } from 'next/navigation';
 
-type VariantType = 'list' | 'gallary' | 'rank';
+type VariantType = 'list' | 'gallery' | 'rank';
 
 type Props = {
   id: number;
@@ -31,7 +31,7 @@ export const ItemCard = ({ id, variant, img, location, title, day, deadLine, ran
     switch (variant) {
       case 'list':
         return { width: 160, height: 160 };
-      case 'gallary':
+      case 'gallery':
         return { width: 168, height: 168 };
       case 'rank':
         return { width: 192, height: 248 };

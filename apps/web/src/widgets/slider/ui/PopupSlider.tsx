@@ -1,20 +1,30 @@
+'use client';
+
 import { ArrowRightSmall } from '@/public';
 import { ItemCard } from '@/src/shared';
 import React from 'react';
 import { ItemCardData } from '../model';
+import { useRouter } from 'next/navigation';
 
 type Props = {
-  variant: 'list' | 'gallary' | 'rank';
+  variant: 'list' | 'gallery' | 'rank';
   text1?: string;
   text2?: string;
   text3?: string;
   data: Array<ItemCardData>;
+  category?: string;
 };
 
 export const PopupSlider = (props: Props) => {
+  const router = useRouter();
+
+  const moreClickHandler = () => {
+    router.push(`/home/more/${props.category}`);
+  };
+
   return (
     <div className="flex flex-col w-full gap-y-12">
-      <div className="flex w-full justify-between items-center px-16">
+      <div className="flex w-full justify-between items-center px-16" onClick={moreClickHandler}>
         <div>
           {props.text1 ? <span className="text-h2 text-gray-900">{props.text1}</span> : null}
           {props.text2 ? <span className="text-h2 text-blue-700">{props.text2}</span> : null}

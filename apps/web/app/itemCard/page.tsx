@@ -113,7 +113,7 @@ export default function page({}: Props) {
             <div key={data.id}>
               <ItemCard
                 id={data.id}
-                variant={'gallary'}
+                variant={'gallery'}
                 img={data.img}
                 location={data.location}
                 title={data.title}
