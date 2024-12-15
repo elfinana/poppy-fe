@@ -10,6 +10,10 @@ type Props = {};
 export const HomeHeader = (props: Props) => {
   const router = useRouter();
 
+  const searchClickHandler = () => {
+    router.push('/home/search');
+  };
+
   const noticeClickHandler = () => {
     router.push('/notice');
   };
@@ -21,7 +25,7 @@ export const HomeHeader = (props: Props) => {
       </div>
       <div className="flex">
         <div className="mr-24">
-          <IconButton size="md" icon="searchLarge" />
+          <IconButton size="md" icon="searchLarge" onClick={searchClickHandler} />
         </div>
         <div>
           <IconButton size="md" icon="notificationOutlined" onClick={noticeClickHandler} />

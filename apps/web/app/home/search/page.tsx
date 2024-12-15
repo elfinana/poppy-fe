@@ -1,3 +1,5 @@
+'use client';
+
 import { InputChip } from '@/src/shared';
 import { InputHeader, PopupSlider } from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/slider/model';
@@ -7,6 +9,20 @@ type Props = {};
 
 const Page = (props: Props) => {
   const lastUpdate = '12. 02 10:00 업데이트';
+
+  const [recentlySearched, setRecentlySearched] = React.useState([
+    '오', // {id: string | number, text: string} 으로 바꾸기
+    '오둥',
+    '오둥이',
+    '오둥이의',
+    '오둥이의 ',
+    '오둥이의 아',
+    '오둥이의 아르',
+    '오둥이의 아르바',
+    '오둥이의 아르바이',
+    '오둥이의 아르바이트',
+  ]);
+  // 배열에서 filter를 이용하여 해당 문자열을 걸러내고, 반환된 새로운 배열을 setState()로 설정해주기
 
   return (
     <div>
@@ -34,9 +50,6 @@ const Page = (props: Props) => {
           </div>
         ))}
       </div>
-      {/* <div className="flex mt-16 px-16">
-        <div className="text-h3 text-gray-900">최근 본 팝업</div>
-      </div> */}
       <div className="flex mt-16 mb-bottomMargin">
         <PopupSlider variant="list" text1="최근 본 팝업" data={recentStores} />
       </div>
@@ -45,19 +58,6 @@ const Page = (props: Props) => {
 };
 
 export default Page;
-
-const recentlySearched: Array<string> = [
-  '오',
-  '오둥',
-  '오둥이',
-  '오둥이의',
-  '오둥이의 ',
-  '오둥이의 아',
-  '오둥이의 아르',
-  '오둥이의 아르바',
-  '오둥이의 아르바이',
-  '오둥이의 아르바이트',
-];
 
 const mostSearched: Array<string> = [
   '일둥이□■□□□□■□□□',
