@@ -89,6 +89,7 @@ export default function page({}: Props) {
           {data.map(data => (
             <div key={data.id}>
               <ItemCard
+                id={data.id}
                 variant={'list'}
                 img={data.img}
                 location={data.location}
@@ -111,6 +112,7 @@ export default function page({}: Props) {
           {data.map(data => (
             <div key={data.id}>
               <ItemCard
+                id={data.id}
                 variant={'gallary'}
                 img={data.img}
                 location={data.location}
@@ -133,6 +135,7 @@ export default function page({}: Props) {
           {rankData.map(data => (
             <div key={data.id}>
               <ItemCard
+                id={data.id}
                 variant={'rank'}
                 img={data.img}
                 location={data.location}

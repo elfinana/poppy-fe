@@ -27,6 +27,7 @@ export const PopupSlider = (props: Props) => {
       <div className="flex w-full overflow-x-auto gap-4">
         {props.data.map((item, idx) => (
           <ItemCard
+            id={item.id}
             key={`ITEMCARD_${idx}`}
             variant={props.variant}
             img={item.img}

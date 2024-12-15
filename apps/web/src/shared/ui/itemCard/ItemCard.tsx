@@ -1,9 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import { DateLabel } from '../..';
+import { useRouter } from 'next/navigation';
 
 type VariantType = 'list' | 'gallary' | 'rank';
 
 type Props = {
+  id: number;
   variant: VariantType;
   img: string;
   location: string;
@@ -16,7 +20,13 @@ type Props = {
   mr: boolean;
 };
 
-export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, isCount, ml, mr }: Props) => {
+export const ItemCard = ({ id, variant, img, location, title, day, deadLine, rank, isCount, ml, mr }: Props) => {
+  const router = useRouter();
+
+  const itemCardClickHandler = (id: number) => {
+    router.push(`/detail/${id}`);
+  };
+
   const getDimensions = (variant: VariantType) => {
     switch (variant) {
       case 'list':
@@ -33,7 +43,9 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
   const { width, height } = getDimensions(variant);
 
   return (
-    <div className={`flex shrink-0 flex-col w-[${width}px] gap-2 ${ml ? 'ml-16' : null} ${mr ? 'mr-16' : null}`}>
+    <div
+      className={`flex shrink-0 flex-col w-[${width}px] gap-2 ${ml ? 'ml-16' : null} ${mr ? 'mr-16' : null}`}
+      onClick={() => itemCardClickHandler(id)}>
       {/* 이미지 섹션 */}
       <div className="relative overflow-hidden">
         <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
