@@ -5,7 +5,9 @@ import { BackDark } from '@/public';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/src/shared';
 
-type Props = {};
+type Props = {
+  defaultText?: string;
+};
 
 export const InputHeader = (props: Props) => {
   const router = useRouter();

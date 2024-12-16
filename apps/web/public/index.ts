@@ -74,3 +74,7 @@ import Food from './3d/food.webp';
 import Goods from './3d/goods.webp';
 import Life from './3d/life.webp';
 export { Art, Fb, Food, Goods, Life };
+
+// others
+import Sort from './others/sort.svg';
+export { Sort };

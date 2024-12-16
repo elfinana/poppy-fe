@@ -16,3 +16,4 @@ export { PopupCarouselL, PopupCarouselXL, CategoryIconList } from './home';
 
 // slider
 export { PopupSlider } from './slider';
+export type { ItemCardData } from './slider';

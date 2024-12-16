@@ -1,6 +1,6 @@
 import { ItemCard } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/slider/model';
+import { ItemCardData } from '@/src/widgets/';
 import React from 'react';
 
 const Page = async ({ params }: { params: Promise<{ category: string }> }) => {
@@ -12,9 +12,9 @@ const Page = async ({ params }: { params: Promise<{ category: string }> }) => {
       <div className="sticky top-0 z-50">
         <ChevronHeader title={category} edit={false} />
       </div>
-      <div className="grid grid-cols-2 gap-y-32 px-16 mt-8">
+      <div className="grid grid-cols-2 gap-y-32 gap-x-8 px-16 mt-8">
         {recommandData.map((item, idx) => (
-          <div key={`ITEMCARD_${idx}`} className="flex justify-center">
+          <div key={`ITEMCARD_${idx}`} className="flex">
             <ItemCard
               id={item.id}
               variant={variant}
@@ -27,6 +27,7 @@ const Page = async ({ params }: { params: Promise<{ category: string }> }) => {
               isCount={item.isCount}
               ml={false}
               mr={false}
+              imageFull
             />
           </div>
         ))}
