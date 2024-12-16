@@ -1,5 +1,4 @@
 'use client';
-
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -26,15 +25,31 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  value: number;
 }
 
 const LikeIconButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, value, asChild = false, ...props }, ref) => {
+  ({ className, variant, value, asChild = false, onClick, ...props }, ref) => {
+    const [currentVariant, setCurrentVariant] = React.useState(variant || 'inactive');
     const Comp = asChild ? Slot : 'button';
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      setCurrentVariant(prev => (prev === 'active' ? 'inactive' : 'active'));
+      if (onClick) {
+        onClick(e);
+      }
+    };
+
+    const textColor = value > 0 ? 'text-blue-500' : 'text-gray-400';
+
     return (
-      <Comp className={cn(buttonVariants({ variant, className }))} ref={ref} {...props}>
-        <span className="mr-4">{variant === 'active' ? <LikeActive /> : <LikeInactive />}</span>
-        <span className="text-c1">{value}</span>
+      <Comp
+        className={cn(buttonVariants({ variant: currentVariant, className }))}
+        ref={ref}
+        onClick={handleClick}
+        {...props}>
+        <span className="mr-4">{currentVariant === 'active' ? <LikeActive /> : <LikeInactive />}</span>
+        <span className={cn('text-c1', textColor)}>{value}</span>
       </Comp>
     );
   },
