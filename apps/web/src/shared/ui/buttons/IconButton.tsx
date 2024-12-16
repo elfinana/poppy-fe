@@ -37,6 +37,7 @@ export interface ButtonProps
     | 'search'
     | 'searchLarge'
     | 'reload'
+    | 'ic-back'
     | 'fb';
 }
 
