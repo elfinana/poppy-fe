@@ -49,11 +49,11 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
 
       {/* 텍스트 섹션 */}
       <div className="flex flex-col ">
-        <span className="text-b4 text-gray-600">{location}</span>
+        <span className="text-gray-600 text-b4">{location}</span>
         <span className={`overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
           {title}
         </span>
-        <span className="text-b5 text-gray-500">{day}</span>
+        <span className="text-gray-500 text-b5">{day}</span>
       </div>
       <DateLabel status="operational" daysLeft={deadLine} />
     </div>
