@@ -12,9 +12,11 @@ type Props = {
   deadLine: number;
   rank: number;
   isCount: boolean;
+  ml: boolean;
+  mr: boolean;
 };
 
-export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, isCount }: Props) => {
+export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, isCount, ml, mr }: Props) => {
   const getDimensions = (variant: VariantType) => {
     switch (variant) {
       case 'list':
@@ -31,7 +33,7 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
   const { width, height } = getDimensions(variant);
 
   return (
-    <div className={`flex shrink-0 flex-col w-[${width}px] gap-2`}>
+    <div className={`flex shrink-0 flex-col w-[${width}px] gap-2 ${ml ? 'ml-16' : null} ${mr ? 'mr-16' : null}`}>
       {/* 이미지 섹션 */}
       <div className="relative overflow-hidden">
         <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
@@ -50,10 +52,11 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
       {/* 텍스트 섹션 */}
       <div className="flex flex-col ">
         <span className="text-b4 text-gray-600">{location}</span>
-        <span className={`overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
+        <span
+          className={`mt-2 overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
           {title}
         </span>
-        <span className="text-b5 text-gray-500">{day}</span>
+        <span className="mt-2 text-b5 text-gray-500">{day}</span>
       </div>
       <DateLabel status="operational" daysLeft={deadLine} />
     </div>

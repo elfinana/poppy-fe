@@ -172,6 +172,7 @@ module.exports = {
       height: {
         343: '343px',
         264: '264px',
+        58: '58px',
         56: '56px',
         48: '48px',
         40: '40px',
@@ -196,6 +197,7 @@ module.exports = {
         4: '4px',
       },
       margin: {
+        bottomMargin: '64px',
         100: '100px',
         48: '48px',
         24: '24px',
