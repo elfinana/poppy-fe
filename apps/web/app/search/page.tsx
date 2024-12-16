@@ -21,25 +21,34 @@ type Props = {};
 const Page = (props: Props) => {
   const mapRef = React.useRef<HTMLDivElement>(null);
   const mapInstance = React.useRef<naver.maps.Map | null>(null);
+  const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    const initMap = () => {
-      if (!mapRef.current) return;
+    // 스크립트 로드
+    const script = document.createElement('script');
+    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr`;
+    script.async = true;
 
-      mapInstance.current = new naver.maps.Map(mapRef.current, {
-        center: new naver.maps.LatLng(37.5665, 126.978), // 서울시청 좌표
-        zoom: 13, // 초기 줌 레벨
-      });
+    script.onload = () => {
+      if (window.naver && window.naver.maps) {
+        if (!mapRef.current) return;
+
+        mapInstance.current = new window.naver.maps.Map(mapRef.current, {
+          center: new window.naver.maps.LatLng(37.5665, 126.978),
+          zoom: 13,
+        });
+      }
     };
 
-    if (window.naver && window.naver.maps) {
-      initMap();
-    }
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
 
   const handleFocusButtonClick = () => {
     if (!navigator.geolocation) {
-      alert('현재 위치를 가져올 수 없습니다.');
       return;
     }
     navigator.geolocation.getCurrentPosition(position => {
@@ -77,14 +86,6 @@ const Page = (props: Props) => {
   };
   return (
     <div className="relative h-screen flex flex-col">
-      {/* <Script
-        src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr`}
-        strategy="beforeInteractive"
-        onLoad={() => {
-          console.log('네이버 지도 API 스크립트가 로드되었습니다.');
-        }}
-      /> */}
-
       <div ref={mapRef} className="flex-grow"></div>
 
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">

@@ -1,5 +1,3 @@
-import { LoginLayout } from '@/src/widgets';
-
-export default function LoginRootLayout({ children }: { children: React.ReactNode }) {
-  return <LoginLayout>{children}</LoginLayout>;
+export default function layout({ children }: { children: React.ReactNode }) {
+  return <div className="w-full h-full">{children}</div>;
 }
