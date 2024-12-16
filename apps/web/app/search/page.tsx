@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import { BottomNavigation } from '@/src/widgets';
-import Script from 'next/script';
 import {
   CategoryIconButton,
+  DatePicker,
   DropdownButton,
   FilterIconButton,
   FocusIconButton,
@@ -15,6 +15,16 @@ import {
 import { MapSearchButton } from '@/src/shared/ui/buttons/MapSearchButton';
 import { PinFashion } from '@/public';
 import { createCustomMarker } from '@/src/shared/ui/markers/customMarker';
+import { BottomSheet, BottomSheetHeader } from '@/src/shared/ui/bottomsheet';
+import { BottomSheetTrigger, BottomSheetContent } from '@/src/shared/ui/bottomsheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared';
+
+const tabsB = [
+  { value: 'c', label: '날짜', content: '날짜' },
+  { value: 'd', label: '위치', content: '위치' },
+  { value: 'e', label: '평점', content: '평점' },
+  { value: 'f', label: '카테고리', content: '카테고리' },
+];
 
 type Props = {};
 
@@ -22,6 +32,11 @@ const Page = (props: Props) => {
   const mapRef = React.useRef<HTMLDivElement>(null);
   const mapInstance = React.useRef<naver.maps.Map | null>(null);
   const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
+
+  const toggleBottomSheet = () => {
+    setIsBottomSheetOpen(prev => !prev);
+  };
 
   React.useEffect(() => {
     // 스크립트 로드
@@ -87,25 +102,50 @@ const Page = (props: Props) => {
   return (
     <div className="relative h-screen flex flex-col">
       <div ref={mapRef} className="flex-grow"></div>
-
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">
         <Input variantType="search" placeholder="팜업스토어명 검색" className="flex-grow" />
         <div className="flex gap-2 justify-start w-full">
-          <FilterIconButton variant="inactive" />
+          <FilterIconButton variant="inactive" onClick={toggleBottomSheet} />
           <DropdownButton value="날짜" variant="inactive" />
           <DropdownButton value="위치" variant="inactive" />
           <DropdownButton value="평점" variant="inactive" />
           <DropdownButton value="카테고리" variant="inactive" />
         </div>
       </div>
-
       <div className="absolute bottom-[100px] left-3">
         <FocusIconButton variant="inactive" onClick={handleFocusButtonClick} />
       </div>
-
       <div className="absolute bottom-[100px] left-1/2 transform -translate-x-1/2">
         <MapSearchButton onClick={handleMapSearch}>이 지역에서 검색</MapSearchButton>
       </div>
+
+      {/* 바텀시트 */}
+      <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
+        <BottomSheetContent>
+          {/* Tabs는 BottomSheetContent 내부로 이동 */}
+          <Tabs defaultValue="c" className="w-full">
+            <BottomSheetHeader>
+              <TabsList>
+                {tabsB.map(tab => (
+                  <TabsTrigger key={tab.value} value={tab.value}>
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </BottomSheetHeader>
+            {tabsB.map(tab => (
+              <TabsContent key={tab.value} value={tab.value}>
+                {tab.value === 'c' && (
+                  <div className="mt-6">
+                    <DatePicker />
+                  </div>
+                )}
+              </TabsContent>
+            ))}
+          </Tabs>
+        </BottomSheetContent>
+      </BottomSheet>
+
       <div className="fixed bottom-0 w-full z-20">
         <BottomNavigation />
       </div>

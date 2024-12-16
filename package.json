@@ -20,6 +20,8 @@
   },
   "name": "with-react-native-web",
   "dependencies": {
-    "@types/navermaps": "^3.7.8"
+    "@types/navermaps": "^3.7.8",
+    "date-fns": "3.0.0",
+    "expo": "50.0.0"
   }
 }
