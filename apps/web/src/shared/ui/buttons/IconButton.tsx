@@ -36,7 +36,8 @@ export interface ButtonProps
     | 'notificationOutlined'
     | 'search'
     | 'searchLarge'
-    | 'ic-back';
+    | 'ic-back'
+    | 'setting';
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
