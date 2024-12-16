@@ -97,6 +97,8 @@ export default function page({}: Props) {
                 deadLine={data.deadLine}
                 rank={data?.id}
                 isCount={data.isCount}
+                ml={false}
+                mr={false}
               />
             </div>
           ))}
@@ -117,6 +119,8 @@ export default function page({}: Props) {
                 deadLine={data.deadLine}
                 rank={data?.id}
                 isCount={data.isCount}
+                ml={false}
+                mr={false}
               />
             </div>
           ))}
@@ -137,6 +141,8 @@ export default function page({}: Props) {
                 deadLine={data.deadLine}
                 rank={data?.id}
                 isCount={data.isCount}
+                ml={false}
+                mr={false}
               />
             </div>
           ))}

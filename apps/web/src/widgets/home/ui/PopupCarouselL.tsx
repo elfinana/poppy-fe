@@ -3,6 +3,7 @@
 import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '../../../shared/ui/carousel';
 import Image from 'next/image';
+import Autoplay from 'embla-carousel-autoplay';
 
 type Props = {};
 
@@ -36,7 +37,7 @@ const PopupCarouselL = (props: Props) => {
   }, [api]);
 
   return (
-    <Carousel setApi={setApi}>
+    <Carousel setApi={setApi} opts={{ loop: true }} plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]}>
       <CarouselContent>
         {carouselItems.map((item, idx) => (
           <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">

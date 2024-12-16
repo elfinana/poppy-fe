@@ -77,7 +77,8 @@ export { Delete };
 
 // Headers
 import PoppyHomeHeader from './header/Poppy_HomeHeader.svg';
-export { PoppyHomeHeader };
+import BackDark from './header/back.svg';
+export { PoppyHomeHeader, BackDark };
 
 // 3d images
 import Art from './3d/art.webp';
