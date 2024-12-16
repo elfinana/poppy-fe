@@ -14,7 +14,7 @@ type Props = {
 export const PopupSlider = (props: Props) => {
   return (
     <div className="flex flex-col w-full gap-y-12">
-      <div className="flex w-full justify-between items-center">
+      <div className="flex w-full justify-between items-center px-16">
         <div>
           {props.text1 ? <span className="text-h2 text-gray-900">{props.text1}</span> : null}
           {props.text2 ? <span className="text-h2 text-blue-700">{props.text2}</span> : null}
@@ -36,6 +36,8 @@ export const PopupSlider = (props: Props) => {
             deadLine={item.deadLine}
             rank={idx + 1}
             isCount={item.isCount}
+            ml={idx === 0 ? true : false}
+            mr={idx === props.data.length - 1 ? true : false}
           />
         ))}
       </div>
