@@ -16,12 +16,12 @@ import {
   TabsTrigger,
 } from '@/src/shared';
 import Textfilter from '../../public/icons/ic-text-filter.svg';
-import { useState, useRef } from 'react';
-import { ItemCardData } from '@/src/widgets/home/model';
+import { useRef, useEffect } from 'react';
+import { useDetailStore } from 'store/detail/detailStore';
 
 export default function Page() {
-  const [selectedTab, setSelectedTab] = useState('a');
-  const [selectedValue, setSelectedValue] = useState('visit');
+  const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
+    useDetailStore();
   const addressRef = useRef<HTMLParagraphElement>(null);
 
   const handleCopy = () => {
@@ -33,7 +33,12 @@ export default function Page() {
 
   const router = useRouter();
 
-  const recommandData: Array<ItemCardData> = [
+  // 데이터 업데이트
+  useEffect(() => {
+    setRecommandData(backendData);
+  }, [setRecommandData]);
+
+  const backendData = [
     {
       id: 1,
       img: 'https://placehold.co/500/webp',
