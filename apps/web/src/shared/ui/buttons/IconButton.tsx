@@ -38,6 +38,8 @@ export interface ButtonProps
     | 'notificationOutlined'
     | 'search'
     | 'searchLarge'
+    | 'reload'
+    | 'fb';
     | 'ic-back'
     | 'setting'
     | 'ic-back-white'
