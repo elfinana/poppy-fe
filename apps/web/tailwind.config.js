@@ -40,7 +40,7 @@ module.exports = {
           700: '#9b7cd9',
         },
         yellow: '#faca60',
-        green: '#02C75A',
+        naver: '#02C75A',
         warning: '#eb535d',
         informative: '#5599ff',
         background: 'hsl(var(--background))', // required

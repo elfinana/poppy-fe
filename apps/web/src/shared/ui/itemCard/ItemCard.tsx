@@ -75,7 +75,7 @@ export const ItemCard = ({
             width={500}
             height={500}
             alt={title}
-            className="rounded-sm object-cover"
+            className="object-cover rounded-sm"
           />
         ) : (
           <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
@@ -94,12 +94,12 @@ export const ItemCard = ({
 
       {/* 텍스트 섹션 */}
       <div className={`flex flex-col`}>
-        <div className="text-b4 text-gray-600">{location}</div>
+        <div className="text-gray-600 text-b4">{location}</div>
         <div
           className={`mt-2 overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
           {title}
         </div>
-        <div className="mt-2 text-b5 text-gray-500">{day}</div>
+        <div className="mt-2 text-gray-500 text-b5">{day}</div>
       </div>
       <DateLabel status="operational" daysLeft={deadLine} />
     </div>
