@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { DateLabel } from '../..';
 import { useRouter } from 'next/navigation';
 
-type VariantType = 'list' | 'gallery' | 'rank';
+type VariantType = 'list' | 'gallery' | 'rank' | 'smlist';
 
 type Props = {
   id: number;
@@ -49,6 +49,8 @@ export const ItemCard = ({
         return { width: 168, height: 168 };
       case 'rank':
         return { width: 192, height: 248 };
+      case 'smlist':
+        return { width: 136, height: 136 };
       default:
         return { width: 160, height: 160 };
     }

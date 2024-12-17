@@ -43,3 +43,6 @@ export { ItemCard } from './itemCard/ItemCard';
 export { Textarea } from './textArea';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
+
+// Hr
+export { Hr } from './hr/Hr';

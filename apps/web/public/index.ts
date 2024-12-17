@@ -10,6 +10,7 @@ import AcSearch from './icons/AcSearch.svg';
 import NotificationOutlined from './icons/notificationOutlined.svg';
 import SearchLarge from './icons/searchLarge.svg';
 import ArrowRightSmall from './icons/arrow_r_sm.svg';
+import Setting from './icons/setting.svg';
 export {
   MyPage,
   Home,
@@ -22,6 +23,7 @@ export {
   NotificationOutlined,
   SearchLarge,
   ArrowRightSmall,
+  Setting,
 };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
@@ -77,4 +79,5 @@ export { Art, Fb, Food, Goods, Life };
 
 // others
 import Sort from './others/sort.svg';
-export { Sort };
+import ExternalLink from './others/external_link.svg';
+export { Sort, ExternalLink };

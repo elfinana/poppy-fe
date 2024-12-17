@@ -39,6 +39,7 @@ export interface ButtonProps
     | 'search'
     | 'searchLarge'
     | 'ic-back'
+    | 'setting'
     | 'ic-back-white'
     | 'ic-bookmark'
     | 'ic-bookmark-active'
