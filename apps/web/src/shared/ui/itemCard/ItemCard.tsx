@@ -1,9 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import { DateLabel } from '../..';
+import { useRouter } from 'next/navigation';
 
-type VariantType = 'list' | 'gallary' | 'rank';
+type VariantType = 'list' | 'gallery' | 'rank';
 
 type Props = {
+  id: number;
   variant: VariantType;
   img: string;
   location: string;
@@ -14,14 +18,34 @@ type Props = {
   isCount: boolean;
   ml: boolean;
   mr: boolean;
+  imageFull?: boolean;
 };
 
-export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, isCount, ml, mr }: Props) => {
+export const ItemCard = ({
+  id,
+  variant,
+  img,
+  location,
+  title,
+  day,
+  deadLine,
+  rank,
+  isCount,
+  ml,
+  mr,
+  imageFull = false,
+}: Props) => {
+  const router = useRouter();
+
+  const itemCardClickHandler = (id: number) => {
+    router.push(`/detail/${id}`);
+  };
+
   const getDimensions = (variant: VariantType) => {
     switch (variant) {
       case 'list':
         return { width: 160, height: 160 };
-      case 'gallary':
+      case 'gallery':
         return { width: 168, height: 168 };
       case 'rank':
         return { width: 192, height: 248 };
@@ -33,10 +57,27 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
   const { width, height } = getDimensions(variant);
 
   return (
-    <div className={`flex shrink-0 flex-col w-[${width}px] gap-2 ${ml ? 'ml-16' : null} ${mr ? 'mr-16' : null}`}>
+    <div
+      className={`flex shrink-0 flex-col gap-2 ${ml ? 'ml-16' : ''} ${mr ? 'mr-16' : ''}`}
+      style={{ width: imageFull ? '100%' : `${width}px` }}
+      onClick={() => itemCardClickHandler(id)}>
       {/* 이미지 섹션 */}
-      <div className="relative overflow-hidden">
-        <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
+      <div className="relative overflow-hidden" style={{ height: imageFull ? '100%' : `${height}px` }}>
+        {imageFull ? (
+          <Image
+            src={img}
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
+            width={500}
+            height={500}
+            alt={title}
+            className="rounded-sm object-cover"
+          />
+        ) : (
+          <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
+        )}
         {variant === 'rank' && (
           <div className="absolute rounded-tl-sm rounded-br-sm w-[24px] h-[24px] flex text-center justify-center top-0 left-0 bg-gray-900 text-white ">
             {rank}
@@ -50,13 +91,13 @@ export const ItemCard = ({ variant, img, location, title, day, deadLine, rank, i
       </div>
 
       {/* 텍스트 섹션 */}
-      <div className="flex flex-col ">
-        <span className="text-b4 text-gray-600">{location}</span>
-        <span
+      <div className={`flex flex-col`}>
+        <div className="text-b4 text-gray-600">{location}</div>
+        <div
           className={`mt-2 overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
           {title}
-        </span>
-        <span className="mt-2 text-b5 text-gray-500">{day}</span>
+        </div>
+        <div className="mt-2 text-b5 text-gray-500">{day}</div>
       </div>
       <DateLabel status="operational" daysLeft={deadLine} />
     </div>

@@ -1,4 +1,3 @@
-import { SubHeader } from './subHeader/SubHeader';
 export { BottomNavigation } from './Navigation/ui/BottomNavigation';
 
 // HomeHeader
@@ -9,14 +8,12 @@ export { SubHeader } from './subHeader/SubHeader';
 // ChevronHeader
 export { ChevronHeader } from './header/ui/ChevronHeader';
 
-// PopupCarouselL
-export { PopupCarouselL } from './home/ui/PopupCarouselL';
+// ChevronHeader
+export { InputHeader } from './header/ui/InputHeader';
 
-// PopupCarouselXL
-export { PopupCarouselXL } from './home/ui/PopupCarouselXL';
+// home
+export { PopupCarouselL, PopupCarouselXL, CategoryIconList } from './home';
 
-// CategoryIconList
-export { CategoryIconList } from './home/ui/CategoryIconList';
-
-// PopupSlider
-export { PopupSlider } from './home/ui/PopupSlider';
+// slider
+export { PopupSlider } from './slider';
+export type { ItemCardData } from './slider';
