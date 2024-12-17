@@ -22,6 +22,7 @@ export { StatusLabel } from './labels/StatusLabel';
 // Chips
 export { ChoiceChipGroup, ChoiceChipGroupItem } from './chips/ChoiceChip';
 export { FilterChipGroup, FilterChipGroupItem } from './chips/FilterChip';
+export { InputChip } from './chips/InputChip';
 
 // Dialog
 export {
@@ -45,3 +46,6 @@ export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
 
 export { BottomSheet, BottomSheetHeader, BottomSheetTrigger, BottomSheetContent } from './bottomsheet/bottomsheet';
+
+// Hr
+export { Hr } from './hr/Hr';

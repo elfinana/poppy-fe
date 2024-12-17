@@ -6,7 +6,7 @@ import {
   BottomNavigation,
   PopupCarouselXL,
 } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/home/model';
+import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
 
 type Props = {};
@@ -24,22 +24,29 @@ const Page = (props: Props) => {
         <CategoryIconList />
       </div>
       <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="OOO님을 위한 추천 팝업" data={recommandData} />
+        <PopupSlider variant="list" text1="OOO님을 위한 추천 팝업" data={recommandData} category="fb" />
       </div>
       <div className="w-full mt-48">
-        <PopupSlider variant="rank" text1="지금 많이 찾는 팝업" data={popularData} />
+        <PopupSlider variant="rank" text1="지금 많이 찾는 팝업" data={popularData} category="popular" />
       </div>
       <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="예전에 방문했던 " text2={`성동구`} text3=" 팝업" data={recommandData} />
+        <PopupSlider
+          variant="list"
+          text1="예전에 방문했던 "
+          text2={`성동구`}
+          text3=" 팝업"
+          data={recommandData}
+          category="past"
+        />
       </div>
       <div className="w-full mt-48">
         <PopupCarouselXL text1="지금 주목해야 할 " text2="패션" text3=" 팝업" />
       </div>
       <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="따끈따끈, 새로 오픈한 팝업" data={recommandData} />
+        <PopupSlider variant="list" text1="따끈따끈, 새로 오픈한 팝업" data={recommandData} category="new" />
       </div>
       <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="오픈 예정인 팝업" data={recommandData} />
+        <PopupSlider variant="list" text1="오픈 예정인 팝업" data={recommandData} category="planned" />
       </div>
       <div className="h-58 mt-bottomMargin"></div>
       <BottomNavigation />
