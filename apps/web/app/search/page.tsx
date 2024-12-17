@@ -167,17 +167,15 @@ const Page = (props: Props) => {
                     <DatePicker />
                   </div>
                 )}
-              </TabsContent>
-            ))}
-          </Tabs>
-          <Tabs defaultValue="d" className="w-full">
-            {tabsB.map(tab => (
-              <TabsContent key={tab.value} value={tab.value}>
+
                 {tab.value === 'd' && (
                   <div className=" p-[24px]">
                     <ChoiceChipGroup className="flex flex-row">
                       {locations.map(location => (
-                        <ChoiceChipGroupItem key={location} value={location}>
+                        <ChoiceChipGroupItem
+                          key={location}
+                          value={location}
+                          className="inline-flex items-center justify-center px-4 py-2">
                           {location}
                         </ChoiceChipGroupItem>
                       ))}
