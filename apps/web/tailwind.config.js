@@ -172,6 +172,7 @@ module.exports = {
       height: {
         343: '343px',
         264: '264px',
+        196: '196px',
         58: '58px',
         56: '56px',
         48: '48px',
@@ -201,6 +202,7 @@ module.exports = {
         100: '100px',
         48: '48px',
         24: '24px',
+        20: '20px',
         16: '16px',
         12: '12px',
         8: '8px',
@@ -208,7 +210,9 @@ module.exports = {
         2: '2px',
       },
       gap: {
+        32: '32px',
         12: '12px',
+        8: '8px',
         4: '4px',
       },
       boxShadow: {
