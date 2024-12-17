@@ -1,3 +1,6 @@
+'use client';
+
+import { ChipListItem } from '@/src/entities';
 import {
   ChoiceChipGroup,
   ChoiceChipGroupItem,
@@ -13,7 +16,17 @@ const tdStyle = 'p-8 text-center item-center';
 
 type Props = {};
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
+  const [recentlySearched, setRecentlySearched] = React.useState([
+    { id: 0, text: '일둥이' },
+    { id: 1, text: '이둥이' },
+  ]);
+
+  const deleteChipsHandler = (chip: ChipListItem) => {
+    setRecentlySearched(recentlySearched.filter(val => val.id !== chip.id));
+    // 삭제 API 요청
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded p-8">
       <table className="table-auto">
@@ -49,8 +62,9 @@ const page = (props: Props) => {
           <tr>
             <td className={`text-h1 ${tdStyle}`}>Input</td>
             <td className={tdStyle}>
-              <InputChip value="odungi" text="오둥이" />
-              <InputChip value="odungiparttime" text="오둥이의 아르바이트" />
+              {recentlySearched.map((item, idx) => (
+                <InputChip key={`CHIP_${idx}`} value={item.id} text={item.text} onDelete={deleteChipsHandler} />
+              ))}
             </td>
           </tr>
         </tbody>
@@ -59,4 +73,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default Page;

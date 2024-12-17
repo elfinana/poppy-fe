@@ -56,11 +56,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <span className="text-gray-800 text-b2">
+          <div className="text-gray-800 text-b2 pl-[4px]">
             {label} <span className="text-warning">*</span>
-          </span>
+          </div>
         )}
-        <div className="relative w-full">
+        <div className="relative w-full mt-[8px]">
           <input
             type={type}
             ref={ref || inputRef}

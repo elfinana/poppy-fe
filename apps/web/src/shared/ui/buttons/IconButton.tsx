@@ -10,8 +10,10 @@ const buttonVariants = cva('flex-shrink-0 block', {
   variants: {
     size: {
       sm: 'w-[16px] h-[16px]',
+      smmd: 'w-[20px] h-[20px]',
       md: 'w-[24px] h-[24px]',
       lg: 'w-[26px] h-[26px]',
+      xlg: 'w-[32px] h-[32px]',
     },
   },
   defaultVariants: {
@@ -37,8 +39,22 @@ export interface ButtonProps
     | 'search'
     | 'searchLarge'
     | 'reload'
-    | 'ic-back'
     | 'fb';
+    | 'ic-back'
+    | 'setting'
+    | 'ic-back-white'
+    | 'ic-bookmark'
+    | 'ic-bookmark-active'
+    | 'ic-star-active'
+    | 'ic-star'
+    | 'ic-camera'
+    | 'ic-info-ticket'
+    | 'ic-info-date'
+    | 'ic-info-location'
+    | 'ic-info-share'
+    | 'ic-info-time'
+    | 'ic-info-copy'
+    | 'ic-share';
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, ButtonProps>(

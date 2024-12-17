@@ -16,7 +16,7 @@ import PinFood from './icons/PinFood.svg';
 import PinLife from './icons/PinLife.svg';
 import PinGoods from './icons/PinGoods.svg';
 import PinArt from './icons/PinArt.svg';
-
+import Setting from './icons/setting.svg';
 export {
   MyPage,
   Home,
@@ -35,6 +35,7 @@ export {
   PinLife,
   PinGoods,
   PinArt,
+  Setting,
 };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
@@ -87,3 +88,8 @@ import Food from './3d/food.webp';
 import Goods from './3d/goods.webp';
 import Life from './3d/life.webp';
 export { Art, Fb, Food, Goods, Life };
+
+// others
+import Sort from './others/sort.svg';
+import ExternalLink from './others/external_link.svg';
+export { Sort, ExternalLink };
