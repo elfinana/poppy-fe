@@ -42,7 +42,7 @@ const BottomSheetContent = React.forwardRef<
       )}
       {...props}>
       <div className="mx-auto mt-2 w-10 h-1 bg-gray-300 rounded-full" />
-      <div className="p-[24px]">{children}</div>
+      <div>{children}</div>
     </DrawerPrimitive.Content>
   </BottomSheetPortal>
 ));

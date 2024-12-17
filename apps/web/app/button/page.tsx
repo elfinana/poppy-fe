@@ -11,8 +11,8 @@ import {
   DropdownButton,
   RadioGroup,
   RadioGroupItem,
+  MapSearchButton,
 } from '@/src/shared';
-import { MapSearchButton } from '@/src/shared/ui/buttons/MapSearchButton';
 import { Checkbox } from '@/src/shared/ui/checkbox';
 import React from 'react';
 

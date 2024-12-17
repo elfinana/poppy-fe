@@ -4,6 +4,8 @@ import * as React from 'react';
 import { BottomNavigation } from '@/src/widgets';
 import {
   CategoryIconButton,
+  ChoiceChipGroup,
+  ChoiceChipGroupItem,
   DatePicker,
   DropdownButton,
   FilterIconButton,
@@ -11,13 +13,18 @@ import {
   IconButton,
   Input,
   SecondaryButton,
+  BottomSheet,
+  BottomSheetHeader,
+  BottomSheetTrigger,
+  BottomSheetContent,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
 } from '@/src/shared';
+
 import { MapSearchButton } from '@/src/shared/ui/buttons/MapSearchButton';
-import { PinFashion } from '@/public';
 import { createCustomMarker } from '@/src/shared/ui/markers/customMarker';
-import { BottomSheet, BottomSheetHeader } from '@/src/shared/ui/bottomsheet';
-import { BottomSheetTrigger, BottomSheetContent } from '@/src/shared/ui/bottomsheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared';
 
 const tabsB = [
   { value: 'c', label: '날짜', content: '날짜' },
@@ -26,6 +33,26 @@ const tabsB = [
   { value: 'f', label: '카테고리', content: '카테고리' },
 ];
 
+const locations = [
+  '전체',
+  '서울',
+  '경기',
+  '인천',
+  '부산',
+  '대구',
+  '대전',
+  '광주',
+  '울산',
+  '세종',
+  '강원',
+  '경남',
+  '경북',
+  '전남',
+  '전북',
+  '충남',
+  '충북',
+  '제주',
+];
 type Props = {};
 
 const Page = (props: Props) => {
@@ -125,9 +152,9 @@ const Page = (props: Props) => {
           {/* Tabs는 BottomSheetContent 내부로 이동 */}
           <Tabs defaultValue="c" className="w-full">
             <BottomSheetHeader>
-              <TabsList>
+              <TabsList className="flex justify-start gap-x-12">
                 {tabsB.map(tab => (
-                  <TabsTrigger key={tab.value} value={tab.value}>
+                  <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
                     {tab.label}
                   </TabsTrigger>
                 ))}
@@ -136,8 +163,25 @@ const Page = (props: Props) => {
             {tabsB.map(tab => (
               <TabsContent key={tab.value} value={tab.value}>
                 {tab.value === 'c' && (
-                  <div className="mt-6">
+                  <div className=" p-[24px]">
                     <DatePicker />
+                  </div>
+                )}
+              </TabsContent>
+            ))}
+          </Tabs>
+          <Tabs defaultValue="d" className="w-full">
+            {tabsB.map(tab => (
+              <TabsContent key={tab.value} value={tab.value}>
+                {tab.value === 'd' && (
+                  <div className=" p-[24px]">
+                    <ChoiceChipGroup className="flex flex-row">
+                      {locations.map(location => (
+                        <ChoiceChipGroupItem key={location} value={location}>
+                          {location}
+                        </ChoiceChipGroupItem>
+                      ))}
+                    </ChoiceChipGroup>
                   </div>
                 )}
               </TabsContent>

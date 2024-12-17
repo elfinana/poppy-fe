@@ -13,6 +13,7 @@ export { DropdownButton } from './buttons/DropdownButton';
 export { RadioGroup, RadioGroupItem } from './buttons/RadioButton';
 export { IconButton } from './buttons/IconButton';
 export { CategoryIconButton } from './buttons/CategoryIconButton';
+export { MapSearchButton } from './buttons/MapSearchButton';
 
 // Labels
 export { DateLabel } from './labels/DateLabel';
@@ -42,3 +43,5 @@ export { ItemCard } from './itemCard/ItemCard';
 export { Textarea } from './textArea';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
+
+export { BottomSheet, BottomSheetHeader, BottomSheetTrigger, BottomSheetContent } from './bottomsheet/bottomsheet';
