@@ -33,11 +33,7 @@ export interface RadioProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
     VariantProps<typeof radioVariants> {
   asChild?: boolean;
-<<<<<<< HEAD
   size: 'lg' | 'sm';
-=======
-  size?: 'lg' | 'sm';
->>>>>>> 946fecc3904ed1a8d1540b345440643dffeddae4
   label?: string;
 }
 
