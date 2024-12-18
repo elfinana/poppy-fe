@@ -11,6 +11,8 @@ import NotificationOutlined from './icons/notificationOutlined.svg';
 import SearchLarge from './icons/searchLarge.svg';
 import ArrowRightSmall from './icons/arrow_r_sm.svg';
 import Setting from './icons/setting.svg';
+import Kebab from './icons/kebab.svg';
+import Camera from './icons/ic-camera.svg';
 export {
   MyPage,
   Home,
@@ -24,6 +26,8 @@ export {
   SearchLarge,
   ArrowRightSmall,
   Setting,
+  Kebab,
+  Camera,
 };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
