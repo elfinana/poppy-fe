@@ -12,6 +12,8 @@ import React from 'react';
 type Props = {};
 
 const Page = (props: Props) => {
+  const data = fetch;
+
   return (
     <div>
       <div className="w-full sticky top-0 z-50">
