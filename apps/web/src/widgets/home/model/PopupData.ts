@@ -1,3 +1,8 @@
+export interface PopupCarouselResponse extends Error {
+  message: string;
+  data?: Array<PopupCarouselItem>;
+}
+
 export interface PopupCarouselItem {
   id: number;
   number: string;
@@ -6,4 +11,8 @@ export interface PopupCarouselItem {
   message?: string;
 }
 
-export interface Error {}
+export interface Error {
+  code: number;
+  httpStatus?: string;
+  errorMessage?: string;
+}

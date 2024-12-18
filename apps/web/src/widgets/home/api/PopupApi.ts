@@ -1,10 +1,12 @@
-import { PopupCarouselItem } from '../model/PopupData';
+import { PopupCarouselResponse } from '../model/';
 
-export const getClosingSoonList = async (): Promise<Array<PopupCarouselItem>> => {
+export const getClosingSoonList = async (): Promise<PopupCarouselResponse> => {
   try {
     const response = await fetch('');
-    const data: Array<PopupCarouselItem> = await response.json();
+    const result = <PopupCarouselResponse>await response.json();
 
-    return data;
-  } catch (e) {}
+    return result;
+  } catch (e) {
+    return { code: 0, message: 'Unable to fetch data' };
+  }
 };

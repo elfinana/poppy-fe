@@ -5,14 +5,17 @@ import {
   PopupSlider,
   BottomNavigation,
   PopupCarouselXL,
+  getClosingSoonList,
 } from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
 
 type Props = {};
 
-const Page = (props: Props) => {
-  const data = fetch;
+const Page = async (props: Props) => {
+  const data = await getClosingSoonList();
+
+  console.log(data);
 
   return (
     <div>
