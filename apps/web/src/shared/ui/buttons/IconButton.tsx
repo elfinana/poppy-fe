@@ -39,7 +39,7 @@ export interface ButtonProps
     | 'search'
     | 'searchLarge'
     | 'reload'
-    | 'fb';
+    | 'fb'
     | 'ic-back'
     | 'setting'
     | 'ic-back-white'
