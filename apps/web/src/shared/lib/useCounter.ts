@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 
 // 추후 서버 데이터 삽입
