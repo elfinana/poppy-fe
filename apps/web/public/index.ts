@@ -10,6 +10,12 @@ import AcSearch from './icons/AcSearch.svg';
 import NotificationOutlined from './icons/notificationOutlined.svg';
 import SearchLarge from './icons/searchLarge.svg';
 import ArrowRightSmall from './icons/arrow_r_sm.svg';
+import Reload from './icons/reload.svg';
+import PinFashion from './icons/PinFashion.svg';
+import PinFood from './icons/PinFood.svg';
+import PinLife from './icons/PinLife.svg';
+import PinGoods from './icons/PinGoods.svg';
+import PinArt from './icons/PinArt.svg';
 import Setting from './icons/setting.svg';
 import Kebab from './icons/kebab.svg';
 import Camera from './icons/ic-camera.svg';
@@ -25,6 +31,12 @@ export {
   NotificationOutlined,
   SearchLarge,
   ArrowRightSmall,
+  Reload,
+  PinFashion,
+  PinFood,
+  PinLife,
+  PinGoods,
+  PinArt,
   Setting,
   Kebab,
   Camera,
