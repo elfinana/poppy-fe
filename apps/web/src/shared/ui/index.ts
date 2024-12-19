@@ -49,3 +49,5 @@ export { BottomSheet, BottomSheetHeader, BottomSheetTrigger, BottomSheetContent 
 
 // Hr
 export { Hr } from './hr/Hr';
+
+export { Counter } from './counter/Counter';
