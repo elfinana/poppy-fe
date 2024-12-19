@@ -9,7 +9,7 @@ type Props = {
   discountHandler: () => void;
 };
 
-const Counter = (props: Props) => {
+export const Counter = (props: Props) => {
   const { count, countHandler, discountHandler } = props;
   return (
     <div className="flex justify-center items-center px-8 py-10 border-[1px] border-gray-100 rounded-12 gap-[13px]">
@@ -23,5 +23,3 @@ const Counter = (props: Props) => {
     </div>
   );
 };
-
-export default Counter;

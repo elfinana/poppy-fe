@@ -1,9 +1,7 @@
 'use client';
-import { useCounter } from '@/src/shared/ui/counter/useCounter';
-import { PrimaryButton } from '@/src/shared';
+import { Counter, PrimaryButton, useCounter } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
 import React from 'react';
-import Counter from '@/src/shared/ui/counter/Counter';
 
 const EditPage = () => {
   const { enabled, maximumCapacity, maximumCapacityHandler, count, countHandler, discountHandler } = useCounter();
