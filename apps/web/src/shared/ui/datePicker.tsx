@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import { ko } from 'date-fns/locale';
 import { format } from 'date-fns';
 
-const DatePicker = () => {
+type Props = {
+  className?: string;
+};
+const DatePicker = (props: Props) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const onSelect = (date: Date | undefined) => {
     if (!date) return;
@@ -17,6 +20,7 @@ const DatePicker = () => {
       selected={selectedDate}
       onSelect={onSelect}
       disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))}
+      className={props.className}
       classNames={{
         day_today: 'text-gray-800',
         day_selected: 'bg-blue-500 !text-white rounded-xl',
