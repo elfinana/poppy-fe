@@ -8,11 +8,22 @@ import React from 'react';
 
 type Props = {};
 
+type PopUpStoreState = 'offline' | 'online';
+
 const Page = (props: Props) => {
   const router = useRouter();
 
   const reviewsClickHandler = () => {
     router.push('/mypage/reviews');
+  };
+
+  // online, offline 유저 개시 팝업스토어 상태에 따라 페이지 이동
+  const myPopUpStoreClickHandler = (userState: PopUpStoreState) => {
+    if (userState === 'offline') {
+      router.push('/mypage/popupstore/offline');
+    } else {
+      router.push('/mypage/popupstore/online/history');
+    }
   };
 
   const name = '가나다';
@@ -25,10 +36,10 @@ const Page = (props: Props) => {
         <MypageHeader title="마이페이지" />
       </div>
       <div className="px-16 mt-12">
-        <div className="flex justify-between items-center bg-gray-50 rounded-12 border border-gray-100 pl-16 pr-8 py-18">
+        <div className="flex justify-between items-center pr-8 pl-16 bg-gray-50 border border-gray-100 rounded-12 py-18">
           <div className="flex flex-col gap-2">
-            <div className="text-h2 text-black">{name}</div>
-            <div className="text-b3_com text-gray-600">{email}</div>
+            <div className="text-black text-h2">{name}</div>
+            <div className="text-gray-600 text-b3_com">{email}</div>
           </div>
           <div>
             <SecondaryButton size="sm">프로필 수정</SecondaryButton>
@@ -48,19 +59,31 @@ const Page = (props: Props) => {
           typography="h3"
         />
       </div>
-      <div className="mt-20 px-16">
+      <div className="px-16 mt-20">
         <Hr variant="hairline" />
       </div>
-      <div className="flex w-full justify-between items-center px-16 mt-20" onClick={reviewsClickHandler}>
-        <div className="flex items-center gap-4">
-          <span className="text-h3 text-gray-900">작성한 리뷰</span>
-          <span className="text-h4 text-gray-300">{reviewsCount}</span>
+      <div className="flex justify-between items-center px-16 mt-20 w-full" onClick={reviewsClickHandler}>
+        <div className="flex gap-4 items-center">
+          <span className="text-gray-900 text-h3">작성한 리뷰</span>
+          <span className="text-gray-300 text-h4">{reviewsCount}</span>
         </div>
         <div>
           <ArrowRightSmall />
         </div>
       </div>
-      <div className="fixed w-full bottom-0 z-50">
+
+      <div
+        className="flex justify-between items-center px-16 mt-20 w-full"
+        onClick={() => myPopUpStoreClickHandler('offline')}>
+        <div className="flex gap-4 items-center">
+          <span className="text-gray-900 text-h3">내 팝업스토어</span>
+        </div>
+        <div>
+          <ArrowRightSmall />
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 z-50 w-full">
         <BottomNavigation />
       </div>
     </div>

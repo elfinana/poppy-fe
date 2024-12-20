@@ -93,3 +93,8 @@ export { Art, Fb, Food, Goods, Life };
 import Sort from './others/sort.svg';
 import ExternalLink from './others/external_link.svg';
 export { Sort, ExternalLink };
+
+// admin, detail
+import Plus from './icons/plus.svg';
+import Minus from './icons/minus.svg';
+export { Plus, Minus };

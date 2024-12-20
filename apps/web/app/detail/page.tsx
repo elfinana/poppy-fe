@@ -18,6 +18,7 @@ import {
 import Textfilter from '../../public/icons/ic-text-filter.svg';
 import { useRef, useEffect } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
+import { useQuery } from 'react-query';
 
 export default function Page() {
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
@@ -32,6 +33,12 @@ export default function Page() {
   };
 
   const router = useRouter();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['popupData'],
+    queryFn: () => fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/1`).then(res => res.json()),
+  });
+  console.log(data);
 
   // 데이터 업데이트
   useEffect(() => {

@@ -27,7 +27,7 @@ const navArr = [
     text: '마이페이지',
     image: MyPage,
     activeImg: AcMyPage,
-    action: '/',
+    action: '/mypage',
   },
 ];
 
@@ -36,7 +36,7 @@ export const BottomNavigation = () => {
   const [active, setActive] = useState('홈');
 
   return (
-    <div className="flex sticky w-full h-fit bg-white bottom-0 pt-8 pb-4 border-t border-t-gray-100 rounded-t-20">
+    <div className="flex sticky bottom-0 pt-8 pb-4 w-full bg-white border-t h-fit border-t-gray-100 rounded-t-20">
       {navArr.map(({ text, image: Icon, activeImg: ActiveIcon, action }) => (
         <button
           key={text}
@@ -46,7 +46,7 @@ export const BottomNavigation = () => {
               router.push(action);
             }
           }}
-          className="flex flex-col justify-center items-center w-full h-full gap-1">
+          className="flex flex-col gap-1 justify-center items-center w-full h-full">
           {active === text ? <ActiveIcon /> : <Icon />}
           <span className={`text-c2 group-hover:text-c1 ${active === text ? 'text-gray-800' : 'text-gray-500'}`}>
             {text}
