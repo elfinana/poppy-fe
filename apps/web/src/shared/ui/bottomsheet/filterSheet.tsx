@@ -16,7 +16,9 @@ import {
   SecondaryButton,
   PrimaryButton,
   FilterChipGroupItem,
+  FilterChipGroup,
 } from '@/src/shared';
+import { ToggleChipGroup, ToggleChipItem } from '../chips/ToggleChip';
 
 const tabsB = [
   { value: 'c', label: '날짜' },
@@ -90,24 +92,11 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
               )}
               {tab.value === 'd' && (
                 <div className="px-[16px] mt-16">
-                  {/* <ChoiceChipGroup className="flex flex-wrap gap-8">
+                  <ToggleChipGroup className="flex flex-wrap gap-8">
                     {locations.map(location => (
-                      <ChoiceChipGroupItem key={location} value={location}>
-                        {location}
-                      </ChoiceChipGroupItem>
+                      <ToggleChipItem key={location} variant="disabled" value={location} text={location} />
                     ))}
-                  </ChoiceChipGroup> */}
-
-                  {locations.map(location => (
-                    <FilterChipGroupItem
-                      key={location}
-                      text="서울울"
-                      variant="enabled" // 적절한 variant 값 설정
-                      value={location} // location 값을 value로 전달
-                    >
-                      {location}
-                    </FilterChipGroupItem>
-                  ))}
+                  </ToggleChipGroup>
                 </div>
               )}
               {tab.value === 'e' && (
@@ -124,13 +113,11 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
               )}
               {tab.value === 'f' && (
                 <div className="px-[16px] mt-16">
-                  <ChoiceChipGroup className="flex flex-wrap gap-8">
+                  <ToggleChipGroup className="flex flex-wrap gap-8">
                     {category.map(cat => (
-                      <ChoiceChipGroupItem key={cat} value={cat}>
-                        {cat}
-                      </ChoiceChipGroupItem>
+                      <ToggleChipItem key={cat} variant="disabled" value={cat} text={cat} />
                     ))}
-                  </ChoiceChipGroup>
+                  </ToggleChipGroup>
                 </div>
               )}
               <div className="flex flex-row gap-8 px-16 mb-8">
