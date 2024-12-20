@@ -52,3 +52,6 @@ export { Hr } from './hr/Hr';
 
 // Title
 export { Title } from './title/Title';
+
+// Counter
+export { Counter } from './counter/Counter';

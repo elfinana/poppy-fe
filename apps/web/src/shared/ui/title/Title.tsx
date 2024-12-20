@@ -25,6 +25,8 @@ export const Title = ({ count = 0, typography = 'h2', ...props }: Props) => {
   const moreClickHandler = () => {
     if (props.category === 'reviews') {
       router.push('/mypage/reviews');
+    } else if (props.category === 'saves') {
+      router.push('/mypage/saves');
     } else {
       router.push(`/home/more/${props.category}`);
     }
