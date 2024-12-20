@@ -10,11 +10,27 @@ type InputProps = React.ComponentProps<'input'> & {
   existingName?: string;
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  /**@description placeholder 대신 기본적으로 입력될 텍스트 */
+  /**@description ex) 검색 후 이동된 화면에서 keyword를 유지하고 싶을 경우 */
+  defaultText?: string;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = 'text', label, variantType = 'default', onClick, onChange, existingName, ...props }, ref) => {
-    const [inputValue, setInputValue] = React.useState<string>('');
+  (
+    {
+      className,
+      type = 'text',
+      label,
+      variantType = 'default',
+      onClick,
+      onChange,
+      existingName,
+      defaultText = '',
+      ...props
+    },
+    ref,
+  ) => {
+    const [inputValue, setInputValue] = React.useState<string>(defaultText);
     const [charCount, setCharCount] = React.useState<number>(0);
     const [message, setMessage] = React.useState<string>('');
     const [messageColor, setMessageColor] = React.useState<string>('text-warning');

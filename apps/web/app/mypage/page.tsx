@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRightSmall } from '@/public';
-import { Hr, SecondaryButton } from '@/src/shared';
+import { Hr, SecondaryButton, Title } from '@/src/shared';
 import { BottomNavigation, ItemCardData, MypageHeader, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -39,26 +39,16 @@ const Page = (props: Props) => {
         <Hr variant="bold" />
       </div>
       <div className="mt-16">
-        <PopupSlider
-          variant="smlist"
-          category="save"
-          text1="저장한 팝업"
-          data={recommandData}
-          showCount
-          typography="h3"
-        />
+        <div className="flex flex-col w-full gap-y-12">
+          <Title category="save" text1="저장한 팝업" count={recommandData.length} typography="h3" />
+          <PopupSlider variant="smlist" data={recommandData} />
+        </div>
       </div>
       <div className="mt-20 px-16">
         <Hr variant="hairline" />
       </div>
-      <div className="flex w-full justify-between items-center px-16 mt-20" onClick={reviewsClickHandler}>
-        <div className="flex items-center gap-4">
-          <span className="text-h3 text-gray-900">작성한 리뷰</span>
-          <span className="text-h4 text-gray-300">{reviewsCount}</span>
-        </div>
-        <div>
-          <ArrowRightSmall />
-        </div>
+      <div className="mt-20">
+        <Title category="reviews" text1="작성한 리뷰" count={reviewsCount} typography="h3" />
       </div>
       <div className="fixed w-full bottom-0 z-50">
         <BottomNavigation />

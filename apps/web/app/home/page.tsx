@@ -1,3 +1,6 @@
+'use client';
+
+import { Title } from '@/src/shared';
 import {
   CategoryIconList,
   HomeHeader,
@@ -5,18 +8,13 @@ import {
   PopupSlider,
   BottomNavigation,
   PopupCarouselXL,
-  getClosingSoonList,
 } from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
 
 type Props = {};
 
-const Page = async (props: Props) => {
-  const data = await getClosingSoonList();
-
-  console.log(data);
-
+const Page = (props: Props) => {
   return (
     <div>
       <div className="w-full sticky top-0 z-50">
@@ -28,32 +26,35 @@ const Page = async (props: Props) => {
       <div className="w-full px-16">
         <CategoryIconList />
       </div>
-      <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="OOO님을 위한 추천 팝업" data={recommandData} category="fb" />
+      <div className="flex flex-col gap-y-48 mt-48 mb-bottomMargin">
+        <div className="w-full">
+          <div className="flex flex-col w-full gap-y-12">
+            <Title text1="지금 많이 찾는 팝업" category="popular" />
+            <PopupSlider variant="rank" data={popularData} />
+          </div>
+        </div>
+        <div className="w-full">
+          <div className="flex flex-col w-full gap-y-12">
+            <Title text1="따끈따끈, 새로 오픈한 팝업" category="new" />
+            <PopupSlider variant="list" data={recommandData} />
+          </div>
+        </div>
+        <div className="w-full">
+          <PopupCarouselXL text1="지금 주목해야 할 " text2="패션" text3=" 팝업" />
+        </div>
+        <div className="w-full">
+          <div className="flex flex-col w-full gap-y-12">
+            <Title text1="예전에 방문했던 팝업" category="past" />
+            <PopupSlider variant="list" data={recommandData} />
+          </div>
+        </div>
+        <div className="w-full">
+          <div className="flex flex-col w-full gap-y-12">
+            <Title text1="오픈 예정인 팝업" category="planned" />
+            <PopupSlider variant="list" data={recommandData} />
+          </div>
+        </div>
       </div>
-      <div className="w-full mt-48">
-        <PopupSlider variant="rank" text1="지금 많이 찾는 팝업" data={popularData} category="popular" />
-      </div>
-      <div className="w-full mt-48">
-        <PopupSlider
-          variant="list"
-          text1="예전에 방문했던 "
-          text2={`성동구`}
-          text3=" 팝업"
-          data={recommandData}
-          category="past"
-        />
-      </div>
-      <div className="w-full mt-48">
-        <PopupCarouselXL text1="지금 주목해야 할 " text2="패션" text3=" 팝업" />
-      </div>
-      <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="따끈따끈, 새로 오픈한 팝업" data={recommandData} category="new" />
-      </div>
-      <div className="w-full mt-48">
-        <PopupSlider variant="list" text1="오픈 예정인 팝업" data={recommandData} category="planned" />
-      </div>
-      <div className="h-58 mt-bottomMargin"></div>
       <BottomNavigation />
     </div>
   );

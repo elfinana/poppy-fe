@@ -1,15 +1,24 @@
+'use client';
+
 import { Sort } from '@/public';
 import { DropdownButton, FilterIconButton, ItemCard, RadioGroup, RadioGroupItem } from '@/src/shared';
 import { InputHeader, ItemCardData } from '@/src/widgets';
 import React from 'react';
 
-const Page = async ({ params }: { params: Promise<{ category: string }> }) => {
-  const keyword = (await params).category;
+const Page = ({ params }: { params: { keyword: string } }) => {
+  const [keyword, setKeyword] = React.useState(decodeURIComponent(params.keyword));
+
+  React.useEffect(() => {
+    // 팝업스토어 검색 API 통신 처리
+    console.log('팝업스토어 검색 API 통신 처리');
+  }, [keyword]);
+
+  const filters = ['날짜', '위치', '평점', '카테고리'];
 
   return (
     <div className="h-full flex flex-col w-full">
       <div>
-        <InputHeader />
+        <InputHeader onSearch={keyword => setKeyword(keyword)} defaultText={keyword} />
       </div>
       <div className="flex px-16 mt-8 gap-8">
         <div>
@@ -99,8 +108,6 @@ const Page = async ({ params }: { params: Promise<{ category: string }> }) => {
 };
 
 export default Page;
-
-const filters = ['날짜', '위치', '평점', '카테고리'];
 
 const recommandData: Array<ItemCardData> = [
   {

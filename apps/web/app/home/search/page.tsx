@@ -12,14 +12,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   InputChip,
+  Title,
 } from '@/src/shared';
 import { InputHeader, PopupSlider } from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/slider/model';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Props = {};
 
 const Page = (props: Props) => {
+  const router = useRouter();
+
   const lastUpdate = '12. 02 10:00 업데이트';
 
   const [recentlySearched, setRecentlySearched] = React.useState([
@@ -50,7 +54,7 @@ const Page = (props: Props) => {
   return (
     <div>
       <div>
-        <InputHeader />
+        <InputHeader onSearch={keyword => router.push(`/home/search/${keyword}`)} />
       </div>
       <div className="flex justify-between my-16 px-16">
         <div className="text-h3 text-gray-900">최근 검색어</div>
@@ -98,7 +102,10 @@ const Page = (props: Props) => {
         ))}
       </div>
       <div className="flex mt-16 mb-bottomMargin">
-        <PopupSlider variant="list" text1="최근 본 팝업" data={recentStores} />
+        <div className="flex flex-col w-full gap-y-12">
+          <Title text1="최근 본 팝업" category="recent" />
+          <PopupSlider variant="list" data={recentStores} />
+        </div>
       </div>
     </div>
   );

@@ -49,3 +49,6 @@ export { BottomSheet, BottomSheetHeader, BottomSheetTrigger, BottomSheetContent 
 
 // Hr
 export { Hr } from './hr/Hr';
+
+// Title
+export { Title } from './title/Title';
