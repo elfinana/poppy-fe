@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BottomSheet,
   BottomSheetHeader,
@@ -15,6 +15,7 @@ import {
   RadioGroupItem,
   SecondaryButton,
   PrimaryButton,
+  FilterChipGroupItem,
 } from '@/src/shared';
 
 const tabsB = [
@@ -55,6 +56,18 @@ interface FilterSheetProps {
 }
 
 const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
+  const [filterState, setFilterState] = useState({
+    date: null as Date | null,
+    location: '전체',
+    rating: '전체',
+    category: '전체',
+    // 추가적인 탭 상태를 여기에 추가
+  });
+
+  // 상태 업데이트 함수
+  const updateFilterState = (key: string, value: any) => {
+    setFilterState(prev => ({ ...prev, [key]: value }));
+  };
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent>
@@ -77,13 +90,24 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
               )}
               {tab.value === 'd' && (
                 <div className="px-[16px] mt-16">
-                  <ChoiceChipGroup className="flex flex-wrap gap-8">
+                  {/* <ChoiceChipGroup className="flex flex-wrap gap-8">
                     {locations.map(location => (
                       <ChoiceChipGroupItem key={location} value={location}>
                         {location}
                       </ChoiceChipGroupItem>
                     ))}
-                  </ChoiceChipGroup>
+                  </ChoiceChipGroup> */}
+
+                  {locations.map(location => (
+                    <FilterChipGroupItem
+                      key={location}
+                      text="서울울"
+                      variant="enabled" // 적절한 variant 값 설정
+                      value={location} // location 값을 value로 전달
+                    >
+                      {location}
+                    </FilterChipGroupItem>
+                  ))}
                 </div>
               )}
               {tab.value === 'e' && (
