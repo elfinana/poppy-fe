@@ -1,12 +1,23 @@
 'use client';
 
 import { Sort } from '@/public';
-import { DropdownButton, FilterIconButton, ItemCard, RadioGroup, RadioGroupItem } from '@/src/shared';
+import {
+  BottomSheet,
+  BottomSheetContent,
+  BottomSheetHeader,
+  DropdownButton,
+  FilterIconButton,
+  ItemCard,
+  RadioGroup,
+  RadioGroupItem,
+} from '@/src/shared';
+import { BottomSheetTitle } from '@/src/shared/ui/bottomsheet/bottomsheet';
 import { InputHeader, ItemCardData } from '@/src/widgets';
 import React from 'react';
 
 const Page = ({ params }: { params: { keyword: string } }) => {
   const [keyword, setKeyword] = React.useState(decodeURIComponent(params.keyword));
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
 
   React.useEffect(() => {
     // 팝업스토어 검색 API 통신 처리
@@ -39,7 +50,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
             <RadioGroupItem size="sm" value="planned" label="오픈예정" />
           </RadioGroup>
         </div>
-        <div className="flex items-center gap-4 text-b2 text-gray-500">
+        <div className="flex items-center gap-4 text-b2 text-gray-500" onClick={() => setIsBottomSheetOpen(true)}>
           <Sort />
           조회순
         </div>
@@ -103,6 +114,27 @@ const Page = ({ params }: { params: { keyword: string } }) => {
           </div>
         )}
       </div>
+      <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
+        <BottomSheetContent aria-describedby="bottomSheetContent" className="px-0">
+          <BottomSheetHeader className="border-b border-gray-100 py-16">
+            <BottomSheetTitle>정렬</BottomSheetTitle>
+          </BottomSheetHeader>
+          <RadioGroup className="flex-col w-full px-16 gap-y-0">
+            <div className="flex  py-14">
+              <RadioGroupItem size="lg" value="views" label="조회순" />
+            </div>
+            <div className="flex py-14">
+              <RadioGroupItem size="lg" value="reviews" label="리뷰 많은 순" />
+            </div>
+            <div className="flex py-14">
+              <RadioGroupItem size="lg" value="opening" label="오픈일순" />
+            </div>
+            <div className="flex py-14">
+              <RadioGroupItem size="lg" value="closing" label="종료일순" />
+            </div>
+          </RadioGroup>
+        </BottomSheetContent>
+      </BottomSheet>
     </div>
   );
 };

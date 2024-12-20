@@ -105,18 +105,9 @@ export const ItemCard = memo(
             className={`mt-2 overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
             {title}
           </div>
-
-          {/* 텍스트 섹션 */}
-          <div className={`flex flex-col`}>
-            <div className="text-gray-600 text-b4">{location}</div>
-            <div
-              className={`mt-2 overflow-hidden text-h4 max-w-[${width}px] text-gray-900 whitespace-nowrap text-ellipsis`}>
-              {title}
-            </div>
-            <div className="mt-2 text-gray-500 text-b5">{day}</div>
-          </div>
-          <DateLabel status="operational" daysLeft={deadLine} />
+          <div className="mt-2 text-gray-500 text-b5">{day}</div>
         </div>
+        <DateLabel status="operational" daysLeft={deadLine} />
       </div>
     );
   },
