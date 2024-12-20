@@ -17,6 +17,10 @@ const Page = (props: Props) => {
     router.push('/mypage/reviews');
   };
 
+  const editClickHandler = () => {
+    router.push('/mypage/edit');
+  }
+  
   // online, offline 유저 개시 팝업스토어 상태에 따라 페이지 이동
   const myPopUpStoreClickHandler = (userState: PopUpStoreState) => {
     if (userState === 'offline') {
@@ -42,7 +46,9 @@ const Page = (props: Props) => {
             <div className="text-gray-600 text-b3_com">{email}</div>
           </div>
           <div>
-            <SecondaryButton size="sm">프로필 수정</SecondaryButton>
+            <SecondaryButton size="sm" onClick={editClickHandler}>
+              프로필 수정
+            </SecondaryButton>
           </div>
         </div>
       </div>
