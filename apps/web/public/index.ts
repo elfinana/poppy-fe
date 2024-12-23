@@ -18,6 +18,8 @@ import PinGoods from './icons/PinGoods.svg';
 import PinArt from './icons/PinArt.svg';
 import Setting from './icons/setting.svg';
 import ArrowRight from './icons/arrow_r_sm.svg';
+import Kebab from './icons/kebab.svg';
+import Camera from './icons/ic-camera.svg';
 export {
   MyPage,
   Home,
@@ -38,6 +40,8 @@ export {
   PinArt,
   Setting,
   ArrowRight,
+  Kebab,
+  Camera,
 };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';
