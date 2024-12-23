@@ -8,6 +8,10 @@ import {
   PopupSlider,
   BottomNavigation,
   PopupCarouselXL,
+  getPopularList,
+  getNewList,
+  getVisitedList,
+  getPlannedList,
 } from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
@@ -30,13 +34,13 @@ const Page = (props: Props) => {
         <div className="w-full">
           <div className="flex flex-col w-full gap-y-12">
             <Title text1="지금 많이 찾는 팝업" category="popular" />
-            <PopupSlider variant="rank" data={popularData} />
+            <PopupSlider variant="rank" queryKey="popularList" queryFn={getPopularList} />
           </div>
         </div>
         <div className="w-full">
           <div className="flex flex-col w-full gap-y-12">
             <Title text1="따끈따끈, 새로 오픈한 팝업" category="new" />
-            <PopupSlider variant="list" data={recommandData} />
+            <PopupSlider variant="list" queryKey="newList" queryFn={getNewList} />
           </div>
         </div>
         <div className="w-full">
@@ -44,14 +48,14 @@ const Page = (props: Props) => {
         </div>
         <div className="w-full">
           <div className="flex flex-col w-full gap-y-12">
-            <Title text1="예전에 방문했던 팝업" category="past" />
-            <PopupSlider variant="list" data={recommandData} />
+            <Title text1="예전에 방문했던 팝업" category="visited" />
+            <PopupSlider variant="list" queryKey="visitedList" queryFn={getVisitedList} />
           </div>
         </div>
         <div className="w-full">
           <div className="flex flex-col w-full gap-y-12">
             <Title text1="오픈 예정인 팝업" category="planned" />
-            <PopupSlider variant="list" data={recommandData} />
+            <PopupSlider variant="list" queryKey="plannedList" queryFn={getPlannedList} />
           </div>
         </div>
       </div>
