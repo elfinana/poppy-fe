@@ -1,8 +1,8 @@
 'use client';
-import TimeList from '@/app/detail/book/TimeList';
-import { DatePicker, FilterChipGroup, FilterChipGroupItem, PrimaryButton } from '@/src/shared';
+import { DatePicker, PrimaryButton } from '@/src/shared';
 import useDatePicker from '@/src/shared/lib/useDatePicker';
 import { ChevronHeader } from '@/src/widgets';
+import TimeList from '@/src/widgets/book/TimeList';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
