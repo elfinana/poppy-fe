@@ -38,7 +38,7 @@ const BookDetailPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="pt-[20px] pl-16 pb-[24px] w-full flex flex-col gap-[20px]">
         <span className="text-gray-900 text-h2">예약자 정보</span>
@@ -56,7 +56,7 @@ const BookDetailPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="pt-[24px] px-16 pb-[150px] w-full flex flex-col gap-[20px]">
         <span className="text-gray-900 text-h2">결제 정보</span>

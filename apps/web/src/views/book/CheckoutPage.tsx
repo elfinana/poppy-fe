@@ -36,7 +36,7 @@ const CheckoutPage = () => {
           </SecondaryButton>
         </div>
       </div>
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="px-16 pt-[20px] pb-[24px] w-full flex flex-col gap-[12px]">
         <span className="text-gray-900 text-h2">예약 상품</span>
@@ -60,7 +60,7 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
       <div className="flex flex-col gap-5 pt-[20px] pb-[24px] pl-16 w-full">
         <span className="text-gray-900 text-h2">결제 수단</span>
         <div className="flex flex-col gap-12">
@@ -80,7 +80,7 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="flex flex-col gap-5 pt-[20px] pb-[24px] px-16 w-full">
         <div className="flex justify-between">
@@ -99,7 +99,7 @@ const CheckoutPage = () => {
         </div>
       </div>
 
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="flex flex-col gap-[18px] pt-[20px] w-full px-16">
         <div className="flex gap-8 items-center">

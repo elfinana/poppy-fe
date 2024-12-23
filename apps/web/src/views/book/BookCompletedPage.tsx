@@ -23,7 +23,7 @@ const BookCompletedPage = () => {
         <Image src={bell} alt="bell-img" width={160} height={160} />
         <span className="text-gray-900 text-h2">예약이 완료되었습니다.</span>
       </div>
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="pt-[20px] px-16 pb-[24px] w-full flex flex-col gap-[16px]">
         <span className="text-gray-900 text-h2">예약 정보</span>
@@ -45,7 +45,7 @@ const BookCompletedPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-2 bg-gray-50" />
+      <hr className="w-full h-2 bg-gray-50 border-0" />
 
       <div className="pt-[24px] px-16 pb-[94px] w-full flex flex-col gap-[20px]">
         <span className="text-gray-900 text-h2">결제 정보</span>
