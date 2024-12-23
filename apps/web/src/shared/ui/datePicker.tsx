@@ -1,24 +1,18 @@
-'use client';
 import { Calendar } from '@/src/shared/ui/calendar';
-import React, { useState } from 'react';
 import { ko } from 'date-fns/locale';
 import { format } from 'date-fns';
 
 type Props = {
   className?: string;
+  selectedDate: Date | undefined;
+  onSelect: (date: Date | undefined) => void;
 };
 const DatePicker = (props: Props) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const onSelect = (date: Date | undefined) => {
-    if (!date) return;
-    setSelectedDate(date);
-  };
-
   return (
     <Calendar
       mode="single"
-      selected={selectedDate}
-      onSelect={onSelect}
+      selected={props.selectedDate ? props.selectedDate : undefined}
+      onSelect={props.onSelect}
       disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))}
       className={props.className}
       classNames={{
