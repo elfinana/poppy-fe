@@ -23,6 +23,7 @@ export { StatusLabel } from './labels/StatusLabel';
 export { ChoiceChipGroup, ChoiceChipGroupItem } from './chips/ChoiceChip';
 export { FilterChipGroup, FilterChipGroupItem } from './chips/FilterChip';
 export { InputChip } from './chips/InputChip';
+export { ToggleChipGroup, ToggleChipItem } from './chips/ToggleChip';
 
 // Dialog
 export {

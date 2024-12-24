@@ -8,17 +8,18 @@ import {
   TabsList,
   TabsTrigger,
   TabsContent,
-  ChoiceChipGroup,
-  ChoiceChipGroupItem,
   DatePicker,
   RadioGroup,
   RadioGroupItem,
   SecondaryButton,
   PrimaryButton,
-  FilterChipGroupItem,
-  FilterChipGroup,
+  ToggleChipGroup,
+  ToggleChipItem,
 } from '@/src/shared';
-import { ToggleChipGroup, ToggleChipItem } from '../chips/ToggleChip';
+
+import FilterStoreSheet from './filterStoreSheet';
+import { fetchFilteredPopupStores } from '@/app/search/api/searchApi';
+import { FilterParams } from '@/app/search/model/searchData';
 
 const tabsB = [
   { value: 'c', label: '날짜' },
@@ -58,77 +59,188 @@ interface FilterSheetProps {
 }
 
 const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
-  const [filterState, setFilterState] = useState({
-    date: null as Date | null,
-    location: '전체',
+  const [currentDate, setCurrentDate] = useState<Date | undefined>(undefined);
+  const [isStoreSheetOpen, setIsStoreSheetOpen] = useState(false);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+
+  const [filterState, setFilterState] = React.useState<{
+    date: Date | null;
+    location: string[];
+    rating: string;
+    category: string[];
+  }>({
+    date: null,
+    location: ['전체'],
     rating: '전체',
-    category: '전체',
-    // 추가적인 탭 상태를 여기에 추가
+    category: ['전체'],
   });
 
-  // 상태 업데이트 함수
   const updateFilterState = (key: string, value: any) => {
     setFilterState(prev => ({ ...prev, [key]: value }));
   };
+
+  const applyFilters = async () => {
+    try {
+      // 필터 파라미터 구성
+      const params: FilterParams = {
+        date: filterState.date ? filterState.date.toISOString().split('T')[0] : null,
+        locations: filterState.location.includes('전체') ? null : filterState.location,
+        rating: filterState.rating === '전체' ? null : parseInt(filterState.rating),
+        categoryIds: filterState.category.includes('전체')
+          ? null
+          : filterState.category.map(cat => category.indexOf(cat) + 1),
+      };
+
+      const data = await fetchFilteredPopupStores(params);
+
+      // 요청 결과 저장
+      setFilteredData(data);
+      setIsStoreSheetOpen(true);
+    } catch (error) {
+      console.error('Failed to fetch filtered data:', error);
+    } finally {
+      onClose();
+    }
+  };
+
   return (
-    <BottomSheet open={isOpen} onOpenChange={onClose}>
-      <BottomSheetContent>
-        <Tabs defaultValue={activeTab} className="w-full mt-24">
-          <BottomSheetHeader>
-            <TabsList className="flex justify-start gap-x-12">
-              {tabsB.map(tab => (
-                <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </BottomSheetHeader>
-          {tabsB.map(tab => (
-            <TabsContent key={tab.value} value={tab.value}>
-              {tab.value === 'c' && (
-                <div className="px-[16px] mt-16">
-                  <DatePicker />
+    <>
+      <BottomSheet open={isOpen} onOpenChange={onClose}>
+        <BottomSheetContent>
+          <Tabs defaultValue={activeTab} className="w-full mt-24">
+            <BottomSheetHeader>
+              <TabsList className="flex justify-start gap-x-12">
+                {tabsB.map(tab => (
+                  <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </BottomSheetHeader>
+            {tabsB.map(tab => (
+              <TabsContent key={tab.value + JSON.stringify(filterState)} value={tab.value}>
+                {tab.value === 'c' && (
+                  <div className="px-[16px] mt-16">
+                    <DatePicker
+                      selectedDate={currentDate}
+                      onDateChange={(date: Date | undefined) => setCurrentDate(date)}
+                    />
+                  </div>
+                )}
+                {tab.value === 'd' && (
+                  <div className="px-[16px] mt-16">
+                    <ToggleChipGroup className="flex flex-wrap gap-8">
+                      {locations.map(location => (
+                        <ToggleChipItem
+                          key={location}
+                          variant={filterState.location.includes(location) ? 'enabled' : 'disabled'}
+                          isSelected={filterState.location.includes(location)}
+                          value={location}
+                          text={location}
+                          onChange={(value, isSelected) => {
+                            if (value === '전체') {
+                              if (isSelected) {
+                                updateFilterState('location', ['전체']);
+                              } else {
+                                updateFilterState(
+                                  'location',
+                                  filterState.location.filter(item => item !== value),
+                                );
+                              }
+                            } else {
+                              const updatedLocation = isSelected
+                                ? [...filterState.location.filter(item => item !== '전체'), value] // "전체" 제거하고 선택된 항목 추가
+                                : filterState.location.filter(item => item !== value); // 선택된 항목 제거
+
+                              updateFilterState('location', updatedLocation);
+                            }
+                          }}
+                        />
+                      ))}
+                    </ToggleChipGroup>
+                  </div>
+                )}
+                {tab.value === 'e' && (
+                  <div className="px-[16px] mt-16">
+                    <RadioGroup
+                      className="flex flex-col"
+                      value={filterState.rating}
+                      onValueChange={(value: string) => updateFilterState('rating', value)}>
+                      {ratings.map((rating, index) => (
+                        <div key={index} className="flex items-center  mb-[28px]">
+                          <RadioGroupItem
+                            key={index}
+                            value={rating}
+                            size="lg"
+                            label={rating}
+                            onChange={value => {
+                              updateFilterState('rating', value);
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                )}
+                {tab.value === 'f' && (
+                  <div className="px-[16px] mt-16">
+                    <ToggleChipGroup className="flex flex-wrap gap-8">
+                      {category.map(cat => (
+                        <ToggleChipItem
+                          key={cat}
+                          variant={filterState.category.includes(cat) ? 'enabled' : 'disabled'}
+                          isSelected={filterState.category.includes(cat)}
+                          value={cat}
+                          text={cat}
+                          onChange={(value, isSelected) => {
+                            if (value === '전체') {
+                              if (isSelected) {
+                                updateFilterState('category', ['전체']);
+                              } else {
+                                updateFilterState(
+                                  'category',
+                                  filterState.category.filter(item => item !== value),
+                                );
+                              }
+                            } else {
+                              const updatedCategory = isSelected
+                                ? [...filterState.category.filter(item => item !== '전체'), value]
+                                : filterState.category.filter(item => item !== value);
+
+                              updateFilterState('category', updatedCategory);
+                            }
+                          }}
+                        />
+                      ))}
+                    </ToggleChipGroup>
+                  </div>
+                )}
+                <div className="flex flex-row gap-8 px-16 mb-8">
+                  <SecondaryButton
+                    className="flex-[1]"
+                    onClick={() => {
+                      setFilterState({
+                        date: null,
+                        location: ['전체'],
+                        rating: '전체',
+                        category: ['전체'],
+                      });
+                      setCurrentDate(undefined);
+                    }}>
+                    초기화
+                  </SecondaryButton>
+                  <PrimaryButton className="flex-[2.5]" variant="enabled" onClick={applyFilters}>
+                    필터 적용하기
+                  </PrimaryButton>
                 </div>
-              )}
-              {tab.value === 'd' && (
-                <div className="px-[16px] mt-16">
-                  <ToggleChipGroup className="flex flex-wrap gap-8">
-                    {locations.map(location => (
-                      <ToggleChipItem key={location} variant="disabled" value={location} text={location} />
-                    ))}
-                  </ToggleChipGroup>
-                </div>
-              )}
-              {tab.value === 'e' && (
-                <div className="px-[16px] mt-16">
-                  <RadioGroup className="flex flex-col">
-                    {ratings.map((rating, index) => (
-                      <div key={index} className="flex  items-center gap-8 mb-[28px]">
-                        <RadioGroupItem value={`rating-${index}`} size="lg" />
-                        <span className="text-gray-800">{rating}</span>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-              )}
-              {tab.value === 'f' && (
-                <div className="px-[16px] mt-16">
-                  <ToggleChipGroup className="flex flex-wrap gap-8">
-                    {category.map(cat => (
-                      <ToggleChipItem key={cat} variant="disabled" value={cat} text={cat} />
-                    ))}
-                  </ToggleChipGroup>
-                </div>
-              )}
-              <div className="flex flex-row gap-8 px-16 mb-8">
-                <SecondaryButton>초기화</SecondaryButton>
-                <PrimaryButton variant="enabled">개 결과보기</PrimaryButton>
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-      </BottomSheetContent>
-    </BottomSheet>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </BottomSheetContent>
+      </BottomSheet>
+
+      <FilterStoreSheet isOpen={isStoreSheetOpen} onClose={() => setIsStoreSheetOpen(false)} data={filteredData} />
+    </>
   );
 };
 

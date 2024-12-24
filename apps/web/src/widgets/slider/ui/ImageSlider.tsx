@@ -11,7 +11,7 @@ type ImageSliderProps = {
 
 export const ImageSlider = ({ images, height = '168px', width = '144px' }: ImageSliderProps) => {
   return (
-    <div className="flex overflow-x-auto gap-4 scrollbar-hide px-4 py-2">
+    <div className="flex overflow-x-auto gap-4 scrollbar-hide px-4 mt-8">
       {images.map((img, idx) => (
         <div
           key={`SLIDER_IMAGE_${idx}`}

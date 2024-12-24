@@ -17,12 +17,17 @@ const Page = (props: Props) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
   const [isFilterSheetOpen, setIsFilterSheetOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<string>('c');
-  const [selectedMarkerData, setSelectedMarkerData] = React.useState({
+  const [selectedMarkerData, setSelectedMarkerData] = React.useState<{
+    title: string;
+    date: string;
+    description: string;
+    images: string[]; // images 속성 추가
+  }>({
     title: '',
     date: '',
     description: '',
+    images: [], // 초기값으로 빈 배열 설정
   });
-
   const toggleFilterSheet = (tab: string) => {
     setActiveTab(tab);
     setIsFilterSheetOpen(prev => !prev);
@@ -92,7 +97,7 @@ const Page = (props: Props) => {
             title: store.name,
             date: '2024.11.22 - 2024.12.04',
             description: `${store.name}의 상세 설명입니다.`,
-            // images: ['/images/example1.jpg', '/images/example2.jpg'], // 이미지 예시
+            images: ['https://placehold.co/500/webp', 'https://placehold.co/500/webp', 'https://placehold.co/500/webp'],
           });
           setIsBottomSheetOpen(true);
         },

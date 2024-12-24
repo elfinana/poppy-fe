@@ -49,7 +49,7 @@ const BottomSheetContent = React.forwardRef<
 BottomSheetContent.displayName = 'BottomSheetContent';
 
 const BottomSheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('grid px-16  text-center font-semibold', className)} {...props} />
+  <div className={cn('grid  text-center font-semibold', className)} {...props} />
 );
 BottomSheetHeader.displayName = 'BottomSheetHeader';
 
