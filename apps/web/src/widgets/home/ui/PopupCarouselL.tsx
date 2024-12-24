@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '@/src/shared/ui/carousel';
-import { getClosingSoonList } from '../api';
+import { getClosingSoonList } from '..';
 import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 import { useQuery } from 'react-query';
@@ -36,7 +36,7 @@ const PopupCarouselL = (props: Props) => {
           data?.map((item, idx) => (
             <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">
               <div className="relative flex justify-center items-center h-264 bg-gray-100">
-                <Image src={'https://placehold.co/500/webp'} alt={`ITEM_${item.id}`} layout="fill" objectFit="cover" />
+                <Image src={item.thumbnail} alt={`ITEM_${item.id}`} layout="fill" objectFit="cover" />
               </div>
             </CarouselItem>
           ))

@@ -16,7 +16,15 @@ export { MypageHeader } from './header/ui/MypageHeader';
 
 // home
 export { PopupCarouselL, PopupCarouselXL, CategoryIconList } from './home';
-export { getClosingSoonList, getPopularList, getNewList, getVisitedList, getPlannedList } from './home';
+export {
+  getClosingSoonList,
+  getPopularList,
+  getNewList,
+  getVisitedList,
+  getPlannedList,
+  getListByCategory,
+} from './home';
+export type { PopupListItem } from './home';
 
 // slider
 export { PopupSlider } from './slider';

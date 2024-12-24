@@ -11,11 +11,11 @@ export const CategoryIconList = (props: Props) => {
 
   return (
     <div className="flex justify-between mt-12">
-      <CategoryIconButton category="fb" onClick={() => router.push('/home/more/fb')} />
-      <CategoryIconButton category="food" onClick={() => router.push('/home/more/food')} />
-      <CategoryIconButton category="art" onClick={() => router.push('/home/more/art')} />
-      <CategoryIconButton category="goods" onClick={() => router.push('/home/more/goods')} />
-      <CategoryIconButton category="life" onClick={() => router.push('/home/more/life')} />
+      <CategoryIconButton category="fb" onClick={() => router.push('/home/more/1')} />
+      <CategoryIconButton category="food" onClick={() => router.push('/home/more/2')} />
+      <CategoryIconButton category="art" onClick={() => router.push('/home/more/3')} />
+      <CategoryIconButton category="goods" onClick={() => router.push('/home/more/4')} />
+      <CategoryIconButton category="life" onClick={() => router.push('/home/more/5')} />
     </div>
   );
 };

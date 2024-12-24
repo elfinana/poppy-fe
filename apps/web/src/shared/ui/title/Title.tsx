@@ -15,17 +15,30 @@ type Props = {
   count?: number;
   /**@description 제목 타이포그래피 설정 */
   typography?: 'h2' | 'h3';
-  /**@description 샤프롱 클릭 시 보여지는 화면에서 어떤 카테고리의 목록을 가져올 지 선택 */
-  category: string;
+  /**@description 샤프롱 클릭 시 보여지는 화면에서 어떤 카테고리의 목록을 가져올 지 선택\
+   * 1 = 패션·뷰티\
+   * 2 = 음식\
+   * 3 = 아트\
+   * 4 = 굿즈\
+   * 5 = 라이프\
+   * 6 = 지금 많이 찾는 팝업\
+   * 7 = 따끈따끈, 새로 오픈한 팝업\
+   * 8 = 예전에 방문했던 팝업\
+   * 9 = 오픈 예정인 팝업\
+   * 10 = OO와 유사한 팝업\
+   * 101 = 저장한 팝업\
+   * 102 = 작성한 리뷰
+   */
+  category: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 101 | 102;
 };
 
 export const Title = ({ count = 0, typography = 'h2', ...props }: Props) => {
   const router = useRouter();
 
   const moreClickHandler = () => {
-    if (props.category === 'reviews') {
+    if (props.category === 102) {
       router.push('/mypage/reviews');
-    } else if (props.category === 'saves') {
+    } else if (props.category === 101) {
       router.push('/mypage/saves');
     } else {
       router.push(`/home/more/${props.category}`);
@@ -33,12 +46,12 @@ export const Title = ({ count = 0, typography = 'h2', ...props }: Props) => {
   };
 
   return (
-    <div className="flex w-full justify-between items-center px-16" onClick={moreClickHandler}>
+    <div className="flex items-center justify-between w-full px-16" onClick={moreClickHandler}>
       <div className="flex items-center gap-4">
         {props.text1 ? <span className={`text-${typography} text-gray-900`}>{props.text1}</span> : null}
         {props.text2 ? <span className={`text-${typography} text-blue-700`}>{props.text2}</span> : null}
         {props.text3 ? <span className={`text-${typography} text-gray-900`}>{props.text3}</span> : null}
-        {count > 0 ? <span className="text-h4 text-gray-300">{count}</span> : null}
+        {count > 0 ? <span className="text-gray-300 text-h4">{count}</span> : null}
       </div>
       <div>
         <ArrowRightSmall />
