@@ -14,9 +14,8 @@ import { ChevronHeader } from '@/src/widgets';
 import Image from 'next/image';
 import React from 'react';
 
-const page = async ({ params, query }: { params: Promise<{ id: number }>; query: any }) => {
-  const id = (await params).id;
-
+const page = ({ params }: { params: { id: string } }) => {
+  const id = params.id;
   return (
     <div className="w-full">
       <ChevronHeader title={'예약 상세'} edit={false} />
