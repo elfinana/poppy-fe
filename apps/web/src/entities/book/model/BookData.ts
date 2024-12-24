@@ -1,18 +1,17 @@
-export interface NoticeListItem {
+export interface BookListItem {
   id: number;
-  type: string;
-  title: string;
-  date: string;
-  time: string;
+  storeId: number;
+  popupStoreName: string;
+  reservationStatus: number;
+  reservationDate: string;
+  reservationTime: string;
+  location: string;
+  person: number;
 }
 
-export interface NoticeDetail {
+export interface ChipItem {
   id: number;
-  type: string;
-  title: string;
-  date: string;
-  time: string;
-  content: string;
+  label: string;
 }
 
 export interface ActivityListItem {

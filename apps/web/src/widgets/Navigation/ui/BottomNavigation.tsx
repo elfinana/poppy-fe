@@ -46,11 +46,7 @@ export const BottomNavigation = () => {
               router.push(action);
             }
           }}
-<<<<<<< HEAD
           className="flex flex-col items-center justify-center w-full h-full gap-1">
-=======
-          className="flex flex-col items-center justify-center w-full h-full gap-1">
->>>>>>> 94aa948de8056100a2ec75d91ab56edce4785f22
           {active === text ? <ActiveIcon /> : <Icon />}
           <span className={`text-c2 group-hover:text-c1 ${active === text ? 'text-gray-800' : 'text-gray-500'}`}>
             {text}

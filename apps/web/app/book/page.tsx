@@ -1,27 +1,21 @@
 'use client';
 import * as React from 'react';
-import { ChoiceChipGroup, ChoiceChipGroupItem, Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared';
+import {
+  ChoiceChipGroup,
+  ChoiceChipGroupItem,
+  IconButton,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/src/shared';
 import { BottomNavigation, NoChevronHeader } from '@/src/widgets';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+import { BookListItem } from '@/src/entities/book';
+
 type Props = {};
-
-export interface BookListItem {
-  id: number;
-  storeId: number;
-  popupStoreName: string;
-  reservationStatus: number;
-  reservationDate: string;
-  reservationTime: string;
-  location: string;
-  person: number;
-}
-
-export interface chipItem {
-  id: number;
-  label: string;
-}
 
 const Page = (props: Props) => {
   const chipItem = ['전체', '예약완료', '방문완료', '예약취소'] as const;
@@ -78,66 +72,6 @@ const Page = (props: Props) => {
       location: '서울 서초구 강남대로 429 올리브영 강남타운',
       person: 12,
     },
-    {
-      id: 2,
-      storeId: 412,
-      popupStoreName: '제로이드 X 올리브영 팝업스토어',
-      reservationStatus: 2,
-      reservationDate: '2024. 11. 01(월)',
-      reservationTime: '오후 5:00',
-      location: '서울 서초구 강남대로 429 올리브영 강남타운',
-      person: 12,
-    },
-    {
-      id: 2,
-      storeId: 412,
-      popupStoreName: '제로이드 X 올리브영 팝업스토어',
-      reservationStatus: 2,
-      reservationDate: '2024. 11. 01(월)',
-      reservationTime: '오후 5:00',
-      location: '서울 서초구 강남대로 429 올리브영 강남타운',
-      person: 12,
-    },
-    {
-      id: 2,
-      storeId: 412,
-      popupStoreName: '제로이드 X 올리브영 팝업스토어',
-      reservationStatus: 2,
-      reservationDate: '2024. 11. 01(월)',
-      reservationTime: '오후 5:00',
-      location: '서울 서초구 강남대로 429 올리브영 강남타운',
-      person: 12,
-    },
-    {
-      id: 2,
-      storeId: 412,
-      popupStoreName: '제로이드 X 올리브영 팝업스토어',
-      reservationStatus: 2,
-      reservationDate: '2024. 11. 01(월)',
-      reservationTime: '오후 5:00',
-      location: '서울 서초구 강남대로 429 올리브영 강남타운',
-      person: 12,
-    },
-    {
-      id: 2,
-      storeId: 412,
-      popupStoreName: '제로이드 X 올리브영 팝업스토어',
-      reservationStatus: 2,
-      reservationDate: '2024. 11. 01(월)',
-      reservationTime: '오후 5:00',
-      location: '서울 서초구 강남대로 429 올리브영 강남타운',
-      person: 12,
-    },
-    {
-      id: 2,
-      storeId: 412,
-      popupStoreName: '제로이드 X 올리브영 팝업스토어',
-      reservationStatus: 2,
-      reservationDate: '2024. 11. 01(월)',
-      reservationTime: '오후 5:00',
-      location: '서울 서초구 강남대로 429 올리브영 강남타운',
-      person: 12,
-    },
   ];
 
   // 상태에 맞는 데이터만 필터링하는 함수
@@ -163,7 +97,6 @@ const Page = (props: Props) => {
           <TabsList className="px-0 pt-8 pb-0 bg-white">
             <TabsTrigger value="reservations">예약내역</TabsTrigger>
             <TabsTrigger value="waitings">대기내역</TabsTrigger>
-            <TabsTrigger value="notifications">알림</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="reservations" className="my-0">
@@ -213,38 +146,7 @@ const Page = (props: Props) => {
             {/* 예약 항목들 필터링 후 표시 */}
             <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
               {filteredData.map((item, idx) => (
-                <BookItem
-                  key={`ITEM_${idx}`}
-                  id={item.id}
-                  storeId={item.storeId}
-                  popupStoreName={item.popupStoreName}
-                  reservationStatus={item.reservationStatus}
-                  reservationDate={item.reservationDate}
-                  reservationTime={item.reservationTime}
-                  location={item.location}
-                  person={item.person}
-                />
-              ))}
-            </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="notifications" className="my-0">
-          <div className="px-16 py-12 bg-gray-50">
-            <ChoiceChipGroup className="flex flex-row gap-x-[8px]" defaultValue={'전체'}>
-              {chipItem.map(item => (
-                <ChoiceChipGroupItem
-                  key={item}
-                  value={item}
-                  onClick={() => setSelectedStatus(item)} // 클릭 시 상태 변경
-                >
-                  {item}
-                </ChoiceChipGroupItem>
-              ))}
-            </ChoiceChipGroup>
-            {/* 예약 항목들 필터링 후 표시 */}
-            <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
-              {filteredData.map((item, idx) => (
-                <BookItem
+                <WaitItem
                   key={`ITEM_${idx}`}
                   id={item.id}
                   storeId={item.storeId}
@@ -281,6 +183,43 @@ export const BookItem = (item: BookListItem) => {
   return (
     <div className="flex flex-col p-12 mb-8 bg-white border border-gray-100 rounded gap-y-[8px]" onClick={handleClick}>
       <div className={status[item.reservationStatus].style}>{status[item.reservationStatus].text}</div>
+      <div className="flex gap-x-[12px]">
+        <Image
+          className="rounded-4"
+          src={`https://placehold.co/500/webp`}
+          alt={`ITEM_${item.id}`}
+          width={104}
+          height={104}
+        />
+        <div className="flex flex-col gap-y-[8px]  justify-center">
+          <span className="text-gray-900 text-h4">{item.popupStoreName}</span>
+          <div className=" text-b5">
+            <div className="flex gap-x-[8px]">
+              <p className="text-gray-400 min-w-[23px] ">일정</p>
+              <p className="text-gray-700">{item.reservationDate}</p>
+            </div>
+            <div className="flex gap-x-[8px]">
+              <p className="text-gray-400 min-w-[23px]">위치</p>
+              <p className="text-gray-700">{item.location}</p>
+            </div>
+            <div className="flex gap-x-[8px]">
+              <p className="text-gray-400 min-w-[23px]">인원</p>
+              <p className="text-gray-700">{item.person}명</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const WaitItem = (item: BookListItem) => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(`/book/wait/${item.id}`);
+  };
+  return (
+    <div className="flex flex-col p-12 mb-8 bg-white border border-gray-100 rounded gap-y-[8px]" onClick={handleClick}>
       <div className="flex gap-x-[12px]">
         <Image
           className="rounded-4"
