@@ -14,8 +14,8 @@ import { ChevronHeader } from '@/src/widgets';
 import Image from 'next/image';
 import React from 'react';
 
-const page = ({ params }: { params: { id: string } }) => {
-  const id = params.id;
+const page = ({ params }: { params: { storeId: number } }) => {
+  const id = params.storeId;
   return (
     <div className="w-full">
       <ChevronHeader title={'예약 상세'} edit={false} />

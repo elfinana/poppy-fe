@@ -1,5 +1,6 @@
 export interface BookListItem {
-  id: number;
+  thumbnail: string;
+  userId: number;
   storeId: number;
   popupStoreName: string;
   reservationStatus: number;
@@ -7,6 +8,7 @@ export interface BookListItem {
   reservationTime: string;
   location: string;
   person: number;
+  status: string;
 }
 
 export interface ChipItem {
