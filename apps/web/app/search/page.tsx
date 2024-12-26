@@ -25,6 +25,7 @@ import {
 
 import { MapSearchButton } from '@/src/shared/ui/buttons/MapSearchButton';
 import { createCustomMarker } from '@/src/shared/ui/markers/customMarker';
+import useDatePicker from '@/src/shared/lib/useDatePicker';
 
 const tabsB = [
   { value: 'c', label: '날짜', content: '날짜' },
@@ -60,7 +61,7 @@ const Page = (props: Props) => {
   const mapInstance = React.useRef<naver.maps.Map | null>(null);
   const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
-
+  const { selectedDate, onSelect } = useDatePicker();
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(prev => !prev);
   };
@@ -127,7 +128,7 @@ const Page = (props: Props) => {
     });
   };
   return (
-    <div className="relative h-screen flex flex-col">
+    <div className="flex relative flex-col h-screen">
       <div ref={mapRef} className="flex-grow"></div>
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">
         <Input variantType="search" placeholder="팜업스토어명 검색" className="flex-grow" />
@@ -152,7 +153,7 @@ const Page = (props: Props) => {
           {/* Tabs는 BottomSheetContent 내부로 이동 */}
           <Tabs defaultValue="c" className="w-full">
             <BottomSheetHeader>
-              <TabsList className="flex justify-start gap-x-12">
+              <TabsList className="flex gap-x-12 justify-start">
                 {tabsB.map(tab => (
                   <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
                     {tab.label}
@@ -164,7 +165,7 @@ const Page = (props: Props) => {
               <TabsContent key={tab.value} value={tab.value}>
                 {tab.value === 'c' && (
                   <div className=" p-[24px]">
-                    <DatePicker />
+                    <DatePicker selectedDate={selectedDate} onSelect={onSelect} />
                   </div>
                 )}
               </TabsContent>
@@ -190,7 +191,7 @@ const Page = (props: Props) => {
         </BottomSheetContent>
       </BottomSheet>
 
-      <div className="fixed bottom-0 w-full z-20">
+      <div className="fixed bottom-0 z-20 w-full">
         <BottomNavigation />
       </div>
     </div>

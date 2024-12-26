@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 // 추후 서버 데이터 삽입
-const dummyMaximumCapacity = 10;
+const dummyMaximumCapacity = 0;
 const minimumCapacity = 0;
 
 export const useCounter = () => {

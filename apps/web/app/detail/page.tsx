@@ -16,11 +16,17 @@ import {
   TabsTrigger,
 } from '@/src/shared';
 import Textfilter from '../../public/icons/ic-text-filter.svg';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
 import { useQuery } from 'react-query';
+import BookSheet from '@/src/widgets/book/BookSheet';
 
 export default function Page() {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const toggleBottomSheet = () => {
+    setIsBottomSheetOpen(prev => !prev);
+  };
+
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
   const addressRef = useRef<HTMLParagraphElement>(null);
@@ -88,7 +94,7 @@ export default function Page() {
 
   const buttonHandle = () => {
     if (selectedTab === 'a') {
-      alert('버튼실행');
+      toggleBottomSheet();
     } else {
       router.push('/review');
     }
@@ -133,7 +139,7 @@ export default function Page() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-between w-full h-full ">
+    <div className="flex flex-col justify-between items-center w-full h-full">
       {/* header  */}
       <header className="fixed flex w-full  px-[16px] justify-between h-[48px] items-center">
         <IconButton className={``} icon={'ic-back-white'} size={'md'} onClick={() => router.back()} />
@@ -142,7 +148,7 @@ export default function Page() {
 
       {/* content area */}
       <div className="flex flex-col w-full h-full">
-        <section className="items-center overflow-auto ">
+        <section className="overflow-auto items-center">
           {/* img area */}
           <Image
             className="flex items-center w-full"
@@ -194,7 +200,7 @@ export default function Page() {
           </div>
 
           {/* tab area */}
-          <Tabs defaultValue="a" className="w-full " onValueChange={value => setSelectedTab(value)}>
+          <Tabs defaultValue="a" className="w-full" onValueChange={value => setSelectedTab(value)}>
             <TabsList>
               {tabsA.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value}>
@@ -412,6 +418,7 @@ export default function Page() {
           <PrimaryButton variant={'enabled'} onClick={buttonHandle}>
             {selectedTab === 'a' ? '예약하기' : '리뷰하기'}
           </PrimaryButton>
+          <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
         </footer>
       </div>
     </div>

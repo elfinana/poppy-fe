@@ -17,6 +17,7 @@ import PinLife from './icons/PinLife.svg';
 import PinGoods from './icons/PinGoods.svg';
 import PinArt from './icons/PinArt.svg';
 import Setting from './icons/setting.svg';
+import ArrowRight from './icons/arrow_r_sm.svg';
 import Kebab from './icons/kebab.svg';
 import Camera from './icons/ic-camera.svg';
 export {
@@ -38,6 +39,7 @@ export {
   PinGoods,
   PinArt,
   Setting,
+  ArrowRight,
   Kebab,
   Camera,
 };
@@ -102,3 +104,10 @@ export { Sort, ExternalLink };
 import Plus from './icons/plus.svg';
 import Minus from './icons/minus.svg';
 export { Plus, Minus };
+
+import book from './book/image.png';
+import TossIcon from './book/toss.svg';
+import CheckIcon from './book/check.svg';
+import CheckActive from './book/check_active.svg';
+import bell from './images/bell.png';
+export { book, TossIcon, CheckIcon, CheckActive, bell };
