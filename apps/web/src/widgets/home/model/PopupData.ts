@@ -27,10 +27,24 @@ export interface PopupListItem {
   description: string;
   location: string;
   address: string;
-  startDate: string;
-  endDate: string;
-  openingTime: string;
-  closingTime: string;
+  startDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  endDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  openingTime: {
+    hour: number;
+    minute: number;
+  };
+  closingTime: {
+    hour: number;
+    minute: number;
+  };
   availableSlot: number;
   isActive: boolean;
   isEnd: boolean;

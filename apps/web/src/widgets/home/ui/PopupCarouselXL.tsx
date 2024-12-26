@@ -7,6 +7,7 @@ import { ArrowRightSmall } from '@/public';
 import Image from 'next/image';
 import { useQuery } from 'react-query';
 import { getHotCategoryList } from '..';
+import { CarouselSkeleton, Skeleton, Title } from '@/src/shared';
 
 type Props = {};
 
@@ -58,27 +59,18 @@ const PopupCarouselXL = (props: Props) => {
 
   return (
     <div className="flex flex-col w-full gap-y-12">
-      <div className="flex justify-between items-center w-full px-16">
-        <div>
-          <span className="text-h2 text-gray-900">지금 주목해야 할 </span>
-          <span className="text-h2 text-blue-700">{hotCategory.current.categoryName}</span>
-          <span className="text-h2 text-gray-900"> 팝업</span>
-        </div>
-        <div>
-          <ArrowRightSmall />
-        </div>
-      </div>
+      <Title category={10} text1="지금 주목해야 할 " text2={hotCategory.current.categoryName} text3=" 팝업" />
       <div>
         <Carousel setApi={setApi} opts={{ loop: true }}>
           <CarouselContent className="ml-0">
             {isLoading ? (
-              <CarouselItem className="px-0">
-                <div className="relative flex justify-center items-center w-full h-fit aspect-square overflow-hidden rounded bg-gray-100" />
-              </CarouselItem>
+              <div className="w-full h-full px-16">
+                <CarouselSkeleton variant="XL" />
+              </div>
             ) : (
               data?.map((item, idx) => (
                 <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-16">
-                  <div className="relative flex justify-center items-center w-full h-fit aspect-square overflow-hidden rounded">
+                  <div className="relative flex items-center justify-center w-full overflow-hidden rounded h-fit aspect-square">
                     <Image
                       src="https://placehold.co/500/webp"
                       alt={`ITEM_${item.id}`}
@@ -87,8 +79,8 @@ const PopupCarouselXL = (props: Props) => {
                     />
                     <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent to-black/80">
                       <div className="absolute bottom-0">
-                        <div className="px-16 text-h1 text-white mb-8">{item.name}</div>
-                        <div className="px-16 text-b3 text-white mb-16">{item.description}</div>
+                        <div className="px-16 mb-8 text-white text-h1">{item.name}</div>
+                        <div className="px-16 mb-16 text-white text-b3">{item.description}</div>
                       </div>
                     </div>
                   </div>
@@ -97,9 +89,12 @@ const PopupCarouselXL = (props: Props) => {
             )}
           </CarouselContent>
         </Carousel>
-        {isLoading ? null : (
-          <div
-            className={`grid grid-cols-${data?.length} grid-rows-1 grid-flow-col gap-4 justify-center items-center w-full mt-8`}>
+        {isLoading ? (
+          <div className="px-[32px]">
+            <Skeleton className="flex justify-center items-center mt-8 w-full h-[6px]" />
+          </div>
+        ) : (
+          <div className={`flex gap-4 justify-center items-center mt-8`}>
             {data?.map((_, idx) =>
               current === idx ? (
                 <button key={`CAROUSEL_INDC_ITEM${idx}`} className={`border-3 rounded-full border-blue-500 cursor`} />

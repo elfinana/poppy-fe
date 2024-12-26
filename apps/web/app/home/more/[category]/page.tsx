@@ -1,6 +1,6 @@
 'use client';
 
-import { ItemCard } from '@/src/shared';
+import { formatToMD, ItemCard, ItemCardSkeleton } from '@/src/shared';
 import {
   ChevronHeader,
   ItemCardData,
@@ -59,6 +59,10 @@ const Page = ({ params }: { params: { category: string } }) => {
       category.current.categoryName = '오픈 예정인 팝업';
       fetchCategoryData = () => getPlannedList();
       break;
+    case '10':
+      category.current.categoryName = '주목해야 할 팝업';
+      fetchCategoryData = () => getListByCategory(categoryId);
+      break;
     default:
       throw new Error('Invalid category ID');
   }
@@ -66,7 +70,6 @@ const Page = ({ params }: { params: { category: string } }) => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['categoryData', categoryId],
     queryFn: () => fetchCategoryData(),
-    enabled: !!categoryId, // categoryId가 있을 때만 실행
   });
 
   const variant = 'gallery';
@@ -75,29 +78,27 @@ const Page = ({ params }: { params: { category: string } }) => {
       <div className="sticky top-0 z-50">
         <ChevronHeader title={category.current.categoryName} edit={false} />
       </div>
-      <div className="grid grid-cols-2 px-16 mt-8 gap-y-32 gap-x-8">
-        {isLoading ? (
-          <div></div>
-        ) : (
-          data?.map((item, idx) => (
-            <div key={`ITEMCARD_${idx}`} className="flex">
-              <ItemCard
-                id={item.id}
-                variant={variant}
-                img={item.thumbnail}
-                location={item.location}
-                title={item.name}
-                day={`${item.startDate} - ${item.endDate}`}
-                deadLine={0}
-                rank={idx + 1}
-                isCount={item.isAlmostFull}
-                ml={false}
-                mr={false}
-                imageFull
-              />
-            </div>
-          ))
-        )}
+      <div className="grid grid-cols-2 px-16 mt-8 gap-y-32 gap-x-8 pb-bottomMargin">
+        {isLoading
+          ? Array.from({ length: 8 }, (_, idx) => <ItemCardSkeleton key={`SKEL_${idx}`} variant="imageFull" />)
+          : data?.map((item, idx) => (
+              <div key={`ITEMCARD_${idx}`} className="flex">
+                <ItemCard
+                  id={item.id}
+                  variant={variant}
+                  img={item.thumbnail}
+                  location={item.location}
+                  title={item.name}
+                  day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
+                  deadLine={0}
+                  rank={idx + 1}
+                  isCount={item.isAlmostFull}
+                  ml={false}
+                  mr={false}
+                  imageFull
+                />
+              </div>
+            ))}
       </div>
     </div>
   );

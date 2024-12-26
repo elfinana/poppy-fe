@@ -190,6 +190,7 @@ module.exports = {
         16: '16px',
       },
       padding: {
+        bottomMargin: '64px',
         28: '28px',
         24: '24px',
         18: '18px',

@@ -6,6 +6,7 @@ import { getClosingSoonList } from '..';
 import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 import { useQuery } from 'react-query';
+import { CarouselSkeleton } from '@/src/shared';
 
 type Props = {};
 
@@ -29,20 +30,18 @@ const PopupCarouselL = (props: Props) => {
     <Carousel setApi={setApi} opts={{ loop: true }} plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]}>
       <CarouselContent>
         {isLoading ? (
-          <CarouselItem className="px-0">
-            <div className="relative flex justify-center items-center w-full h-264 bg-gray-100" />
-          </CarouselItem>
+          <CarouselSkeleton variant="L" />
         ) : (
           data?.map((item, idx) => (
             <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">
-              <div className="relative flex justify-center items-center h-264 bg-gray-100">
+              <div className="relative flex items-center justify-center bg-gray-100 h-264">
                 <Image src={item.thumbnail} alt={`ITEM_${item.id}`} layout="fill" objectFit="cover" />
               </div>
             </CarouselItem>
           ))
         )}
       </CarouselContent>
-      <div className="absolute bottom-0 flex justify-center w-full mb-12 px-16">
+      <div className="absolute bottom-0 flex justify-center w-full px-16 mb-12">
         {data?.map((_, idx) =>
           current === idx ? (
             <button key={`CAROUSEL_INDC_ITEM${idx}`} className={`w-full border border-white cursor`} />

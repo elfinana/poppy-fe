@@ -55,3 +55,8 @@ export { Title } from './title/Title';
 
 // Counter
 export { Counter } from './counter/Counter';
+
+// Skeletons
+export { Skeleton } from './skeleton';
+export { ItemCardSkeleton } from './skeletons/ItemCardSkeleton';
+export { CarouselSkeleton } from './skeletons/CarouselSkeletion';

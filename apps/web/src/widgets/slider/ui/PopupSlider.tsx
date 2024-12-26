@@ -1,4 +1,4 @@
-import { ItemCard } from '@/src/shared';
+import { formatToMD, ItemCard, ItemCardSkeleton } from '@/src/shared';
 import React from 'react';
 import { ItemCardData } from '../model';
 import { useQuery } from 'react-query';
@@ -17,9 +17,25 @@ export const PopupSlider = ({ ...props }: Props) => {
   const { data, error, isLoading } = useQuery([props.queryKey], props.queryFn);
 
   return (
-    <div className="flex w-full overflow-x-auto gap-4">
+    <div className="flex w-full gap-4 overflow-x-auto">
       {isLoading ? (
-        <div>loading...</div>
+        <div className="flex w-full gap-4 overflow-x-auto">
+          <div className="ml-16">
+            <ItemCardSkeleton variant={props.variant} />
+          </div>
+          <div>
+            <ItemCardSkeleton variant={props.variant} />
+          </div>
+          <div>
+            <ItemCardSkeleton variant={props.variant} />
+          </div>
+          <div>
+            <ItemCardSkeleton variant={props.variant} />
+          </div>
+          <div className="mr-16">
+            <ItemCardSkeleton variant={props.variant} />
+          </div>
+        </div>
       ) : (
         data?.map((item, idx) => (
           <ItemCard
@@ -29,7 +45,7 @@ export const PopupSlider = ({ ...props }: Props) => {
             img={item.thumbnail}
             location={item.location}
             title={item.name}
-            day={`${item.startDate} - ${item.endDate}`}
+            day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
             deadLine={0}
             rank={idx + 1}
             isCount={item.isAlmostFull}

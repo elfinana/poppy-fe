@@ -25,6 +25,7 @@ export {
   getVisitedList,
   getPlannedList,
   getListByCategory,
+  getListByName,
 } from './home';
 export type { PopupListItem } from './home';
 
