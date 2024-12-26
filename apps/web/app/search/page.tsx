@@ -105,11 +105,11 @@ const Page = (props: Props) => {
     });
   };
   return (
-    <div className="relative h-screen flex flex-col">
+    <div className="relative flex flex-col h-screen">
       <div ref={mapRef} className="flex-grow"></div>
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">
         <Input variantType="search" placeholder="팜업스토어명 검색" className="flex-grow" />
-        <div className="flex gap-2 justify-start w-full">
+        <div className="flex justify-start w-full gap-2">
           <FilterIconButton variant="inactive" onClick={() => toggleFilterSheet('c')} />
           <DropdownButton value="날짜" variant="inactive" onClick={() => toggleFilterSheet('c')} />
           <DropdownButton value="위치" variant="inactive" onClick={() => toggleFilterSheet('d')} />
@@ -124,7 +124,7 @@ const Page = (props: Props) => {
         <MapSearchButton onClick={handleMapSearch}>이 지역에서 검색</MapSearchButton>
       </div>
 
-      <div className="fixed bottom-0 w-full z-20">
+      <div className="fixed bottom-0 z-20 w-full">
         <BottomNavigation />
       </div>
 

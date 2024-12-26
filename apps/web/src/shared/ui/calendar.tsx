@@ -14,7 +14,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn('mx-auto min-w-[327px]', className)}
+      className={cn('mx-auto', className)}
       classNames={{
         caption: 'flex justify-center relative items-center h-6 mb-4 px-1.5',
         caption_label: 'text-h2',
