@@ -109,7 +109,7 @@ const Page = (props: Props) => {
       <div ref={mapRef} className="flex-grow"></div>
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">
         <Input variantType="search" placeholder="팜업스토어명 검색" className="flex-grow" />
-        <div className="flex justify-start w-full gap-2">
+        <div className="flex justify-start w-full gap-2 mt-8">
           <FilterIconButton variant="inactive" onClick={() => toggleFilterSheet('c')} />
           <DropdownButton value="날짜" variant="inactive" onClick={() => toggleFilterSheet('c')} />
           <DropdownButton value="위치" variant="inactive" onClick={() => toggleFilterSheet('d')} />

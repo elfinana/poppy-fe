@@ -10,14 +10,14 @@ type Props = {
 const DatePicker = ({ className, selectedDate, onDateChange }: Props) => {
   const onSelect = (date: Date | undefined) => {
     if (!date) return;
-    onDateChange(date); // 부모에게 선택된 날짜 전달
+    onDateChange(date);
   };
 
   return (
     <Calendar
       mode="single"
-      selected={props.selectedDate ? props.selectedDate : undefined}
-      onSelect={props.onSelect}
+      selected={selectedDate ? selectedDate : undefined}
+      onSelect={onSelect}
       disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))}
       className={className}
       classNames={{

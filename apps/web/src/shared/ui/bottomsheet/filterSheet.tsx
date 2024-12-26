@@ -118,7 +118,7 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
               </TabsList>
             </BottomSheetHeader>
             {tabsB.map(tab => (
-              <TabsContent key={tab.value + JSON.stringify(filterState)} value={tab.value}>
+              <TabsContent key={tab.value + JSON.stringify(filterState)} value={tab.value} className="min-h-[350px]">
                 {tab.value === 'c' && (
                   <div className="px-[16px] mt-16">
                     <DatePicker
@@ -215,27 +215,27 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
                     </ToggleChipGroup>
                   </div>
                 )}
-                <div className="flex flex-row gap-8 px-16 mb-8">
-                  <SecondaryButton
-                    className="flex-[1]"
-                    onClick={() => {
-                      setFilterState({
-                        date: null,
-                        location: ['전체'],
-                        rating: '전체',
-                        category: ['전체'],
-                      });
-                      setCurrentDate(undefined);
-                    }}>
-                    초기화
-                  </SecondaryButton>
-                  <PrimaryButton className="flex-[2.5]" variant="enabled" onClick={applyFilters}>
-                    필터 적용하기
-                  </PrimaryButton>
-                </div>
               </TabsContent>
             ))}
           </Tabs>
+          <div className="flex flex-row gap-8 px-16 mb-8">
+            <SecondaryButton
+              className="flex-[1]"
+              onClick={() => {
+                setFilterState({
+                  date: null,
+                  location: ['전체'],
+                  rating: '전체',
+                  category: ['전체'],
+                });
+                setCurrentDate(undefined);
+              }}>
+              초기화
+            </SecondaryButton>
+            <PrimaryButton className="flex-[2.5]" variant="enabled" onClick={applyFilters}>
+              필터 적용하기
+            </PrimaryButton>
+          </div>
         </BottomSheetContent>
       </BottomSheet>
 
