@@ -43,10 +43,14 @@ const Page = (props: Props) => {
       if (window.naver && window.naver.maps) {
         if (!mapRef.current) return;
 
-        mapInstance.current = new window.naver.maps.Map(mapRef.current, {
+        const mapOptions = {
           center: new window.naver.maps.LatLng(37.5665, 126.978),
           zoom: 13,
-        });
+          logoControl: false,
+          mapDataControl: false,
+          scaleControl: false,
+        };
+        mapInstance.current = new window.naver.maps.Map(mapRef.current, mapOptions);
       }
     };
 
@@ -87,6 +91,7 @@ const Page = (props: Props) => {
     mockData.forEach(store => {
       createCustomMarker({
         map: mapInstance.current!,
+
         lat: store.lat,
         lng: store.lng,
         category: store.category,
