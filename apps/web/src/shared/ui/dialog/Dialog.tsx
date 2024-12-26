@@ -20,7 +20,7 @@ export interface DialogTriggerProps
 const AlertDialogTrigger = React.forwardRef<React.ElementRef<typeof AlertDialogPrimitive.Trigger>, DialogTriggerProps>(
   ({ className, variant, ...props }, ref) => (
     // <AlertDialogPrimitive.Trigger className={cn(primaryButtonVariants({ variant, className }))} ref={ref} {...props} />
-    <AlertDialogPrimitive.Trigger ref={ref} {...props} />
+    <AlertDialogPrimitive.Trigger ref={ref} className={className} {...props} />
   ),
 );
 AlertDialogTrigger.displayName = AlertDialogPrimitive.Trigger.displayName;

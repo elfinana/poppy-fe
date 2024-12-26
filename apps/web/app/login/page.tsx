@@ -9,7 +9,8 @@ export default function Page() {
 
   // 네이버 로그인 이벤트
   const handleButtonClick = () => {
-    router.push('signup');
+    // router.push('signup');
+    window.location.href = 'http://pop-py.duckdns.org/oauth2/authorization/naver';
   };
 
   return (
