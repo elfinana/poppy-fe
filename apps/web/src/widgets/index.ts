@@ -5,6 +5,8 @@ export { HomeHeader } from './header/ui/HomeHeader';
 
 export { SubHeader } from './subHeader/SubHeader';
 
+export { NoChevronHeader } from './header/ui/NoChevronHeader';
+
 // ChevronHeader
 export { ChevronHeader } from './header/ui/ChevronHeader';
 
