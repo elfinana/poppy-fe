@@ -25,13 +25,9 @@ export const createCustomMarker = ({ map, lat, lng, category, name, onMarkerClic
     map,
     icon: {
       url: iconUrl, // 마커에 사용할 아이콘 URL
-      size: new naver.maps.Size(50, 50), // 마커 크기
-      scaledSize: new naver.maps.Size(36, 36), // 크기 비율 유지
+      size: new naver.maps.Size(60, 60), // 마커 크기
+      // anchor: new naver.maps.Point(18, 18),
     },
-  });
-
-  const infoWindow = new naver.maps.InfoWindow({
-    content: `<div style="padding:10px;">${name}</div>`,
   });
 
   naver.maps.Event.addListener(marker, 'click', () => {

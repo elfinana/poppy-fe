@@ -64,6 +64,10 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
     setSortedData(data);
   }, [data]);
 
+  useEffect(() => {
+    console.log('정렬된 데이터:', sortedData);
+  }, [sortedData]);
+
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent className="max-h-[500px]">

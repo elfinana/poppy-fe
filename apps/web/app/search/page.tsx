@@ -8,6 +8,7 @@ import { createCustomMarker } from '@/src/shared/ui/markers/customMarker';
 import MarkerInfoSheet from '@/src/shared/ui/bottomsheet/markerInfoSheet';
 import FilterSheet from '@/src/shared/ui/bottomsheet/filterSheet';
 import { FilterParams } from './model/searchData';
+import { fetchAddress } from './api/addressApi';
 
 type Props = {};
 
@@ -43,13 +44,11 @@ const Page = (props: Props) => {
   };
 
   React.useEffect(() => {
-    // 스크립트 로드
     const script = document.createElement('script');
     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr&submodules=geocoder&callback=initMap`;
     script.async = true;
 
     window.initMap = () => {
-      console.log('네이버 지도 API 로드 완료');
       if (!mapRef.current) return;
 
       const mapOptions = {
@@ -61,7 +60,6 @@ const Page = (props: Props) => {
       };
 
       mapInstance.current = new naver.maps.Map(mapRef.current, mapOptions);
-      console.log('지도 인스턴스 생성 완료:', mapInstance.current);
     };
 
     document.head.appendChild(script);
@@ -72,9 +70,59 @@ const Page = (props: Props) => {
     };
   }, []);
 
-  const searchCoordinateToAddress = (latlng: naver.maps.LatLng) => {
+  const normalizeAddress = (address: string): string => {
+    // "서울시"를 "서울특별시"로 변경
+    if (address.startsWith('서울시')) {
+      return address.replace('서울시', '서울특별시');
+    }
+    return address;
+  };
+
+  //도로명 -> 위도경도로
+  const searchAddressToCoordinate = (address: string, callback: (lat: number | null, lng: number | null) => void) => {
+    const normalizedAddress = normalizeAddress(address); // 정규화된 주소 사용
+    // const normalizedAddress = '서울특별시 강남구 도곡로 142'; // 정규화된 주소 사용
+    // const normalizedAddress = '서울특별시 강남구 강남대로 286'; // 정규화된 주소 사용
+
+    console.log('정규화된 주소:', normalizedAddress);
+    if (!naver.maps.Service || !naver.maps.Service.geocode) {
+      callback(null, null);
+      return;
+    }
+
+    naver.maps.Service.geocode(
+      {
+        query: normalizedAddress, // 변환할 주소
+      },
+      (status, response) => {
+        if (status !== naver.maps.Service.Status.OK) {
+          console.error('Geocoding 오류:', status);
+          callback(null, null);
+          return;
+        }
+
+        const result = response.v2.addresses[0]; // 첫 번째 결과
+        if (!result) {
+          console.error('주소 결과를 찾을 수 없습니다.');
+          callback(null, null);
+          return;
+        }
+
+        const { x, y } = result; // x = 경도(lng), y = 위도(lat)
+        const lat = parseFloat(y); // 문자열을 숫자로 변환
+        const lng = parseFloat(x); // 문자열을 숫자로 변환
+
+        console.log('주소 변환 결과 - 위도:', lat, '경도:', lng);
+        callback(lat, lng);
+      },
+    );
+  };
+
+  //위도경도 -> 도로명으로
+  const searchCoordinateToAddress = (latlng: naver.maps.LatLng, callback: (jibunAddress: string | null) => void) => {
     if (!naver.maps.Service || !naver.maps.Service.reverseGeocode) {
       console.error('naver.maps.Service.reverseGeocode가 초기화되지 않았습니다.');
+      callback(null);
       return;
     }
 
@@ -85,38 +133,87 @@ const Page = (props: Props) => {
       },
       (status, response) => {
         if (status === naver.maps.Service.Status.ERROR) {
-          console.error('Reverse Geocoding 오류 발생');
+          console.error('Reverse Geocoding 오류 발생:', status);
+          callback(null);
           return;
         }
 
         const items = response.v2.results;
         if (!items || items.length === 0) {
           console.error('결과를 찾을 수 없습니다.');
+          callback(null);
           return;
         }
 
-        const roadAddress = items.find((item: any) => item.name === 'roadaddr')?.region?.area2?.name;
-        const jibunAddress = items.find((item: any) => item.name === 'addr')?.region?.area2?.name;
+        // 지역 정보 추출
+        let area1 = items[0]?.region?.area1?.name || ''; // 시도 (서울특별시)
+        const area2 = items[0]?.region?.area2?.name || ''; // 시군구 (중구)
 
-        console.log('도로명 주소:', roadAddress || '없음');
-        console.log('지번 주소:', jibunAddress || '없음');
+        if (area1 === '서울특별시') {
+          area1 = '서울시';
+        }
+
+        const fullAddress = `${area1} ${area2}`.trim(); // '서울특별시 중구' 형식으로 조합
+        callback(fullAddress);
       },
     );
   };
 
-  //이 위치에서 검색
-  const handleMapSearch = () => {
+  //이 지역에서 검색
+  const handleMapSearch = async () => {
     if (!mapInstance.current) {
       console.error('지도 인스턴스가 초기화되지 않았습니다.');
       return;
     }
 
     const center = mapInstance.current.getCenter(); // 현재 지도 중심 좌표 가져오기
-
     const latLng = new naver.maps.LatLng(center.y, center.x); // LatLng로 변환
-    searchCoordinateToAddress(latLng); // Reverse Geocoding 호출
+
+    searchCoordinateToAddress(latLng, async jibunAddress => {
+      if (jibunAddress) {
+        try {
+          const popupStores = await fetchAddress(jibunAddress); // API 호출
+          console.log('팝업스토어 데이터:', popupStores);
+
+          const categoryMapping: { [key: string]: string } = {
+            '패션/뷰티': 'fashion',
+            아트: 'art',
+            음식: 'food',
+            굿즈: 'goods',
+            라이프: 'life',
+          };
+
+          // 받은 팝업스토어 데이터를 하나씩 처리하여 마커 생성
+          popupStores.forEach((store: any) => {
+            const address = store.address;
+
+            const category = categoryMapping[store.categoryName] || 'default'; // 매핑되지 않은 경우 기본값
+
+            // 주소를 위도/경도로 변환하여 마커 추가
+            searchAddressToCoordinate(address, (lat, lng) => {
+              if (lat !== null && lng !== null && mapInstance.current) {
+                // createCustomMarker 함수 사용
+                createCustomMarker({
+                  map: mapInstance.current,
+                  lat,
+                  lng,
+                  category,
+                  name: store.name, // 팝업스토어 이름
+                  onMarkerClick: () => {
+                    console.log(`${store.name} 마커 클릭됨`);
+                  },
+                });
+              }
+            });
+          });
+        } catch (error) {
+          console.error('팝업스토어 데이터를 가져오는 중 에러 발생:', error);
+        }
+      }
+    });
   };
 
+  //내 현재위치
   const handleFocusButtonClick = () => {
     if (!navigator.geolocation) {
       return;
@@ -134,34 +231,6 @@ const Page = (props: Props) => {
       }
     });
   };
-
-  // 예시 데이터 (실제 API 응답 형식을 시뮬레이션)
-  // const mockData = [
-  //   { id: 1, name: '팝업스토어 A', category: 'fashion', lat: 37.5705, lng: 126.982 },
-  //   { id: 2, name: '팝업스토어 B', category: 'food', lat: 37.5663, lng: 126.9784 },
-  //   { id: 3, name: '팝업스토어 C', category: 'goods', lat: 37.563, lng: 126.975 },
-  // ];
-
-  // mockData.forEach(store => {
-  //   createCustomMarker({
-  //     map: mapInstance.current!,
-
-  //     lat: store.lat,
-  //     lng: store.lng,
-  //     category: store.category,
-  //     name: store.name,
-  //     onMarkerClick: () => {
-  //       // 클릭 시 바텀시트 데이터 설정 및 열기
-  //       setSelectedMarkerData({
-  //         title: store.name,
-  //         date: '2024.11.22 - 2024.12.04',
-  //         description: `${store.name}의 상세 설명입니다.`,
-  //         images: ['https://placehold.co/500/webp', 'https://placehold.co/500/webp', 'https://placehold.co/500/webp'],
-  //       });
-  //       setIsBottomSheetOpen(true);
-  //     },
-  //   });
-  // });
 
   return (
     <div className="relative flex flex-col h-screen">
