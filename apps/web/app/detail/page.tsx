@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { PopupSlider } from '@/src/widgets';
+import { getNewList, PopupSlider } from '@/src/widgets';
 import {
   IconButton,
   LikeIconButton,
@@ -14,6 +14,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  Title,
 } from '@/src/shared';
 import Textfilter from '../../public/icons/ic-text-filter.svg';
 import { useRef, useEffect, useState } from 'react';
@@ -139,7 +140,7 @@ export default function Page() {
   ];
 
   return (
-    <div className="flex flex-col justify-between items-center w-full h-full">
+    <div className="flex flex-col items-center justify-between w-full h-full">
       {/* header  */}
       <header className="fixed flex w-full  px-[16px] justify-between h-[48px] items-center">
         <IconButton className={``} icon={'ic-back-white'} size={'md'} onClick={() => router.back()} />
@@ -148,7 +149,7 @@ export default function Page() {
 
       {/* content area */}
       <div className="flex flex-col w-full h-full">
-        <section className="overflow-auto items-center">
+        <section className="items-center overflow-auto">
           {/* img area */}
           <Image
             className="flex items-center w-full"
@@ -281,7 +282,10 @@ export default function Page() {
                     </div>
 
                     {/* pop list */}
-                    <PopupSlider variant="list" text2={`${title}`} text3={'와 유사한 팝업'} data={recommandData} />
+                    <div className="flex flex-col w-full gap-y-12">
+                      <Title text1="비슷한 팝업 추천" text2="" category={7} />
+                      <PopupSlider variant="list" queryKey="newList" queryFn={getNewList} />
+                    </div>
                   </div>
                 )}
 
