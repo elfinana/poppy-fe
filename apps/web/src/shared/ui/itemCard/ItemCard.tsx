@@ -81,7 +81,7 @@ export const ItemCard = memo(
               width={500}
               height={500}
               alt={title}
-              className="object-cover rounded-sm"
+              className="object-cover rounded-sm aspect-square"
             />
           ) : (
             <Image src={img} fill alt={title} className="object-cover rounded-sm" />

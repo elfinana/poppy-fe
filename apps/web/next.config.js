@@ -27,6 +27,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'placehold.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'd1jch5cr8xrdjz.cloudfront.net',
+      },
     ],
   },
 };

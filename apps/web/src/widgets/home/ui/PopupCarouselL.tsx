@@ -35,7 +35,12 @@ const PopupCarouselL = (props: Props) => {
           data?.map((item, idx) => (
             <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">
               <div className="relative flex items-center justify-center bg-gray-100 h-264">
-                <Image src={item.thumbnail} alt={`ITEM_${item.id}`} layout="fill" objectFit="cover" />
+                <Image
+                  src={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
+                  alt={`ITEM_${item.id}`}
+                  layout="fill"
+                  objectFit="cover"
+                />
               </div>
             </CarouselItem>
           ))

@@ -36,6 +36,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
   const [filterBottomSheetOpen, setFilterBottomSheetOpen] = React.useState(false);
   const [radioFilter, setRadioFilter] = React.useState('operational');
+  const [listOrder, setListOrder] = React.useState('opening');
 
   const queries = [
     { queryKey: ['getListByName', keyword], queryFn: () => getListByName(keyword), enabled: !!keyword },
@@ -46,21 +47,56 @@ const Page = ({ params }: { params: { keyword: string } }) => {
 
   const searchList = () => {
     let arr = results[0].data!;
+    let today = new Date();
 
     if (arr !== undefined) {
       if (radioFilter === 'operational') {
         arr = arr.filter(elem => elem.isEnd === false);
       } else {
-        let today = new Date();
         arr = arr.filter(
           elem =>
             getDateDifference(
-              { year: elem.startDate.year, month: elem.startDate.month, day: elem.startDate.day },
-              { year: today.getFullYear(), month: today.getMonth() + 1, day: today.getDate() },
+              `${elem.startDate.year}${elem.startDate.month}${elem.startDate.day}`,
+              `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
             ) >= 0,
         );
       }
 
+      switch (listOrder) {
+        // 조회수순은 보류
+        case 'scraps':
+          arr.sort((a, b) => b.scrapCount - a.scrapCount);
+          break;
+        case 'rating':
+          arr.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'opening':
+          arr.sort(
+            (a, b) =>
+              getDateDifference(
+                `${a.startDate.year}${a.startDate.month}${a.startDate.day}`,
+                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+              ) -
+              getDateDifference(
+                `${b.startDate.year}${b.startDate.month}${b.startDate.day}`,
+                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+              ),
+          );
+          break;
+        case 'closing':
+          arr.sort(
+            (a, b) =>
+              getDateDifference(
+                `${a.endDate.year}${a.endDate.month}${a.endDate.day}`,
+                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+              ) -
+              getDateDifference(
+                `${b.endDate.year}${b.endDate.month}${b.endDate.day}`,
+                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+              ),
+          );
+          break;
+      }
       // 그 외 필터 아래로 추가
     }
 
@@ -114,7 +150,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
       </div>
       <div className="flex justify-between px-16 mt-12 mb-16">
         <div className="flex flex-1 w-full">
-          <RadioGroup defaultValue={radioFilter} onValueChange={e => setRadioFilter(e)}>
+          <RadioGroup defaultValue={radioFilter} onValueChange={value => setRadioFilter(value)}>
             <RadioGroupItem size="sm" value="operational" label="영업중" />
             <RadioGroupItem size="sm" value="planned" label="오픈예정" />
           </RadioGroup>
@@ -132,13 +168,13 @@ const Page = ({ params }: { params: { keyword: string } }) => {
             ))}
           </div>
         ) : results[0].data?.length! > 0 ? (
-          <div className="grid grid-cols-2 px-16 gap-y-32 gap-x-8">
+          <div className="grid grid-cols-2 px-16 gap-y-32 gap-x-8 pb-bottomMargin">
             {searchList().map((item, idx) => (
               <div key={`ITEMCARD_${idx}`} className="flex">
                 <ItemCard
                   id={item.id}
                   variant="gallery"
-                  img={item.thumbnail}
+                  img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                   location={item.location}
                   title={item.name}
                   day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
@@ -174,7 +210,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
                       <ItemCard
                         id={item.id}
                         variant="gallery"
-                        img={item.thumbnail}
+                        img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                         location={item.location}
                         title={item.name}
                         day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
@@ -196,12 +232,15 @@ const Page = ({ params }: { params: { keyword: string } }) => {
           <BottomSheetHeader className="py-16 border-b border-gray-100">
             <BottomSheetTitle>정렬</BottomSheetTitle>
           </BottomSheetHeader>
-          <RadioGroup className="flex-col w-full px-16 gap-y-0">
+          <RadioGroup
+            className="flex-col w-full px-16 gap-y-0"
+            defaultValue={listOrder}
+            onValueChange={value => setListOrder(value)}>
             <div className="flex py-14">
-              <RadioGroupItem size="lg" value="views" label="조회순" />
+              <RadioGroupItem size="lg" value="scraps" label="저장 많은 순" />
             </div>
             <div className="flex py-14">
-              <RadioGroupItem size="lg" value="reviews" label="리뷰 많은 순" />
+              <RadioGroupItem size="lg" value="rating" label="평점순" />
             </div>
             <div className="flex py-14">
               <RadioGroupItem size="lg" value="opening" label="오픈일순" />

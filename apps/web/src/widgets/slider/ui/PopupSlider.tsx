@@ -42,7 +42,7 @@ export const PopupSlider = ({ ...props }: Props) => {
             id={item.id}
             key={`ITEMCARD_${idx}`}
             variant={props.variant}
-            img={item.thumbnail}
+            img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
             location={item.location}
             title={item.name}
             day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
