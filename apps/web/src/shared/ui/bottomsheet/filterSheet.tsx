@@ -56,6 +56,7 @@ interface FilterSheetProps {
   isOpen: boolean;
   onClose: () => void;
   activeTab: string;
+  // onApplyFilter: (params: FilterParams) => void;
 }
 
 const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
@@ -91,9 +92,9 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
           : filterState.category.map(cat => category.indexOf(cat) + 1),
       };
 
+      // onApplyFilter(params);
       const data = await fetchFilteredPopupStores(params);
 
-      // 요청 결과 저장
       setFilteredData(data);
       setIsStoreSheetOpen(true);
     } catch (error) {
