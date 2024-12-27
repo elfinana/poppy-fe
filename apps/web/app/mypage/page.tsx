@@ -2,7 +2,7 @@
 
 import { ArrowRightSmall } from '@/public';
 import { Hr, SecondaryButton, Title } from '@/src/shared';
-import { BottomNavigation, ItemCardData, MypageHeader, PopupSlider } from '@/src/widgets';
+import { BottomNavigation, getNewList, ItemCardData, MypageHeader, PopupListItem, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -40,7 +40,7 @@ const Page = (props: Props) => {
         <MypageHeader title="마이페이지" />
       </div>
       <div className="px-16 mt-12">
-        <div className="flex justify-between items-center pr-8 pl-16 bg-gray-50 border border-gray-100 rounded-12 py-18">
+        <div className="flex items-center justify-between pl-16 pr-8 border border-gray-100 bg-gray-50 rounded-12 py-18">
           <div className="flex flex-col gap-2">
             <div className="text-black text-h2">{name}</div>
             <div className="text-gray-600 text-b3_com">{email}</div>
@@ -57,20 +57,20 @@ const Page = (props: Props) => {
       </div>
       <div className="mt-16">
         <div className="flex flex-col w-full gap-y-12">
-          <Title category="saves" text1="저장한 팝업" count={recommandData.length} typography="h3" />
-          <PopupSlider variant="smlist" data={recommandData} />
+          <Title category={101} text1="저장한 팝업" count={recommandData.length} typography="h3" />
+          <PopupSlider variant="smlist" queryKey="getSaveList" queryFn={getNewList} />
         </div>
       </div>
       <div className="px-16 mt-20">
         <Hr variant="hairline" />
       </div>
       <div className="mt-20">
-        <Title category="reviews" text1="작성한 리뷰" count={reviewsCount} typography="h3" />
+        <Title category={102} text1="작성한 리뷰" count={reviewsCount} typography="h3" />
       </div>
       <div
-        className="flex justify-between items-center px-16 mt-20 w-full"
+        className="flex items-center justify-between w-full px-16 mt-20"
         onClick={() => myPopUpStoreClickHandler('offline')}>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <span className="text-gray-900 text-h3">내 팝업스토어</span>
         </div>
         <div>
