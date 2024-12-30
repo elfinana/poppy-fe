@@ -30,6 +30,7 @@ type FilterStoreSheetProps = {
 const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
   const [selectedOption, setSelectedOption] = useState('조회 순');
   const [sortedData, setSortedData] = useState(data);
+  const [currentData, setCurrentData] = useState(data);
   const sort = ['조회 순', '리뷰 많은 순', '오픈일순', '종료일순'];
 
   const handleSort = () => {
@@ -62,9 +63,11 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
 
   useEffect(() => {
     setSortedData(data);
+    setCurrentData(data);
   }, [data]);
 
   useEffect(() => {
+    console.log('FilterStoreSheet received data:', data);
     console.log('정렬된 데이터:', sortedData);
   }, [sortedData]);
 
@@ -135,20 +138,21 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
                   </div>
                 )}
               </div>
-
-              <span className="text-gray-500 text-b3_com">
-                {formatDay({
-                  year: store.startDate.year,
-                  month: store.startDate.month,
-                  day: store.startDate.day,
-                })}{' '}
-                ~{' '}
-                {formatDay({
-                  year: store.endDate.year,
-                  month: store.endDate.month,
-                  day: store.endDate.day,
-                })}
-              </span>
+              {
+                <span className="text-gray-500 text-b3_com">
+                  {formatDay({
+                    year: store.startDate.year,
+                    month: store.startDate.month,
+                    day: store.startDate.day,
+                  })}{' '}
+                  ~{' '}
+                  {formatDay({
+                    year: store.endDate.year,
+                    month: store.endDate.month,
+                    day: store.endDate.day,
+                  })}
+                </span>
+              }
               <div className="flex items-center mt-4">
                 <IconButton icon={'ic-star-active'} size={'smmd'} />
                 <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>

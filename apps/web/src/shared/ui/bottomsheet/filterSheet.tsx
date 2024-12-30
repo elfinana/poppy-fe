@@ -18,7 +18,7 @@ import {
 } from '@/src/shared';
 
 import FilterStoreSheet from './filterStoreSheet';
-import { fetchFilteredPopupStores } from '@/app/search/api/searchApi';
+import { fetchFilteredPopupStores } from '@/app/search/api/filterSearchApi';
 import { FilterParams } from '@/app/search/model/searchData';
 
 const tabsB = [

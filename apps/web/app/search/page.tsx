@@ -9,6 +9,9 @@ import MarkerInfoSheet from '@/src/shared/ui/bottomsheet/markerInfoSheet';
 import FilterSheet from '@/src/shared/ui/bottomsheet/filterSheet';
 import { FilterParams } from './model/searchData';
 import { fetchAddress } from './api/addressApi';
+import { fetchNamePopupStores } from './api/nameSearchApi';
+import { useQuery } from 'react-query';
+import FilterStoreSheet from '@/src/shared/ui/bottomsheet/filterStoreSheet';
 
 type Props = {};
 
@@ -24,8 +27,10 @@ const Page = (props: Props) => {
   const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
   const [isFilterSheetOpen, setIsFilterSheetOpen] = React.useState(false);
+  const [isFilterStoreSheetOpen, setIsFilterStoreOpen] = React.useState(false);
   const [filterParams, setFilterParams] = React.useState<FilterParams | null>(null);
   const [isMapInitialized, setIsMapInitialized] = React.useState(false); // 지도 초기화 상태 추가
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [activeTab, setActiveTab] = React.useState<string>('c');
   const [selectedMarkerData, setSelectedMarkerData] = React.useState<{
     title: string;
@@ -69,6 +74,11 @@ const Page = (props: Props) => {
       window.initMap = undefined;
     };
   }, []);
+
+  const handleMarkerClick = (store: any) => {
+    setSelectedMarkerData(store); // 팝업스토어 데이터를 그대로 저장
+    setIsBottomSheetOpen(true); // BottomSheet 열기
+  };
 
   const normalizeAddress = (address: string): string => {
     // "서울시"를 "서울특별시"로 변경
@@ -199,9 +209,7 @@ const Page = (props: Props) => {
                   lng,
                   category,
                   name: store.name, // 팝업스토어 이름
-                  onMarkerClick: () => {
-                    console.log(`${store.name} 마커 클릭됨`);
-                  },
+                  onMarkerClick: () => handleMarkerClick(store),
                 });
               }
             });
@@ -232,11 +240,46 @@ const Page = (props: Props) => {
     });
   };
 
+  const {
+    data: nameSearchResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery(
+    ['popupStores', searchQuery], // Query 키와 검색어
+    () => fetchNamePopupStores(searchQuery), // API 호출 함수
+    {
+      enabled: false, // 초기에는 자동으로 실행되지 않도록 설정
+    },
+  );
+
+  // 검색 실행 함수
+  const handleSearch = () => {
+    if (!searchQuery.trim()) {
+      return;
+    }
+    refetch(); // React Query의 refetch로 API 호출
+    setIsFilterStoreOpen(true);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="relative flex flex-col h-screen">
       <div ref={mapRef} className="flex-grow"></div>
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">
-        <Input variantType="search" placeholder="팜업스토어명 검색" className="flex-grow" />
+        <Input
+          variantType="search"
+          placeholder="팜업스토어명 검색"
+          className="flex-grow"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
         <div className="flex justify-start w-full gap-2 mt-8">
           <FilterIconButton variant="inactive" onClick={() => toggleFilterSheet('c')} />
           <DropdownButton value="날짜" variant="inactive" onClick={() => toggleFilterSheet('c')} />
@@ -261,6 +304,12 @@ const Page = (props: Props) => {
         isOpen={isBottomSheetOpen}
         onClose={() => setIsBottomSheetOpen(false)}
         markerData={selectedMarkerData}
+      />
+
+      <FilterStoreSheet
+        isOpen={isFilterStoreSheetOpen}
+        onClose={() => setIsBottomSheetOpen(false)}
+        data={nameSearchResult || []}
       />
     </div>
   );
