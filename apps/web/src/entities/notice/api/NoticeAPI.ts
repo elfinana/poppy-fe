@@ -2,7 +2,7 @@ import { NoticeDetail, NoticeListItem } from '..';
 
 export const getNotices = async (): Promise<Array<NoticeListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/notices`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/notices`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -22,7 +22,7 @@ export const getNotices = async (): Promise<Array<NoticeListItem>> => {
 
 export const getNoticeDetail = async (id: string): Promise<NoticeDetail> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/notices/${id}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/notices/${id}`);
     const result = await response.json();
 
     if (result && result.data) {

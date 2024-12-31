@@ -44,6 +44,7 @@ export interface ButtonProps
     | 'ic-info-location'
     | 'ic-info-share'
     | 'ic-info-time'
+    | 'ic-info-bluetime'
     | 'ic-search'
     | 'ic-share'
     | 'ic-star'

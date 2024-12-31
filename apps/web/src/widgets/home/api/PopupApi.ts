@@ -2,7 +2,7 @@ import { PopupCarouselItem, PopupCarouselResponse, PopupListItem } from '../mode
 
 export const getClosingSoonList = async (): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -17,7 +17,7 @@ export const getClosingSoonList = async (): Promise<Array<PopupListItem>> => {
 
 export const getPopularList = async (): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/popular`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/popular`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -32,7 +32,7 @@ export const getPopularList = async (): Promise<Array<PopupListItem>> => {
 
 export const getNewList = async (): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/new`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/new`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -47,7 +47,7 @@ export const getNewList = async (): Promise<Array<PopupListItem>> => {
 
 export const getHotCategoryList = async (categoryId: number): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/search?categoryIds=${categoryId}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/search?categoryIds=${categoryId}`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -62,7 +62,7 @@ export const getHotCategoryList = async (categoryId: number): Promise<Array<Popu
 
 export const getVisitedList = async (): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -77,7 +77,7 @@ export const getVisitedList = async (): Promise<Array<PopupListItem>> => {
 
 export const getPlannedList = async (): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/future`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/future`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -92,7 +92,7 @@ export const getPlannedList = async (): Promise<Array<PopupListItem>> => {
 
 export const getListByCategory = async (categoryId: string): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/search?categoryIds=${categoryId}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/search?categoryIds=${categoryId}`);
     const result = await response.json();
 
     if (result && result.data) {
@@ -107,7 +107,7 @@ export const getListByCategory = async (categoryId: string): Promise<Array<Popup
 
 export const getListByName = async (keyword: string): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/${keyword}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/${keyword}`);
     const result = await response.json();
 
     if (result && result.data) {
