@@ -93,7 +93,10 @@ export default function Page() {
     };
 
     const daysLeft = data?.endDate
-      ? getDateDifference({ year: data.endDate.year, month: data.endDate.month, day: data.endDate.day }, todayDate)
+      ? getDateDifference(
+          `${data.endDate.year}${data.endDate.month}${data.endDate.day}`,
+          `${todayDate.year}${todayDate.month}${todayDate.day}`,
+        )
       : null;
 
     return (

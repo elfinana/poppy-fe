@@ -2,19 +2,23 @@
 import { bell, book } from '@/public';
 import { PrimaryButton, SecondaryButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
-import Image from "next/legacy/image";
-import { useRouter } from 'next/navigation';
+import Image from 'next/legacy/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { bookData, security, storeData } from './const';
+import { security } from './const';
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 
-const BookCompletedPage = () => {
+const BookCompletedPage = ({ popupId }: { popupId: number }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const bookDataParams = searchParams.get('bookData');
+  const bookData = bookDataParams && JSON.parse(bookDataParams);
+
   const detailButtonClickHandler = () => {
-    router.push('/detail/book/completed/detail');
+    router.push(`/detail/${popupId}/book/completed/detail?bookData=${JSON.stringify(bookData)}`);
   };
   const goBackButtonClickHandler = () => {
-    router.push('/detail');
+    router.replace(`/detail/${popupId}`);
   };
   return (
     <div className="flex flex-col items-center h-full">
@@ -31,11 +35,13 @@ const BookCompletedPage = () => {
           <Image className="border rounded-4 min-w-[104px]" src={book} alt="book" width={72} height={72} />
 
           <div className="ml-12">
-            <span className="block mb-8 text-gray-900 text-h4">{storeData.name}</span>
+            <span className="block mb-8 text-gray-900 text-h4">{bookData.name}</span>
             <div>
               <div className="mb-2">
                 <span className="mr-8 text-gray-400 text-b5">일정</span>
-                <span className="text-gray-700 text-b5">{bookData.date}</span>
+                <span className="text-gray-700 text-b5">
+                  {bookData.date} {bookData.time}
+                </span>
               </div>
               <div>
                 <span className="mr-8 text-gray-400 text-b5">위치</span>
@@ -52,11 +58,13 @@ const BookCompletedPage = () => {
         <div className="">
           <div className="mb-4">
             <span className="pr-12 text-gray-400 text-b3">결제방법</span>
-            <span className="text-gray-600 text-b2">토스페이</span>
+            <span className="text-gray-600 text-b2">{bookData.paymentMethod}</span>
           </div>
           <div className="mb-12">
             <span className="pr-12 text-gray-400 text-b3">결제금액</span>
-            <span className="text-gray-600 text-b2">{formatWithThousandsSeparator(bookData.cost + security)}원</span>
+            <span className="text-gray-600 text-b2">
+              {formatWithThousandsSeparator(bookData.price * bookData.people + security)}원
+            </span>
           </div>
         </div>
       </div>

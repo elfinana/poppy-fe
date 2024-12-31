@@ -5,27 +5,41 @@ import {
   DatePicker,
   PrimaryButton,
   SecondaryButton,
-  useCounter,
 } from '@/src/shared';
 import React from 'react';
-import BookingForm from './ui/BookingForm';
-import useDatePicker from '@/src/shared/lib/useDatePicker';
+import BookingForm from './BookingForm';
 import { useRouter } from 'next/navigation';
 import useBooking from '@/src/shared/lib/useBooking';
-
+import { Time } from '@/src/entities/home/model/PopupData';
+import { nanoid } from 'nanoid';
 type Props = {
   isBottomSheetOpen: boolean;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  popupId: number;
+  openingTime: Time;
+  closingTime: Time;
+  price: number;
+  storeName: string;
+  address: string;
 };
 
 const BookSheet = (props: Props) => {
   const router = useRouter();
-  const { bookData, onSelect, onReset, countHandler, discountHandler, time, onSelectTime } = useBooking();
+  const { bookData, onSelect, onReset, countHandler, discountHandler, time, onSelectTime } = useBooking({
+    popupId: props.popupId,
+    openingTime: props.openingTime,
+    closingTime: props.closingTime,
+    price: props.price,
+    storeName: props.storeName,
+    address: props.address,
+  });
   const { date: selectedDate, people } = bookData;
 
-  const bookButtonClickHandler = () => {
-    console.log(bookData);
-    router.push('/detail/book');
+  const bookButtonClickHandler = async () => {
+    //const response = await postReservation(bookData);
+    //console.log(response);
+    const orderId = nanoid();
+    router.push(`/detail/${props.popupId}/book?bookData=${JSON.stringify({ ...bookData, orderId })}`);
   };
 
   return (
@@ -36,11 +50,11 @@ const BookSheet = (props: Props) => {
             <span className="mt-[18px] mb-16">예약 정보</span>
           </BottomSheetHeader>
           <div className="mx-24 mb-8 mt-[25px]">
-            <DatePicker selectedDate={selectedDate} onDateChange={onSelect} />
+            <DatePicker selectedDate={selectedDate} onSelect={onSelect} />
           </div>
           <div className=" border-t-[1px] border-gray-100">
             {!selectedDate && (
-              <div className="flex items-center justify-center py-12 m-16 bg-gray-100 rounded">
+              <div className="flex justify-center items-center py-12 m-16 bg-gray-100 rounded">
                 <span className="text-gray-700 text-b3">날짜를 선택해주세요.</span>
               </div>
             )}

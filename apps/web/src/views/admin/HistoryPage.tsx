@@ -2,7 +2,7 @@
 import { DatePicker, PrimaryButton } from '@/src/shared';
 import useDatePicker from '@/src/shared/lib/useDatePicker';
 import { ChevronHeader } from '@/src/widgets';
-import TimeList from '@/src/widgets/book/TimeList';
+import TimeList from '@/src/widgets/book/ui/TimeList';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
