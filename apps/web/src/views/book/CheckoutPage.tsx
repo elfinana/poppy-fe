@@ -3,7 +3,7 @@ import { ArrowRight, book, CheckActive, CheckIcon } from '@/public';
 import { CheckboxButton, PrimaryButton, RadioGroupItem, SecondaryButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
 import { RadioGroup } from '@radix-ui/react-radio-group';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import React from 'react';
 import { TossIcon } from '@/public';
 import { useSearchParams } from 'next/navigation';
@@ -73,11 +73,11 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
   };
 
   return (
-    <div className="flex flex-col items-center h-full">
+    <form className="flex flex-col items-center h-full" onSubmit={paymentButtonClickHandler}>
       <ChevronHeader title="결제하기" edit={false} />
       <div className="p-16 pb-[24px] w-full">
         <span className="block mb-20 text-gray-900 text-h2">예약자 정보</span>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-gray-900 text-h3">{userData.name}</span>
             <span className="text-gray-600 text-b3">{userData.phoneNumber}</span>
@@ -87,12 +87,12 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
           </SecondaryButton>
         </div>
       </div>
-      <hr className="w-full h-2 bg-gray-50 border-0" />
+      <hr className="w-full h-2 border-0 bg-gray-50" />
 
       <div className="px-16 pt-[20px] pb-[24px] w-full flex flex-col gap-[12px]">
         <span className="text-gray-900 text-h2">예약 상품</span>
         <div className="rounded-12 border-[1px] border-gray-200 py-16 pl-12 pr-[42px]">
-          <div className="flex justify-between items-center w-full">
+          <div className="flex items-center justify-between w-full">
             <Image className="border rounded-4 min-w-[104px]" src={book} alt="book" width={104} height={104} />
 
             <div className="my-[10px] ml-12">
@@ -113,7 +113,7 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
           </div>
         </div>
       </div>
-      <hr className="w-full h-2 bg-gray-50 border-0" />
+      <hr className="w-full h-2 border-0 bg-gray-50" />
       <div className="flex flex-col gap-5 pt-[20px] pb-[24px] pl-16 w-full">
         <span className="text-gray-900 text-h2">결제 수단</span>
         <div className="flex flex-col gap-12">
@@ -123,14 +123,14 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
             onValueChange={value => setPaymentMethod(value)}>
             <div className="flex gap-8">
               <RadioGroupItem value="토스페이" size="lg" id="토스페이" />
-              <div className="flex gap-2 items-center">
+              <div className="flex items-center gap-2">
                 <TossIcon />
                 <label className="text-gray-800 text-b1" htmlFor="토스페이">
                   토스페이
                 </label>
               </div>
             </div>
-            <div className="flex gap-8 items-center">
+            <div className="flex items-center gap-8">
               <RadioGroupItem value="현장에서 결제" size="lg" id="현장에서 결제" />
               <label className="text-gray-800 text-b1" htmlFor="현장에서 결제">
                 현장에서 결제
@@ -140,7 +140,7 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
         </div>
       </div>
 
-      <hr className="w-full h-2 bg-gray-50 border-0" />
+      <hr className="w-full h-2 border-0 bg-gray-50" />
 
       <div className="flex flex-col gap-5 pt-[20px] pb-[24px] px-16 w-full">
         <div className="flex justify-between">
@@ -163,23 +163,23 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
         </div>
       </div>
 
-      <hr className="w-full h-2 bg-gray-50 border-0" />
+      <hr className="w-full h-2 border-0 bg-gray-50" />
 
       <div className="flex flex-col gap-[18px] pt-[20px] w-full px-16">
-        <div className="flex gap-8 items-center">
+        <div className="flex items-center gap-8">
           <CheckboxButton onClick={() => checkboxButtonClickHandler(0)} checked={checked[0]} />
           <span className="text-gray-900 text-h4">예약 내용 확인 및 결제 동의</span>
         </div>
         <div className="flex flex-col gap-8">
           <div className="flex justify-between cursor-pointer" onClick={() => checkboxButtonClickHandler(1)}>
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-4">
               {checked[1] ? <CheckActive /> : <CheckIcon />}
               <span className="text-gray-400 text-b5">(필수) 개인정보 수집 · 이용 동의</span>
             </div>
             <ArrowRight />
           </div>
           <div className="flex justify-between cursor-pointer" onClick={() => checkboxButtonClickHandler(2)}>
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-4">
               {checked[2] ? <CheckActive /> : <CheckIcon />}
               <span className="text-gray-400 text-b5">(필수) 개인정보 제3자 제공 동의</span>
             </div>
@@ -195,12 +195,12 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
         <br />
         통신판매의 당사자가 아닙니다.
       </p>
-      <div className="px-16 py-8 w-full">
+      <div className="w-full px-16 py-8">
         <PrimaryButton variant={variantHandler()} onClick={paymentButtonClickHandler}>
           {formatWithThousandsSeparator(bookData.price * bookData.people + security)}원 결제하기
         </PrimaryButton>
       </div>
-    </div>
+    </form>
   );
 };
 
