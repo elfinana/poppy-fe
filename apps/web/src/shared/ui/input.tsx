@@ -3,11 +3,12 @@
 import * as React from 'react';
 import { cn } from '@/src/shared/lib/utils';
 import { IconButton } from './buttons/IconButton';
+import { useNickNameCheck } from 'store/login/loginStore';
 
 type InputProps = React.ComponentProps<'input'> & {
   label?: string;
   variantType?: 'default' | 'search';
-  existingName?: string;
+  existingName?: boolean;
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /**@description placeholder 대신 기본적으로 입력될 텍스트 */
@@ -30,10 +31,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
+    const { nickNameCheck } = useNickNameCheck();
     const [inputValue, setInputValue] = React.useState<string>(defaultText);
     const [charCount, setCharCount] = React.useState<number>(0);
     const [message, setMessage] = React.useState<string>('');
     const [messageColor, setMessageColor] = React.useState<string>('text-warning');
+    console.log(nickNameCheck);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -46,18 +49,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       if (value.length > 10) {
         setMessage('10자 이내로 입력해 주세요.');
         setMessageColor('text-warning');
-      } else if (existingName && value === existingName) {
-        setMessage('이미 사용 중인 닉네임입니다.');
-        setMessageColor('text-warning');
-      } else if (value.length > 0) {
-        setMessage('사용 가능한 닉네임입니다.');
-        setMessageColor('text-blue-500');
       } else {
         setMessage('');
         setMessageColor('text-warning');
       }
     };
-
     const handleClear = () => {
       if (variantType === 'default') {
         setInputValue('');
@@ -68,6 +64,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         onClick();
       }
     };
+    React.useEffect(() => {
+      if (nickNameCheck) {
+        setMessage('이미 사용 중인 닉네임입니다.');
+        setMessageColor('text-warning');
+      }
+    }, [nickNameCheck, inputValue]);
 
     return (
       <div className="w-full">
