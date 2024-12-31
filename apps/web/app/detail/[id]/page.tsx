@@ -1,5 +1,4 @@
 'use client';
-
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { PopupSlider } from '@/src/widgets';
@@ -15,82 +14,112 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/src/shared';
-import Textfilter from '../../public/icons/ic-text-filter.svg';
 import { useRef, useEffect, useState } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
 import { useQuery } from 'react-query';
-import BookSheet from '@/src/widgets/book/BookSheet';
+import BookSheet from '@/src/widgets/book/ui/BookSheet';
+import { TextFilter } from '@/public';
+import { PopupDetailResponse } from '@/src/entities/home/model/PopupData';
 
-export default function Page() {
+const backendData = [
+  {
+    id: 1,
+    img: 'https://placehold.co/500/webp',
+    location: '서울 영등포구',
+    title: '골든볼 팝업스토어',
+    day: '05.21(금) - 12.31(일)',
+    deadLine: 40,
+    isCount: true,
+  },
+  {
+    id: 2,
+    img: 'https://placehold.co/500/webp',
+    location: '서울 성동구',
+    title: '어노브 이터널 아우라 성수 팝업스토어',
+    day: '11.08(금) - 11.24(일)',
+    deadLine: 3,
+    isCount: false,
+  },
+  {
+    id: 3,
+    img: 'https://placehold.co/500/webp',
+    location: '서울 성동구',
+    title: '어노브 이터널 아우라 성수 팝업스토어',
+    day: '11.08(금) - 11.24(일)',
+    deadLine: 3,
+    isCount: true,
+  },
+  {
+    id: 4,
+    img: 'https://placehold.co/500/webp',
+    location: '서울 성동구',
+    title: '어노브 이터널 아우라 성수 팝업스토어',
+    day: '11.08(금) - 11.24(일)',
+    deadLine: 0,
+    isCount: false,
+  },
+];
+const tabsA = [
+  { value: 'a', label: '정보' },
+  { value: 'b', label: '리뷰 26' },
+];
+const reviewData = [
+  {
+    id: 1,
+    rating: 4.0,
+    date: '24.10.19',
+    images: [
+      '/images/img-review-1.png',
+      '/images/img-review-2.png',
+      '/images/img-review-3.png',
+      '/images/img-review-3.png',
+    ],
+    username: 'leechunsik',
+    comment:
+      '처음 방문해 봤는데 생각보다 만족스러웠어요. 공간 디자인도 깔끔하고, 제품 체험할 수 있는 부분이 특히 좋았어요. 다만 사람이 좀 많아서 한두 곳은 dsf 만족스러웠 만족스러',
+    likes: 1,
+  },
+  {
+    id: 2,
+    rating: 4.0,
+    date: '24.10.19',
+    images: [
+      '/images/img-review-1.png',
+      '/images/img-review-2.png',
+      '/images/img-review-3.png',
+      '/images/img-review-3.png',
+    ],
+    username: 'leechunsik',
+    comment:
+      '처음 방문해 봤는데 생각보다 만족스러웠어요. 공간 디자인도 깔끔하고, 제품 체험할 수 있는 부분이 특히 좋았어요. 다만 사람이 좀 많아서 한두 곳은 dsf 만족스러웠 만족스러',
+    likes: 1,
+  },
+];
+
+export default function Page({ params }: { params: { id: number } }) {
+  const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
+    useDetailStore();
+  const title = recommandData.length > 0 ? recommandData[0].title : '유사한 팝업';
+
+  const router = useRouter();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(prev => !prev);
   };
-
-  const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
-    useDetailStore();
   const addressRef = useRef<HTMLParagraphElement>(null);
-
-  const handleCopy = () => {
-    if (addressRef.current) {
-      navigator.clipboard.writeText(addressRef.current.textContent || '');
-      alert('주소가 복사되었습니다!');
-    }
-  };
-
-  const router = useRouter();
-
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['popupData'],
-    queryFn: () => fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/1`).then(res => res.json()),
-  });
-  console.log(data);
-
   // 데이터 업데이트
   useEffect(() => {
     setRecommandData(backendData);
   }, [setRecommandData]);
 
-  const backendData = [
-    {
-      id: 1,
-      img: 'https://placehold.co/500/webp',
-      location: '서울 영등포구',
-      title: '골든볼 팝업스토어',
-      day: '05.21(금) - 12.31(일)',
-      deadLine: 40,
-      isCount: true,
-    },
-    {
-      id: 2,
-      img: 'https://placehold.co/500/webp',
-      location: '서울 성동구',
-      title: '어노브 이터널 아우라 성수 팝업스토어',
-      day: '11.08(금) - 11.24(일)',
-      deadLine: 3,
-      isCount: false,
-    },
-    {
-      id: 3,
-      img: 'https://placehold.co/500/webp',
-      location: '서울 성동구',
-      title: '어노브 이터널 아우라 성수 팝업스토어',
-      day: '11.08(금) - 11.24(일)',
-      deadLine: 3,
-      isCount: true,
-    },
-    {
-      id: 4,
-      img: 'https://placehold.co/500/webp',
-      location: '서울 성동구',
-      title: '어노브 이터널 아우라 성수 팝업스토어',
-      day: '11.08(금) - 11.24(일)',
-      deadLine: 0,
-      isCount: false,
-    },
-  ];
+  const { data, error, isLoading } = useQuery<PopupDetailResponse>({
+    queryKey: ['popupData'],
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${params.id}`).then(res => res.json()),
+  });
 
-  const title = recommandData.length > 0 ? recommandData[0].title : '유사한 팝업';
+  if (!data) return null;
+  const { openingTime, closingTime, price, name, address } = data.data;
 
   const buttonHandle = () => {
     if (selectedTab === 'a') {
@@ -99,45 +128,12 @@ export default function Page() {
       router.push('/review');
     }
   };
-
-  const tabsA = [
-    { value: 'a', label: '정보' },
-    { value: 'b', label: '리뷰 26' },
-  ];
-
-  const reviewData = [
-    {
-      id: 1,
-      rating: 4.0,
-      date: '24.10.19',
-      images: [
-        '/images/img-review-1.png',
-        '/images/img-review-2.png',
-        '/images/img-review-3.png',
-        '/images/img-review-3.png',
-      ],
-      username: 'leechunsik',
-      comment:
-        '처음 방문해 봤는데 생각보다 만족스러웠어요. 공간 디자인도 깔끔하고, 제품 체험할 수 있는 부분이 특히 좋았어요. 다만 사람이 좀 많아서 한두 곳은 dsf 만족스러웠 만족스러',
-      likes: 1,
-    },
-    {
-      id: 2,
-      rating: 4.0,
-      date: '24.10.19',
-      images: [
-        '/images/img-review-1.png',
-        '/images/img-review-2.png',
-        '/images/img-review-3.png',
-        '/images/img-review-3.png',
-      ],
-      username: 'leechunsik',
-      comment:
-        '처음 방문해 봤는데 생각보다 만족스러웠어요. 공간 디자인도 깔끔하고, 제품 체험할 수 있는 부분이 특히 좋았어요. 다만 사람이 좀 많아서 한두 곳은 dsf 만족스러웠 만족스러',
-      likes: 1,
-    },
-  ];
-
+  const handleCopy = () => {
+    if (addressRef.current) {
+      navigator.clipboard.writeText(addressRef.current.textContent || '');
+      alert('주소가 복사되었습니다!');
+    }
+  };
   return (
     <div className="flex flex-col justify-between items-center w-full h-full">
       {/* header  */}
@@ -293,7 +289,7 @@ export default function Page() {
                         <RadioGroupItem value="instar" size="sm" label="인스타그램 리뷰" />
                       </RadioGroup>
                       <button className="flex items-center gap-x-[4px]" type="button" onClick={() => {}}>
-                        <Textfilter />
+                        <TextFilter />
                         <span className="text-gray-500 text-b2">최근 등록순</span>
                       </button>
                     </div>
@@ -418,7 +414,16 @@ export default function Page() {
           <PrimaryButton variant={'enabled'} onClick={buttonHandle}>
             {selectedTab === 'a' ? '예약하기' : '리뷰하기'}
           </PrimaryButton>
-          <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
+          <BookSheet
+            isBottomSheetOpen={isBottomSheetOpen}
+            setIsBottomSheetOpen={setIsBottomSheetOpen}
+            popupId={params.id}
+            openingTime={openingTime}
+            closingTime={closingTime}
+            price={price}
+            storeName={name}
+            address={address}
+          />
         </footer>
       </div>
     </div>

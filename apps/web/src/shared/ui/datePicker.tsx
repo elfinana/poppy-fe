@@ -4,14 +4,14 @@ import { format } from 'date-fns';
 
 type Props = {
   className?: string;
-  selectedDate: Date | undefined;
+  selectedDate: string | undefined;
   onSelect: (date: Date | undefined) => void;
 };
 const DatePicker = (props: Props) => {
   return (
     <Calendar
       mode="single"
-      selected={props.selectedDate ? props.selectedDate : undefined}
+      selected={props.selectedDate ? new Date(props.selectedDate) : undefined}
       onSelect={props.onSelect}
       disabled={date => date < new Date(new Date().setHours(0, 0, 0, 0))}
       className={props.className}
