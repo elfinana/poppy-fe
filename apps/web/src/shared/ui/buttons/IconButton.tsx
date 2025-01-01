@@ -56,6 +56,9 @@ export interface ButtonProps
     | 'reload'
     | 'search'
     | 'searchLarge'
+    | 'ic-noti-cal'
+    | 'ic-noti-wait'
+    | 'ic-noti-locate'
     | 'setting';
 }
 
