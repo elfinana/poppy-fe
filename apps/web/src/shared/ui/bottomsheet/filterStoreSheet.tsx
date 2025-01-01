@@ -66,15 +66,10 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
     setCurrentData(data);
   }, [data]);
 
-  useEffect(() => {
-    // console.log('FilterStoreSheet received data:', data);
-    console.log('정렬된 데이터:', sortedData);
-  }, [sortedData]);
-
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent>
-        <div className="flex flex-col items-center w-full pt-28">
+        <div className="flex flex-col items-center justify-center w-full h-full pt-28">
           <span className="text-h3">팝업스토어 목록</span>
           <hr className="w-full mt-16 border-t border-gray-100" />
         </div>

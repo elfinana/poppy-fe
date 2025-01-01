@@ -56,10 +56,10 @@ interface FilterSheetProps {
   isOpen: boolean;
   onClose: () => void;
   activeTab: string;
-  // onApplyFilter: (filters: { date: Date | null; location: string[]; rating: string; category: string[] }) => void;
+  onApplyFilter: (filters: { date: Date | null; location: string[]; rating: string; category: string[] }) => void;
 }
 
-const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
+const FilterSheet = ({ isOpen, onClose, activeTab, onApplyFilter }: FilterSheetProps) => {
   const [currentDate, setCurrentDate] = useState<Date | undefined>(undefined);
   const [isStoreSheetOpen, setIsStoreSheetOpen] = useState(false);
   const [filteredData, setFilteredData] = useState<any[]>([]);
@@ -92,7 +92,13 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
           : filterState.category.map(cat => category.indexOf(cat) + 1),
       };
 
-      // onApplyFilter(params);
+      onApplyFilter({
+        date: filterState.date,
+        location: filterState.location,
+        rating: filterState.rating,
+        category: filterState.category,
+      });
+
       const data = await fetchFilteredPopupStores(params);
 
       setFilteredData(data);
@@ -123,8 +129,10 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
                 {tab.value === 'c' && (
                   <div className="px-[16px] mt-16">
                     <DatePicker
-                      selectedDate={currentDate}
-                      onDateChange={(date: Date | undefined) => setCurrentDate(date)}
+                      selectedDate={filterState.date || undefined}
+                      onDateChange={(date: Date | undefined) => {
+                        updateFilterState('date', date || null);
+                      }}
                     />
                   </div>
                 )}

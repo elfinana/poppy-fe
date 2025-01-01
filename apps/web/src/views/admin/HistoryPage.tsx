@@ -21,11 +21,11 @@ const HistoryPage = (props: Props) => {
     <div className="flex flex-col h-full bg-gray-50">
       <ChevronHeader title={props.title} edit={false} />
 
-      <DatePicker
+      {/* <DatePicker
         selectedDate={date}
         onSelect={onSelect}
         className="mt-12 px-12 pt-[20px] pb-16 rounded-12 mx-12 border-[1px] border-gray-100 bg-white"
-      />
+      /> */}
 
       <div className="flex flex-col justify-between h-full">
         <div className="py-16 flex flex-col gap-[16px]">
