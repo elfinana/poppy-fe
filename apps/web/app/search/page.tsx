@@ -259,7 +259,7 @@ const Page = (props: Props) => {
     ['popupStores', searchQuery], // Query 키와 검색어
     () => fetchNamePopupStores(searchQuery), // API 호출 함수
     {
-      enabled: false, // 초기에는 자동으로 실행되지 않도록 설정
+      enabled: false,
     },
   );
 
@@ -350,7 +350,7 @@ const Page = (props: Props) => {
           />
         </div>
       </div>
-      <div className="absolute bottom-[100px] left-3">
+      <div className={`absolute left-3 ${isBottomSheetOpen ? 'bottom-[320px]' : 'bottom-[100px]'}`}>
         <FocusIconButton variant="inactive" onClick={handleFocusButtonClick} />
       </div>
       <div className="absolute bottom-[100px] left-1/2 transform -translate-x-1/2">
