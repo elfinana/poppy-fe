@@ -3,6 +3,7 @@ import React from 'react';
 import { BottomSheet, BottomSheetContent, BottomSheetHeader, IconButton } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
+import { BottomSheetOverlay } from './bottomsheet';
 
 type MarkerInfoSheetProps = {
   isOpen: boolean;
@@ -14,7 +15,8 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
   // console.log('MarkerInfoSheet - 전달된 markerData:', markerData);
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
-      <BottomSheetContent className="px-16 ">
+      {/* <BottomSheetOverlay dimmed={true} /> */}
+      <BottomSheetContent className="px-16" dimmed={false}>
         <div className="flex flex-row justify-between items-center mt-[32px]">
           <span className="text-h2">{markerData.name}</span>
           {markerData.isActive ? (

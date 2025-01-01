@@ -68,7 +68,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
 
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
-      <BottomSheetContent>
+      <BottomSheetContent dimmed={false}>
         <div className="flex flex-col items-center justify-center w-full h-full pt-28">
           <span className="text-h3">팝업스토어 목록</span>
           <hr className="w-full mt-16 border-t border-gray-100" />
@@ -117,7 +117,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
           </AlertDialog>
         </div>
 
-        <div className="max-h-[400px] mx-16 overflow-y-auto">
+        <div className="max-h-[380px] mx-16 overflow-y-auto">
           {sortedData.map((store, index) => (
             <>
               <div key={index} className={index > 0 ? 'mt-32' : ''}>
