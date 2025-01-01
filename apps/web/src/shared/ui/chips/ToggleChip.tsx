@@ -25,7 +25,6 @@ const ToggleChipGroup = ({ children, className }: ToggleChipGroupProps) => {
 };
 
 interface ToggleChipItemProps extends VariantProps<typeof toggleChipVariants> {
-  variant: 'enabled' | 'disabled';
   value: string;
   text: string;
   isSelected?: boolean; // 초기 선택 상태
@@ -33,7 +32,7 @@ interface ToggleChipItemProps extends VariantProps<typeof toggleChipVariants> {
   className?: string;
 }
 
-const ToggleChipItem = ({ className, variant, value, text, isSelected = false, onChange }: ToggleChipItemProps) => {
+const ToggleChipItem = ({ className, value, text, isSelected = false, onChange }: ToggleChipItemProps) => {
   const [selected, setSelected] = React.useState(isSelected);
 
   const handleClick = () => {

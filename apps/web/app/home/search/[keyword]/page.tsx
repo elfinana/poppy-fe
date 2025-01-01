@@ -24,12 +24,37 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  ToggleChipGroup,
+  ToggleChipItem,
 } from '@/src/shared';
-import { BottomSheetTitle } from '@/src/shared/ui/bottomsheet/bottomsheet';
-import { InputHeader, ItemCardData } from '@/src/widgets';
+import { BottomSheetFooter, BottomSheetTitle } from '@/src/shared/ui/bottomsheet/bottomsheet';
+import { InputHeader, ItemCardData, PopupListItem } from '@/src/widgets';
 import { getListByName, getPopularList } from '@/src/widgets';
 import React from 'react';
 import { useQueries, useQuery } from 'react-query';
+
+const locations = [
+  '전체',
+  '서울',
+  '경기',
+  '인천',
+  '부산',
+  '대구',
+  '대전',
+  '광주',
+  '울산',
+  '세종',
+  '강원',
+  '경남',
+  '경북',
+  '전남',
+  '전북',
+  '충남',
+  '충북',
+  '제주',
+];
+
+const categories = ['전체', '패션 · 뷰티', '아트', '음식', '굿즈', '라이프'];
 
 const Page = ({ params }: { params: { keyword: string } }) => {
   const [keyword, setKeyword] = React.useState(decodeURIComponent(params.keyword));
@@ -38,15 +63,81 @@ const Page = ({ params }: { params: { keyword: string } }) => {
   const [radioFilter, setRadioFilter] = React.useState('operational');
   const [listOrder, setListOrder] = React.useState('opening');
 
+  const [filterDate, setFilterDate] = React.useState(new Date());
+  const [filterLocation, setFilterLocation] = React.useState<Array<string>>(['전체']);
+  const [filterRating, setFilterRating] = React.useState('all');
+  const [filterCategory, setFilterCategory] = React.useState<Array<string>>(['전체']);
+
+  const [filteredArr, setFilteredArr] = React.useState<Array<PopupListItem>>([]);
+
   const queries = [
     { queryKey: ['getListByName', keyword], queryFn: () => getListByName(keyword), enabled: !!keyword },
     { queryKey: ['popularList'], queryFn: getPopularList },
   ];
 
   const results = useQueries(queries);
+  const searchResult = results[0]?.data;
+
+  React.useEffect(() => {
+    if (searchResult) setFilteredArr(searchResult);
+  }, [searchResult]);
+
+  const initializeFilter = () => {
+    setFilterDate(new Date());
+    setFilterLocation(['전체']);
+    setFilterRating('all');
+    setFilterCategory(['전체']);
+  };
+
+  const setFilters = () => {
+    let filtered = searchResult;
+
+    if (filtered !== undefined) {
+      // 📅 날짜 필터
+      if (filterDate) {
+        filtered = filtered.filter(
+          item =>
+            filterDate >= new Date(`${item.startDate.year}-${item.startDate.month}-${item.startDate.day}`) &&
+            filterDate <= new Date(`${item.endDate.year}-${item.endDate.month}-${item.endDate.day}`),
+        );
+      }
+      console.log('날짜 필터');
+      console.log(filtered);
+
+      // 📍 위치 필터
+      if (filterLocation.length > 0) {
+        if (filterLocation[0] !== '전체') filtered = filtered.filter(item => filterLocation.includes(item.location));
+      }
+      console.log('위치 필터');
+      console.log(filtered);
+
+      // ⭐ 평점 필터
+      if (filterRating) {
+        if (filterRating !== 'all') filtered = filtered.filter(item => item.rating >= Number(filterRating));
+      }
+      console.log('평점 필터');
+      console.log(filtered);
+
+      // 🏷️ 카테고리 필터
+      if (filterCategory.length > 0) {
+        if (filterCategory[0] !== '전체')
+          filtered = filtered.filter(item => filterCategory.includes(item.categoryName));
+      }
+      console.log('카테고리 필터');
+      console.log(filtered);
+
+      console.log(filterDate);
+      console.log(filterLocation);
+      console.log(filterRating);
+      console.log(filterCategory);
+      console.log(filtered);
+
+      setFilteredArr(filtered);
+    }
+  };
 
   const searchList = () => {
-    let arr = results[0].data!;
+    let arr = filteredArr;
     let today = new Date();
 
     if (arr !== undefined) {
@@ -102,27 +193,6 @@ const Page = ({ params }: { params: { keyword: string } }) => {
 
     return arr;
   };
-
-  const locations = [
-    '전체',
-    '서울',
-    '경기',
-    '인천',
-    '부산',
-    '대구',
-    '대전',
-    '광주',
-    '울산',
-    '세종',
-    '강원',
-    '경남',
-    '경북',
-    '전남',
-    '전북',
-    '충남',
-    '충북',
-    '제주',
-  ];
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -271,37 +341,101 @@ const Page = ({ params }: { params: { keyword: string } }) => {
                 카테고리
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="date">
+            <TabsContent value="date" className="min-h-[400px]">
               <div>
                 <div className="px-24 pt-24">
-                  {/* <DatePicker selectedDate={undefined} onSelect={function (date: Date | undefined): void {
-                    throw new Error('Function not implemented.');
-                  } } /> */}
-                </div>
-                <div className="flex gap-8 px-16 py-8">
-                  <div>
-                    <SecondaryButton>초기화</SecondaryButton>
-                  </div>
-                  <div className="flex-1">
-                    <PrimaryButton variant="enabled">필터 적용하기</PrimaryButton>
-                  </div>
+                  <DatePicker
+                    selectedDate={filterDate}
+                    onDateChange={date => {
+                      if (date) setFilterDate(date);
+                    }}
+                  />
                 </div>
               </div>
             </TabsContent>
-            <TabsContent value="location">
+            <TabsContent value="location" className="min-h-[400px]">
               <div className="px-16 pt-16">
                 <ChoiceChipGroup className="grid grid-cols-6 grid-rows-3 gap-8 justify-items-center">
-                  {locations.map(location => (
-                    <ChoiceChipGroupItem key={location} value={location}>
-                      {location}
-                    </ChoiceChipGroupItem>
+                  {locations.map((item, idx) => (
+                    <ToggleChipItem
+                      key={`CAT_${idx}`}
+                      isSelected={filterLocation.includes(item)}
+                      value={item}
+                      text={item}
+                      onChange={(value, selected) => {
+                        if (selected) {
+                          // 선택 시 배열에 카테고리 추가
+                          setFilterLocation(prev => [...prev, value]);
+                        } else {
+                          // 선택 해제 시 배열에서 카테고리 제거
+                          setFilterLocation(filterLocation.filter(elem => elem !== value));
+                        }
+                      }}
+                    />
                   ))}
                 </ChoiceChipGroup>
               </div>
             </TabsContent>
-            <TabsContent value="rate">평점</TabsContent>
-            <TabsContent value="category">카테고리</TabsContent>
+            <TabsContent value="rate" className="min-h-[400px]">
+              <div className="px-16 pt-8">
+                <RadioGroup className="flex flex-col" onValueChange={value => setFilterRating(value)}>
+                  <div className="py-14">
+                    <RadioGroupItem size="lg" value="all" label="전체" />
+                  </div>
+                  <div className="py-14">
+                    <RadioGroupItem size="lg" value="4" label="4점 이상" />
+                  </div>
+                  <div className="py-14">
+                    <RadioGroupItem size="lg" value="3" label="3점 이상" />
+                  </div>
+                  <div className="py-14">
+                    <RadioGroupItem size="lg" value="2" label="2점 이상" />
+                  </div>
+                  <div className="py-14">
+                    <RadioGroupItem size="lg" value="1" label="1점 이상" />
+                  </div>
+                </RadioGroup>
+              </div>
+            </TabsContent>
+            <TabsContent value="category" className="min-h-[400px]">
+              <ToggleChipGroup className="flex flex-wrap w-full gap-8 px-16 pt-16 h-fit">
+                {categories.map((item, idx) => (
+                  <ToggleChipItem
+                    key={`CAT_${idx}`}
+                    isSelected={filterCategory.includes(item)}
+                    value={item}
+                    text={item}
+                    onChange={(value, selected) => {
+                      if (selected) {
+                        // 선택 시 배열에 카테고리 추가
+                        setFilterCategory(prev => [...prev, value]);
+                      } else {
+                        // 선택 해제 시 배열에서 카테고리 제거
+                        setFilterCategory(filterCategory.filter(elem => elem !== value));
+                      }
+                    }}
+                  />
+                ))}
+              </ToggleChipGroup>
+            </TabsContent>
           </Tabs>
+          <BottomSheetFooter>
+            <div className="flex gap-8 px-16 py-8">
+              <div>
+                <SecondaryButton onClick={initializeFilter}>초기화</SecondaryButton>
+              </div>
+              <div className="flex-1">
+                <PrimaryButton
+                  variant="enabled"
+                  onClick={() => {
+                    setFilterBottomSheetOpen(false);
+                    setFilters();
+                  }}>
+                  필터 적용하기
+                </PrimaryButton>
+              </div>
+            </div>
+          </BottomSheetFooter>
         </BottomSheetContent>
       </BottomSheet>
     </div>
