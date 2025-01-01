@@ -56,7 +56,7 @@ interface FilterSheetProps {
   isOpen: boolean;
   onClose: () => void;
   activeTab: string;
-  // onApplyFilter: (params: FilterParams) => void;
+  // onApplyFilter: (filters: { date: Date | null; location: string[]; rating: string; category: string[] }) => void;
 }
 
 const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {

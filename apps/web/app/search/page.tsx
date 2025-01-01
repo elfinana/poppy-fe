@@ -37,11 +37,15 @@ const Page = (props: Props) => {
     date: string;
     description: string;
     images: string[]; // images 속성 추가
+    startDate?: { year: number; month: number; day: number };
+    endDate?: { year: number; month: number; day: number };
   }>({
     title: '',
     date: '',
     description: '',
     images: [], // 초기값으로 빈 배열 설정
+    startDate: undefined,
+    endDate: undefined,
   });
   const toggleFilterSheet = (tab: string) => {
     setActiveTab(tab);
@@ -92,7 +96,7 @@ const Page = (props: Props) => {
   const searchAddressToCoordinate = (address: string, callback: (lat: number | null, lng: number | null) => void) => {
     const normalizedAddress = normalizeAddress(address); // 정규화된 주소 사용
     // const normalizedAddress = '서울특별시 강남구 도곡로 142'; // 정규화된 주소 사용
-    // const normalizedAddress = '서울특별시 강남구 강남대로 286'; // 정규화된 주소 사용
+    // const normalizedAddress = '서울 송파구 올림픽로 240'; // 정규화된 주소 사용
 
     console.log('정규화된 주소:', normalizedAddress);
     if (!naver.maps.Service || !naver.maps.Service.geocode) {
@@ -164,6 +168,7 @@ const Page = (props: Props) => {
         }
 
         const fullAddress = `${area1} ${area2}`.trim(); // '서울특별시 중구' 형식으로 조합
+        console.log('지역', fullAddress);
         callback(fullAddress);
       },
     );
@@ -258,7 +263,7 @@ const Page = (props: Props) => {
     if (!searchQuery.trim()) {
       return;
     }
-    refetch(); // React Query의 refetch로 API 호출
+    refetch();
     setIsFilterStoreOpen(true);
   };
 
@@ -266,6 +271,15 @@ const Page = (props: Props) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const handleClear = () => {
+    setSearchQuery('');
+  };
+
+  const handleCloseFilterStoreSheet = () => {
+    setIsFilterStoreOpen(false);
+    setSearchQuery('');
   };
 
   return (
@@ -279,6 +293,7 @@ const Page = (props: Props) => {
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           onKeyDown={handleKeyDown}
+          onClick={handleClear}
         />
         <div className="flex justify-start w-full gap-2 mt-8">
           <FilterIconButton variant="inactive" onClick={() => toggleFilterSheet('c')} />
@@ -303,12 +318,12 @@ const Page = (props: Props) => {
       <MarkerInfoSheet
         isOpen={isBottomSheetOpen}
         onClose={() => setIsBottomSheetOpen(false)}
-        markerData={selectedMarkerData}
+        markerData={selectedMarkerData || []}
       />
 
       <FilterStoreSheet
         isOpen={isFilterStoreSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
+        onClose={handleCloseFilterStoreSheet}
         data={nameSearchResult || []}
       />
     </div>

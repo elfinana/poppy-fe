@@ -37,8 +37,8 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
     let sorted = [...data];
     switch (selectedOption) {
       case '조회 순':
-      // sorted.sort((a, b) => b.viewCount - a.viewCount);
-      // break;
+        sorted.sort((a, b) => b.viewCount - a.viewCount);
+        break;
       case '리뷰 많은 순':
         sorted.sort((a, b) => b.scrapCount - a.scrapCount);
         break;
@@ -67,13 +67,13 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
   }, [data]);
 
   useEffect(() => {
-    console.log('FilterStoreSheet received data:', data);
+    // console.log('FilterStoreSheet received data:', data);
     console.log('정렬된 데이터:', sortedData);
   }, [sortedData]);
 
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
-      <BottomSheetContent className="max-h-[500px]">
+      <BottomSheetContent>
         <div className="flex flex-col items-center w-full pt-28">
           <span className="text-h3">팝업스토어 목록</span>
           <hr className="w-full mt-16 border-t border-gray-100" />
@@ -122,43 +122,46 @@ const FilterStoreSheet = ({ isOpen, onClose, data }: FilterStoreSheetProps) => {
           </AlertDialog>
         </div>
 
-        <div className="overflow-y-auto h-[calc(100vh-200px)] mx-16">
+        <div className="max-h-[400px] mx-16 overflow-y-auto">
           {sortedData.map((store, index) => (
-            <div key={index} className="mb-8">
-              <div className="flex flex-row justify-between items-center mt-[32px]">
-                <span className="text-h2">{store.name}</span>
-                {store.isActive ? (
-                  <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
-                    <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-                    <p className="text-[#5599FF] text-c1 font-medium">영업 중</p>
-                  </div>
-                ) : (
-                  <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
-                    <p className="font-medium text-purple-600 text-c1">영업종료</p>
-                  </div>
-                )}
+            <>
+              <div key={index} className={index > 0 ? 'mt-32' : ''}>
+                <ImageSlider images={store.imageUrls} />
+                <div className="flex flex-row justify-between items-center mt-[8px]">
+                  <span className="text-h2">{store.name}</span>
+                  {store.isActive ? (
+                    <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
+                      <IconButton icon={'ic-info-bluetime'} size={'sm'} />
+                      <p className="text-[#5599FF] text-c1 font-medium">영업 중</p>
+                    </div>
+                  ) : (
+                    <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
+                      <p className="font-medium text-purple-600 text-c1">영업종료</p>
+                    </div>
+                  )}
+                </div>
+                {
+                  <span className="text-gray-500 text-b3_com">
+                    {formatDay({
+                      year: store.startDate.year,
+                      month: store.startDate.month,
+                      day: store.startDate.day,
+                    })}{' '}
+                    ~{' '}
+                    {formatDay({
+                      year: store.endDate.year,
+                      month: store.endDate.month,
+                      day: store.endDate.day,
+                    })}
+                  </span>
+                }
+                <div className="flex items-center mt-4">
+                  <IconButton icon={'ic-star-active'} size={'smmd'} />
+                  <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>
+                  <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {store.scrapCount}</span>
+                </div>
               </div>
-              {
-                <span className="text-gray-500 text-b3_com">
-                  {formatDay({
-                    year: store.startDate.year,
-                    month: store.startDate.month,
-                    day: store.startDate.day,
-                  })}{' '}
-                  ~{' '}
-                  {formatDay({
-                    year: store.endDate.year,
-                    month: store.endDate.month,
-                    day: store.endDate.day,
-                  })}
-                </span>
-              }
-              <div className="flex items-center mt-4">
-                <IconButton icon={'ic-star-active'} size={'smmd'} />
-                <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>
-                <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {store.scrapCount}</span>
-              </div>
-            </div>
+            </>
           ))}
         </div>
       </BottomSheetContent>
