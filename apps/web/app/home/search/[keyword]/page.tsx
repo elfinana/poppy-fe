@@ -27,8 +27,8 @@ import {
   ToggleChipGroup,
   ToggleChipItem,
 } from '@/src/shared';
-import { BottomSheetFooter, BottomSheetTitle } from '@/src/shared/ui/bottomsheet/bottomsheet';
-import { InputHeader, ItemCardData, PopupListItem } from '@/src/widgets';
+import { BottomSheetDescription, BottomSheetFooter, BottomSheetTitle } from '@/src/shared/ui/bottomsheet/bottomsheet';
+import { getNewList, InputHeader, ItemCardData, PopupListItem } from '@/src/widgets';
 import { getListByName, getPopularList } from '@/src/widgets';
 import React from 'react';
 import { useQueries, useQuery } from 'react-query';
@@ -63,27 +63,36 @@ const Page = ({ params }: { params: { keyword: string } }) => {
   const [radioFilter, setRadioFilter] = React.useState('operational');
   const [listOrder, setListOrder] = React.useState('opening');
 
-  const [filterDate, setFilterDate] = React.useState(new Date());
+  const [filterDate, setFilterDate] = React.useState<Date>();
   const [filterLocation, setFilterLocation] = React.useState<Array<string>>(['전체']);
   const [filterRating, setFilterRating] = React.useState('all');
   const [filterCategory, setFilterCategory] = React.useState<Array<string>>(['전체']);
 
   const [filteredArr, setFilteredArr] = React.useState<Array<PopupListItem>>([]);
 
+  const [defaultTab, setDefaultTab] = React.useState('date');
+
+  const isFilterDateOn = React.useRef({ state: false, text: '날짜' });
+  const isFilterLocationOn = React.useRef(false);
+  const isFilterratingOn = React.useRef({ state: false, text: '평점' });
+  const isFilterCategoryOn = React.useRef(false);
+
   const queries = [
     { queryKey: ['getListByName', keyword], queryFn: () => getListByName(keyword), enabled: !!keyword },
-    { queryKey: ['popularList'], queryFn: getPopularList },
+    { queryKey: ['popularList'], queryFn: getNewList },
   ];
 
   const results = useQueries(queries);
   const searchResult = results[0]?.data;
 
   React.useEffect(() => {
-    if (searchResult) setFilteredArr(searchResult);
+    if (searchResult) {
+      setFilteredArr(searchResult);
+    }
   }, [searchResult]);
 
-  const initializeFilter = () => {
-    setFilterDate(new Date());
+  const initializeFilters = () => {
+    setFilterDate(undefined);
     setFilterLocation(['전체']);
     setFilterRating('all');
     setFilterCategory(['전체']);
@@ -100,37 +109,42 @@ const Page = ({ params }: { params: { keyword: string } }) => {
             filterDate >= new Date(`${item.startDate.year}-${item.startDate.month}-${item.startDate.day}`) &&
             filterDate <= new Date(`${item.endDate.year}-${item.endDate.month}-${item.endDate.day}`),
         );
+        isFilterDateOn.current.state = true;
+        isFilterDateOn.current.text = formatToMD({
+          year: filterDate!.getFullYear(),
+          month: filterDate!.getMonth() + 1,
+          day: filterDate!.getDate(),
+        });
+      } else {
+        isFilterDateOn.current.state = false;
+        isFilterDateOn.current.text = '날짜';
       }
-      console.log('날짜 필터');
-      console.log(filtered);
 
       // 📍 위치 필터
-      if (filterLocation.length > 0) {
-        if (filterLocation[0] !== '전체') filtered = filtered.filter(item => filterLocation.includes(item.location));
+      if (filterLocation.length > 0 && filterLocation[0] !== '전체') {
+        filtered = filtered.filter(item => filterLocation.includes(item.location));
+        isFilterLocationOn.current = true;
+      } else {
+        isFilterLocationOn.current = false;
       }
-      console.log('위치 필터');
-      console.log(filtered);
 
       // ⭐ 평점 필터
-      if (filterRating) {
-        if (filterRating !== 'all') filtered = filtered.filter(item => item.rating >= Number(filterRating));
+      if (filterRating && filterRating !== 'all') {
+        filtered = filtered.filter(item => item.rating >= Number(filterRating));
+        isFilterratingOn.current.state = true;
+        isFilterratingOn.current.text = `${filterRating}점 이상`;
+      } else {
+        isFilterratingOn.current.state = false;
+        isFilterratingOn.current.text = '평점';
       }
-      console.log('평점 필터');
-      console.log(filtered);
 
       // 🏷️ 카테고리 필터
-      if (filterCategory.length > 0) {
-        if (filterCategory[0] !== '전체')
-          filtered = filtered.filter(item => filterCategory.includes(item.categoryName));
+      if (filterCategory.length > 0 && filterCategory[0] !== '전체') {
+        filtered = filtered.filter(item => filterCategory.includes(item.categoryName));
+        isFilterCategoryOn.current = true;
+      } else {
+        isFilterCategoryOn.current = false;
       }
-      console.log('카테고리 필터');
-      console.log(filtered);
-
-      console.log(filterDate);
-      console.log(filterLocation);
-      console.log(filterRating);
-      console.log(filterCategory);
-      console.log(filtered);
 
       setFilteredArr(filtered);
     }
@@ -140,55 +154,54 @@ const Page = ({ params }: { params: { keyword: string } }) => {
     let arr = filteredArr;
     let today = new Date();
 
-    if (arr !== undefined) {
-      if (radioFilter === 'operational') {
-        arr = arr.filter(elem => elem.isEnd === false);
-      } else {
-        arr = arr.filter(
-          elem =>
-            getDateDifference(
-              `${elem.startDate.year}${elem.startDate.month}${elem.startDate.day}`,
-              `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
-            ) >= 0,
-        );
-      }
+    if (!arr) return [];
 
-      switch (listOrder) {
-        // 조회수순은 보류
-        case 'scraps':
-          arr.sort((a, b) => b.scrapCount - a.scrapCount);
-          break;
-        case 'rating':
-          arr.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'opening':
-          arr.sort(
-            (a, b) =>
-              getDateDifference(
-                `${a.startDate.year}${a.startDate.month}${a.startDate.day}`,
-                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
-              ) -
-              getDateDifference(
-                `${b.startDate.year}${b.startDate.month}${b.startDate.day}`,
-                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
-              ),
-          );
-          break;
-        case 'closing':
-          arr.sort(
-            (a, b) =>
-              getDateDifference(
-                `${a.endDate.year}${a.endDate.month}${a.endDate.day}`,
-                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
-              ) -
-              getDateDifference(
-                `${b.endDate.year}${b.endDate.month}${b.endDate.day}`,
-                `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
-              ),
-          );
-          break;
-      }
-      // 그 외 필터 아래로 추가
+    if (radioFilter === 'operational') {
+      arr = arr.filter(elem => elem.isEnd === false);
+    } else {
+      arr = arr.filter(
+        elem =>
+          getDateDifference(
+            `${elem.startDate.year}${elem.startDate.month}${elem.startDate.day}`,
+            `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+          ) >= 0,
+      );
+    }
+
+    switch (listOrder) {
+      // 조회수순은 보류
+      case 'scraps':
+        arr.sort((a, b) => b.scrapCount - a.scrapCount);
+        break;
+      case 'rating':
+        arr.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'opening':
+        arr.sort(
+          (a, b) =>
+            getDateDifference(
+              `${a.startDate.year}${a.startDate.month}${a.startDate.day}`,
+              `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+            ) -
+            getDateDifference(
+              `${b.startDate.year}${b.startDate.month}${b.startDate.day}`,
+              `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+            ),
+        );
+        break;
+      case 'closing':
+        arr.sort(
+          (a, b) =>
+            getDateDifference(
+              `${a.endDate.year}${a.endDate.month}${a.endDate.day}`,
+              `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+            ) -
+            getDateDifference(
+              `${b.endDate.year}${b.endDate.month}${b.endDate.day}`,
+              `${today.getFullYear()}${today.getMonth() + 1}${today.getDate()}`,
+            ),
+        );
+        break;
     }
 
     return arr;
@@ -201,20 +214,58 @@ const Page = ({ params }: { params: { keyword: string } }) => {
       </div>
       <div className="flex gap-8 px-16 mt-8">
         <div>
-          <FilterIconButton variant="inactive" onClick={() => setFilterBottomSheetOpen(true)} />
+          <FilterIconButton
+            variant={
+              isFilterDateOn.current.state ||
+              isFilterLocationOn.current ||
+              isFilterratingOn.current.state ||
+              isFilterCategoryOn.current
+                ? 'active'
+                : 'inactive'
+            }
+            onClick={() => setFilterBottomSheetOpen(true)}
+          />
         </div>
         <div className="flex gap-4">
           <div>
-            <DropdownButton value="날짜" />
+            <DropdownButton
+              value={isFilterDateOn.current.text}
+              variant={isFilterDateOn.current.state ? 'active' : 'inactive'}
+              onClick={() => {
+                setDefaultTab('date');
+                setFilterBottomSheetOpen(true);
+              }}
+            />
           </div>
           <div>
-            <DropdownButton value="위치" />
+            <DropdownButton
+              value="위치"
+              variant={isFilterLocationOn.current ? 'active' : 'inactive'}
+              onClick={() => {
+                setDefaultTab('location');
+                setFilterBottomSheetOpen(true);
+              }}
+            />
           </div>
           <div>
-            <DropdownButton value="평점" />
+            <DropdownButton
+              value={isFilterratingOn.current.text}
+              variant={isFilterratingOn.current.state ? 'active' : 'inactive'}
+              onClick={() => {
+                setDefaultTab('rating');
+                setFilterBottomSheetOpen(true);
+              }}
+            />
           </div>
           <div>
-            <DropdownButton value="카테고리" />
+            <DropdownButton
+              value="카테고리"
+              variant={isFilterCategoryOn.current ? 'active' : 'inactive'}
+              onClick={() => {
+                setDefaultTab('category');
+                setFilterBottomSheetOpen(true);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -323,10 +374,11 @@ const Page = ({ params }: { params: { keyword: string } }) => {
       </BottomSheet>
       <BottomSheet open={filterBottomSheetOpen} onOpenChange={setFilterBottomSheetOpen}>
         <BottomSheetContent aria-describedby="bottomSheetContent" className="px-0">
-          {/* <BottomSheetHeader className="py-16 border-b border-gray-100">
-            <BottomSheetTitle>정렬</BottomSheetTitle>
-          </BottomSheetHeader> */}
-          <Tabs defaultValue="date" className="relative w-full">
+          <BottomSheetHeader className="invisible">
+            <BottomSheetDescription className="invisible" />
+            <BottomSheetTitle className="invisible" />
+          </BottomSheetHeader>
+          <Tabs defaultValue={defaultTab} className="relative w-full">
             <TabsList className="flex justify-start gap-16 px-16 pt-8 pb-0 mt-14">
               <TabsTrigger value="date" className="pb-12 w-fit">
                 날짜
@@ -334,7 +386,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
               <TabsTrigger value="location" className="pb-12 w-fit">
                 위치
               </TabsTrigger>
-              <TabsTrigger value="rate" className="pb-12 w-fit">
+              <TabsTrigger value="rating" className="pb-12 w-fit">
                 평점
               </TabsTrigger>
               <TabsTrigger value="category" className="pb-12 w-fit">
@@ -344,41 +396,46 @@ const Page = ({ params }: { params: { keyword: string } }) => {
             <TabsContent value="date" className="min-h-[400px]">
               <div>
                 <div className="px-24 pt-24">
-                  <DatePicker
-                    selectedDate={filterDate}
-                    onDateChange={date => {
-                      if (date) setFilterDate(date);
-                    }}
-                  />
+                  <DatePicker selectedDate={filterDate} onDateChange={setFilterDate} />
                 </div>
               </div>
             </TabsContent>
             <TabsContent value="location" className="min-h-[400px]">
               <div className="px-16 pt-16">
-                <ChoiceChipGroup className="grid grid-cols-6 grid-rows-3 gap-8 justify-items-center">
-                  {locations.map((item, idx) => (
+                <ToggleChipGroup className="grid grid-cols-6 grid-rows-3 gap-8 justify-items-center">
+                  {locations.map(item => (
                     <ToggleChipItem
-                      key={`CAT_${idx}`}
+                      key={`LOC_${item}`}
                       isSelected={filterLocation.includes(item)}
                       value={item}
                       text={item}
                       onChange={(value, selected) => {
-                        if (selected) {
-                          // 선택 시 배열에 카테고리 추가
-                          setFilterLocation(prev => [...prev, value]);
-                        } else {
-                          // 선택 해제 시 배열에서 카테고리 제거
-                          setFilterLocation(filterLocation.filter(elem => elem !== value));
-                        }
+                        setFilterLocation(prev => {
+                          // 선택 시
+                          if (selected) {
+                            // '전체'를 클릭했을 경우
+                            if (value === '전체') {
+                              return ['전체'];
+                            }
+                            // 그 외를 클릭했을 경우
+                            return [...prev.filter(elem => elem !== '전체'), value];
+                          } else {
+                            // 선택 해제 시
+                            return prev.filter(elem => elem !== value);
+                          }
+                        });
                       }}
                     />
                   ))}
-                </ChoiceChipGroup>
+                </ToggleChipGroup>
               </div>
             </TabsContent>
-            <TabsContent value="rate" className="min-h-[400px]">
+            <TabsContent value="rating" className="min-h-[400px]">
               <div className="px-16 pt-8">
-                <RadioGroup className="flex flex-col" onValueChange={value => setFilterRating(value)}>
+                <RadioGroup
+                  className="flex flex-col"
+                  defaultValue={filterRating}
+                  onValueChange={value => setFilterRating(value)}>
                   <div className="py-14">
                     <RadioGroupItem size="lg" value="all" label="전체" />
                   </div>
@@ -399,20 +456,27 @@ const Page = ({ params }: { params: { keyword: string } }) => {
             </TabsContent>
             <TabsContent value="category" className="min-h-[400px]">
               <ToggleChipGroup className="flex flex-wrap w-full gap-8 px-16 pt-16 h-fit">
-                {categories.map((item, idx) => (
+                {categories.map(item => (
                   <ToggleChipItem
-                    key={`CAT_${idx}`}
+                    key={`CAT_${item}`}
                     isSelected={filterCategory.includes(item)}
                     value={item}
                     text={item}
                     onChange={(value, selected) => {
-                      if (selected) {
-                        // 선택 시 배열에 카테고리 추가
-                        setFilterCategory(prev => [...prev, value]);
-                      } else {
-                        // 선택 해제 시 배열에서 카테고리 제거
-                        setFilterCategory(filterCategory.filter(elem => elem !== value));
-                      }
+                      setFilterCategory(prev => {
+                        // 선택 시
+                        if (selected) {
+                          // '전체'를 클릭했을 경우 그 외 선택 해제
+                          if (value === '전체') {
+                            return ['전체'];
+                          }
+                          // 그 외를 클릭했을 경우 '전체' 선택 해제
+                          return [...prev.filter(elem => elem !== '전체'), value];
+                        } else {
+                          // 선택 해제 시
+                          return prev.filter(elem => elem !== value);
+                        }
+                      });
                     }}
                   />
                 ))}
@@ -422,7 +486,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
           <BottomSheetFooter>
             <div className="flex gap-8 px-16 py-8">
               <div>
-                <SecondaryButton onClick={initializeFilter}>초기화</SecondaryButton>
+                <SecondaryButton onClick={initializeFilters}>초기화</SecondaryButton>
               </div>
               <div className="flex-1">
                 <PrimaryButton

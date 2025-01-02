@@ -9,7 +9,7 @@ type Props = {
 };
 const DatePicker = ({ className, selectedDate, onDateChange }: Props) => {
   const onSelect = (date: Date | undefined) => {
-    if (!date) return;
+    // if (!date) return;
     onDateChange(date);
   };
 
