@@ -52,6 +52,13 @@ const locations = [
 const category = ['전체', '패션 · 뷰티', '아트', '음식', '굿즈', '라이프'];
 const ratings = ['전체', '4점 이상', '3점 이상', '2점 이상', '1점 이상'];
 
+const categoryMap: Record<string, number> = {
+  '패션 · 뷰티': 1,
+  음식: 2,
+  아트: 3,
+  굿즈: 4,
+  라이프: 5,
+};
 interface FilterSheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -87,9 +94,7 @@ const FilterSheet = ({ isOpen, onClose, activeTab, onApplyFilter }: FilterSheetP
         date: filterState.date ? filterState.date.toISOString().split('T')[0] : null,
         locations: filterState.location.includes('전체') ? null : filterState.location,
         rating: filterState.rating === '전체' ? null : parseInt(filterState.rating),
-        categoryIds: filterState.category.includes('전체')
-          ? null
-          : filterState.category.map(cat => category.indexOf(cat) + 1),
+        categoryIds: filterState.category.includes('전체') ? null : filterState.category.map(cat => categoryMap[cat]),
       };
 
       onApplyFilter({
