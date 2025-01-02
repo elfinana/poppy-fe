@@ -12,14 +12,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   InputChip,
+  Title,
 } from '@/src/shared';
-import { InputHeader, PopupSlider } from '@/src/widgets';
+import { getVisitedList, InputHeader, PopupSlider } from '@/src/widgets';
 import { ItemCardData } from '@/src/widgets/slider/model';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Props = {};
 
 const Page = (props: Props) => {
+  const router = useRouter();
+
   const lastUpdate = '12. 02 10:00 업데이트';
 
   const [recentlySearched, setRecentlySearched] = React.useState([
@@ -50,13 +54,13 @@ const Page = (props: Props) => {
   return (
     <div>
       <div>
-        <InputHeader />
+        <InputHeader onSearch={keyword => router.push(`/home/search/${keyword}`)} />
       </div>
-      <div className="flex justify-between my-16 px-16">
-        <div className="text-h3 text-gray-900">최근 검색어</div>
+      <div className="flex justify-between px-16 my-16">
+        <div className="text-gray-900 text-h3">최근 검색어</div>
         <AlertDialog>
           <AlertDialogTrigger variant="enabled">
-            <div className="text-c1 text-gray-500 underline cursor-pointer">지우기</div>
+            <div className="text-gray-500 underline cursor-pointer text-c1">지우기</div>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -73,32 +77,35 @@ const Page = (props: Props) => {
       <div className="flex px-16 min-h-[64px]">
         {recentlySearched.length > 0 ? (
           // 최근 검색 기록이 하나 이상일 경우
-          <div className="flex flex-wrap gap-8 w-full h-fit">
+          <div className="flex flex-wrap w-full gap-8 h-fit">
             {recentlySearched.map((item, idx) => (
               <InputChip key={`CHIP_${idx}`} value={item.id} text={item.text} onDelete={deleteChipsHandler} />
             ))}
           </div>
         ) : (
           // 최근 검색 기록이 하나도 없을 경우
-          <div className="flex justify-center items-center w-full text-b3 text-gray-400">
+          <div className="flex items-center justify-center w-full text-gray-400 text-b3">
             최근 검색 내역이 없습니다.
           </div>
         )}
       </div>
       <div className="flex justify-between px-16 mt-16">
-        <div className="text-h3 text-gray-900">인기 검색어</div>
-        <div className="text-c2 text-gray-400">{lastUpdate}</div>
+        <div className="text-gray-900 text-h3">인기 검색어</div>
+        <div className="text-gray-400 text-c2">{lastUpdate}</div>
       </div>
-      <div className="grid grid-cols-2 grid-rows-5 grid-flow-col mt-16 mb-bottomMargin px-16 gap-8">
+      <div className="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8 px-16 mt-16 mb-bottomMargin">
         {mostSearched.map((item, idx) => (
           <div key={`ITEM_${idx}`} className="flex items-center">
-            <div className="text-b2 text-gray-900 w-16 text-center">{idx + 1}</div>
-            <div className="text-b3 text-gray-900 grow ml-16 truncate">{item}</div>
+            <div className="w-16 text-center text-gray-900 text-b2">{idx + 1}</div>
+            <div className="ml-16 text-gray-900 truncate text-b3 grow">{item}</div>
           </div>
         ))}
       </div>
       <div className="flex mt-16 mb-bottomMargin">
-        <PopupSlider variant="list" text1="최근 본 팝업" data={recentStores} />
+        <div className="flex flex-col w-full gap-y-12">
+          <Title text1="최근 본 팝업" category={8} />
+          <PopupSlider variant="list" queryKey="visitedList" queryFn={getVisitedList} />
+        </div>
       </div>
     </div>
   );
