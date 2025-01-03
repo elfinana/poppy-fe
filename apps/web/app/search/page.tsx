@@ -42,6 +42,7 @@ const Page = (props: Props) => {
     rating: '',
     category: [],
   });
+
   const [selectedMarkerData, setSelectedMarkerData] = React.useState<{
     title: string;
     date: string;
@@ -57,6 +58,7 @@ const Page = (props: Props) => {
     startDate: undefined,
     endDate: undefined,
   });
+
   const toggleFilterSheet = (tab: string) => {
     setActiveTab(tab);
     setIsFilterSheetOpen(prev => !prev);
@@ -282,9 +284,16 @@ const Page = (props: Props) => {
     setSearchQuery('');
   };
 
-  const handleCloseFilterStoreSheet = () => {
-    setIsFilterStoreOpen(false);
-    setSearchQuery('');
+  const handleResetFilter = () => {
+    setIsFilterStoreOpen(false); // FilterStoreSheet 닫기
+    setSelectedFilters({
+      date: null,
+      location: [],
+      rating: '',
+      category: [],
+    }); // 필터 초기화
+    setActiveTab('c'); // 기본 탭 설정
+    setIsFilterSheetOpen(true); // FilterSheet 열기
   };
 
   return (
@@ -324,7 +333,9 @@ const Page = (props: Props) => {
           <DropdownButton
             value={
               selectedFilters.location.length > 0 && !selectedFilters.location.includes('전체')
-                ? selectedFilters.location.join(', ')
+                ? selectedFilters.location.length > 2
+                  ? `${selectedFilters.location[0]} 외 ${selectedFilters.location.length - 1}개`
+                  : selectedFilters.location.join(', ')
                 : '위치'
             }
             variant={
@@ -333,14 +344,20 @@ const Page = (props: Props) => {
             onClick={() => toggleFilterSheet('d')}
           />
           <DropdownButton
-            value={selectedFilters.rating ? `${selectedFilters.rating}` : '평점'}
+            value={selectedFilters.rating && selectedFilters.rating !== '전체' ? `${selectedFilters.rating}` : '평점'}
             variant={selectedFilters.rating && selectedFilters.rating !== '전체' ? 'active' : 'inactive'}
             onClick={() => toggleFilterSheet('e')}
           />
           <DropdownButton
             value={
               selectedFilters.category.length > 0 && !selectedFilters.category.includes('전체')
-                ? selectedFilters.category.join(', ')
+                ? selectedFilters.category.includes('패션 · 뷰티')
+                  ? selectedFilters.category.length > 1
+                    ? `패션 · 뷰티 외 ${selectedFilters.category.length - 1}개`
+                    : '패션 · 뷰티'
+                  : selectedFilters.category.length > 2
+                    ? `${selectedFilters.category[0]} 외 ${selectedFilters.category.length - 1}개`
+                    : selectedFilters.category.join(', ')
                 : '카테고리'
             }
             variant={
@@ -368,6 +385,7 @@ const Page = (props: Props) => {
         onApplyFilter={filters => {
           setSelectedFilters(filters);
         }}
+        onResetFilter={handleResetFilter}
       />
 
       {isBottomSheetOpen && (
@@ -380,8 +398,9 @@ const Page = (props: Props) => {
 
       <FilterStoreSheet
         isOpen={isFilterStoreSheetOpen}
-        onClose={handleCloseFilterStoreSheet}
+        onClose={() => setIsFilterStoreOpen(false)}
         data={nameSearchResult || []}
+        onResetFilter={handleResetFilter}
       />
     </div>
   );

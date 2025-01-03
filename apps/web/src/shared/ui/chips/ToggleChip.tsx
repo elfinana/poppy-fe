@@ -25,7 +25,6 @@ const ToggleChipGroup = ({ children, className }: ToggleChipGroupProps) => {
 };
 
 interface ToggleChipItemProps extends VariantProps<typeof toggleChipVariants> {
-  variant: 'enabled' | 'disabled';
   value: string;
   text: string;
   isSelected?: boolean; // 초기 선택 상태
@@ -33,18 +32,15 @@ interface ToggleChipItemProps extends VariantProps<typeof toggleChipVariants> {
   className?: string;
 }
 
-const ToggleChipItem = ({ className, variant, value, text, isSelected = false, onChange }: ToggleChipItemProps) => {
-  const [selected, setSelected] = React.useState(isSelected);
-
+const ToggleChipItem = ({ className, value, text, isSelected = false, onChange }: ToggleChipItemProps) => {
   const handleClick = () => {
-    const newState = !selected;
-    setSelected(newState);
-    onChange?.(value, newState); // 상태 변경을 부모로 전달
+    const newState = !isSelected;
+    onChange?.(value, newState);
   };
 
   return (
     <button
-      className={cn(toggleChipVariants({ variant: selected ? 'enabled' : 'disabled', className }))}
+      className={cn(toggleChipVariants({ variant: isSelected ? 'enabled' : 'disabled', className }))}
       onClick={handleClick}>
       {text}
     </button>

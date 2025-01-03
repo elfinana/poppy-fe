@@ -64,12 +64,14 @@ interface FilterSheetProps {
   onClose: () => void;
   activeTab: string;
   onApplyFilter: (filters: { date: Date | null; location: string[]; rating: string; category: string[] }) => void;
+  onResetFilter: () => void;
 }
 
-const FilterSheet = ({ isOpen, onClose, activeTab, onApplyFilter }: FilterSheetProps) => {
+const FilterSheet = ({ isOpen, onClose, activeTab, onApplyFilter, onResetFilter }: FilterSheetProps) => {
   const [currentDate, setCurrentDate] = useState<Date | undefined>(undefined);
   const [isStoreSheetOpen, setIsStoreSheetOpen] = useState(false);
   const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(isOpen);
 
   const [filterState, setFilterState] = React.useState<{
     date: Date | null;
@@ -253,7 +255,12 @@ const FilterSheet = ({ isOpen, onClose, activeTab, onApplyFilter }: FilterSheetP
         </BottomSheetContent>
       </BottomSheet>
 
-      <FilterStoreSheet isOpen={isStoreSheetOpen} onClose={() => setIsStoreSheetOpen(false)} data={filteredData} />
+      <FilterStoreSheet
+        isOpen={isStoreSheetOpen}
+        onClose={() => setIsStoreSheetOpen(false)}
+        data={filteredData}
+        onResetFilter={onResetFilter}
+      />
     </>
   );
 };
