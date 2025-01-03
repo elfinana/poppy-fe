@@ -59,6 +59,12 @@ const Page = (props: Props) => {
     endDate: undefined,
   });
 
+  const applyFilters = (
+    filters: React.SetStateAction<{ date: Date | null; location: string[]; rating: string; category: string[] }>,
+  ) => {
+    setSelectedFilters(filters); // Filtersheet에서 적용된 필터 반영
+  };
+
   const toggleFilterSheet = (tab: string) => {
     setActiveTab(tab);
     setIsFilterSheetOpen(prev => !prev);
@@ -382,6 +388,7 @@ const Page = (props: Props) => {
         isOpen={isFilterSheetOpen}
         onClose={() => setIsFilterSheetOpen(false)}
         activeTab={activeTab}
+        filters={selectedFilters || { date: null, location: ['전체'], rating: '전체', category: ['전체'] }}
         onApplyFilter={filters => {
           setSelectedFilters(filters);
         }}

@@ -80,12 +80,10 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
   }) => {
     console.log('필터 적용:', filters);
   };
-
-  const onTest = () => {
-    onClose();
-    setTestOpen(true);
-  };
-
+  useEffect(() => {
+    setSortedData(data);
+    console.log('Initial sortedData:', data); // 데이터 초기화 시 출력
+  }, [data]);
   return (
     <>
       <BottomSheet open={isOpen} onOpenChange={onClose}>
