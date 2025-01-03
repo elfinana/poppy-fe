@@ -73,9 +73,9 @@ const Page = ({ params }: { params: { keyword: string } }) => {
   const [defaultTab, setDefaultTab] = React.useState('date');
 
   const isFilterDateOn = React.useRef({ state: false, text: '날짜' });
-  const isFilterLocationOn = React.useRef(false);
+  const isFilterLocationOn = React.useRef({ state: false, text: '위치' });
   const isFilterratingOn = React.useRef({ state: false, text: '평점' });
-  const isFilterCategoryOn = React.useRef(false);
+  const isFilterCategoryOn = React.useRef({ state: false, text: '카테고리' });
 
   const queries = [
     { queryKey: ['getListByName', keyword], queryFn: () => getListByName(keyword), enabled: !!keyword },
@@ -123,9 +123,14 @@ const Page = ({ params }: { params: { keyword: string } }) => {
       // 📍 위치 필터
       if (filterLocation.length > 0 && filterLocation[0] !== '전체') {
         filtered = filtered.filter(item => filterLocation.includes(item.location));
-        isFilterLocationOn.current = true;
+        isFilterLocationOn.current.state = true;
+        isFilterLocationOn.current.text =
+          filterLocation.length > 2
+            ? `${filterLocation[0]} 외 ${filterLocation.length - 1}개`
+            : `${filterLocation[0]}, ${filterLocation[1]}`;
       } else {
-        isFilterLocationOn.current = false;
+        isFilterLocationOn.current.state = false;
+        isFilterLocationOn.current.text = '위치';
       }
 
       // ⭐ 평점 필터
@@ -141,9 +146,14 @@ const Page = ({ params }: { params: { keyword: string } }) => {
       // 🏷️ 카테고리 필터
       if (filterCategory.length > 0 && filterCategory[0] !== '전체') {
         filtered = filtered.filter(item => filterCategory.includes(item.categoryName));
-        isFilterCategoryOn.current = true;
+        isFilterCategoryOn.current.state = true;
+        isFilterCategoryOn.current.text =
+          filterCategory.length > 2
+            ? `${filterCategory[0]} 외 ${filterCategory.length - 1}개`
+            : `${filterCategory[0]}, ${filterCategory[1]}`;
       } else {
-        isFilterCategoryOn.current = false;
+        isFilterCategoryOn.current.state = false;
+        isFilterCategoryOn.current.text = '카테고리';
       }
 
       setFilteredArr(filtered);
@@ -212,61 +222,57 @@ const Page = ({ params }: { params: { keyword: string } }) => {
       <div>
         <InputHeader onSearch={keyword => setKeyword(keyword)} defaultText={keyword} />
       </div>
-      <div className="flex gap-8 px-16 mt-8">
+      <div className="flex gap-8 pl-16 mt-8">
         <div>
           <FilterIconButton
             variant={
               isFilterDateOn.current.state ||
-              isFilterLocationOn.current ||
+              isFilterLocationOn.current.state ||
               isFilterratingOn.current.state ||
-              isFilterCategoryOn.current
+              isFilterCategoryOn.current.state
                 ? 'active'
                 : 'inactive'
             }
             onClick={() => setFilterBottomSheetOpen(true)}
           />
         </div>
-        <div className="flex gap-4">
-          <div>
-            <DropdownButton
-              value={isFilterDateOn.current.text}
-              variant={isFilterDateOn.current.state ? 'active' : 'inactive'}
-              onClick={() => {
-                setDefaultTab('date');
-                setFilterBottomSheetOpen(true);
-              }}
-            />
-          </div>
-          <div>
-            <DropdownButton
-              value="위치"
-              variant={isFilterLocationOn.current ? 'active' : 'inactive'}
-              onClick={() => {
-                setDefaultTab('location');
-                setFilterBottomSheetOpen(true);
-              }}
-            />
-          </div>
-          <div>
-            <DropdownButton
-              value={isFilterratingOn.current.text}
-              variant={isFilterratingOn.current.state ? 'active' : 'inactive'}
-              onClick={() => {
-                setDefaultTab('rating');
-                setFilterBottomSheetOpen(true);
-              }}
-            />
-          </div>
-          <div>
-            <DropdownButton
-              value="카테고리"
-              variant={isFilterCategoryOn.current ? 'active' : 'inactive'}
-              onClick={() => {
-                setDefaultTab('category');
-                setFilterBottomSheetOpen(true);
-              }}
-            />
-          </div>
+        <div className="flex w-full gap-4 overflow-x-scroll">
+          <DropdownButton
+            value={isFilterDateOn.current.text}
+            variant={isFilterDateOn.current.state ? 'active' : 'inactive'}
+            onClick={() => {
+              setDefaultTab('date');
+              setFilterBottomSheetOpen(true);
+            }}
+            className="text-nowrap"
+          />
+          <DropdownButton
+            value={isFilterLocationOn.current.text}
+            variant={isFilterLocationOn.current.state ? 'active' : 'inactive'}
+            onClick={() => {
+              setDefaultTab('location');
+              setFilterBottomSheetOpen(true);
+            }}
+            className="text-nowrap"
+          />
+          <DropdownButton
+            value={isFilterratingOn.current.text}
+            variant={isFilterratingOn.current.state ? 'active' : 'inactive'}
+            onClick={() => {
+              setDefaultTab('rating');
+              setFilterBottomSheetOpen(true);
+            }}
+            className="text-nowrap"
+          />
+          <DropdownButton
+            value={isFilterCategoryOn.current.text}
+            variant={isFilterCategoryOn.current.state ? 'active' : 'inactive'}
+            onClick={() => {
+              setDefaultTab('category');
+              setFilterBottomSheetOpen(true);
+            }}
+            className="text-nowrap"
+          />
         </div>
       </div>
       <div className="flex justify-between px-16 mt-12 mb-16">
