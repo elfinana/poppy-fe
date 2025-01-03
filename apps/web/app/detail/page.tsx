@@ -282,10 +282,7 @@ export default function Page() {
                     </div>
 
                     {/* pop list */}
-                    <div className="flex flex-col w-full gap-y-12">
-                      <Title text1="비슷한 팝업 추천" text2="" category={7} />
-                      <PopupSlider variant="list" queryKey="newList" queryFn={getNewList} />
-                    </div>
+                    {/* <PopupSlider variant="list" text2={`${title}`} text3={'와 유사한 팝업'} data={recommandData} /> */}
                   </div>
                 )}
 
