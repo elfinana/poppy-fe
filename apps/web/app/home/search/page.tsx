@@ -1,6 +1,5 @@
 'use client';
 
-import { ChipListItem } from '@/src/entities';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,12 +11,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   InputChip,
+  Skeleton,
   Title,
 } from '@/src/shared';
 import { getVisitedList, InputHeader, PopupSlider } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/slider/model';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useLoginStore } from 'store/login/loginStore';
+import { deleteAllSearchHistories, deleteSearchHistory, getSearchHistory } from '@/src/entities';
+import { useQuery } from 'react-query';
 
 type Props = {};
 
@@ -26,29 +28,45 @@ const Page = (props: Props) => {
 
   const lastUpdate = '12. 02 10:00 업데이트';
 
-  const [recentlySearched, setRecentlySearched] = React.useState([
-    { id: 0, text: '일둥이' },
-    { id: 1, text: '이둥이' },
-    { id: 2, text: '삼둥이' },
-    { id: 3, text: '사둥이' },
-    { id: 4, text: '오둥이' },
-    { id: 5, text: '육둥이' },
-  ]);
+  const { token } = useLoginStore();
 
-  const deleteChipsHandler = (chips: ChipListItem) => {
-    setRecentlySearched(recentlySearched.filter(val => val.id !== chips.id));
-    // 삭제 API 요청
+  const [recentlySearched, setRecentlySearched] = React.useState<Array<string>>([]);
+
+  const { isLoading } = useQuery(['getSearchHistory'], () => getSearchHistory(token!), {
+    enabled: !!token,
+    onSuccess: results => setRecentlySearched(results),
+  });
+
+  const deleteChipHandler = (chip: string) => {
+    if (token) {
+      deleteSearchHistory(chip, token).then(result => {
+        if (result) {
+          setRecentlySearched(recentlySearched.filter(val => val !== chip));
+        } else {
+          alert(`Failed to delete search history of '${chip}'.`);
+        }
+      });
+    }
   };
 
   const deleteAllChipsHandler = () => {
-    setRecentlySearched(prev => {
-      const arr = [...prev];
-      while (arr.length > 0) {
-        const deleted = arr.pop();
-        // 삭제 API 요청
-      }
-      return arr;
-    });
+    // setRecentlySearched(prev => {
+    //   const arr = [...prev];
+    //   while (arr.length > 0) {
+    //     const deleted = arr.pop();
+    //     // 삭제 API 요청
+    //   }
+    //   return arr;
+    // });
+    if (token) {
+      deleteAllSearchHistories(token).then(result => {
+        if (result) {
+          setRecentlySearched([]);
+        } else {
+          alert(`Failed to delete search histories.`);
+        }
+      });
+    }
   };
 
   return (
@@ -75,11 +93,13 @@ const Page = (props: Props) => {
         </AlertDialog>
       </div>
       <div className="flex px-16 min-h-[64px]">
-        {recentlySearched.length > 0 ? (
+        {isLoading ? (
+          <Skeleton className="w-full h-32" />
+        ) : recentlySearched.length > 0 ? (
           // 최근 검색 기록이 하나 이상일 경우
           <div className="flex flex-wrap w-full gap-8 h-fit">
             {recentlySearched.map((item, idx) => (
-              <InputChip key={`CHIP_${idx}`} value={item.id} text={item.text} onDelete={deleteChipsHandler} />
+              <InputChip key={`CHIP_${idx}`} value={item} onDelete={deleteChipHandler} />
             ))}
           </div>
         ) : (

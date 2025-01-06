@@ -105,9 +105,23 @@ export const getListByCategory = async (categoryId: string): Promise<Array<Popup
   }
 };
 
-export const getListByName = async (keyword: string): Promise<Array<PopupListItem>> => {
+export const getListByName = async (keyword: string, accessToken?: string): Promise<Array<PopupListItem>> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  };
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/${keyword}`);
+    let response;
+
+    if (accessToken) {
+      response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/${keyword}`, options);
+    } else {
+      response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/${keyword}`);
+    }
+
     const result = await response.json();
 
     if (result && result.data) {

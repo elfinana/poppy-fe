@@ -32,6 +32,7 @@ import { getNewList, InputHeader, ItemCardData, PopupListItem } from '@/src/widg
 import { getListByName, getPopularList } from '@/src/widgets';
 import React from 'react';
 import { useQueries, useQuery } from 'react-query';
+import { useLoginStore } from 'store/login/loginStore';
 
 const locations = [
   '전체',
@@ -77,8 +78,10 @@ const Page = ({ params }: { params: { keyword: string } }) => {
   const isFilterratingOn = React.useRef({ state: false, text: '평점' });
   const isFilterCategoryOn = React.useRef({ state: false, text: '카테고리' });
 
+  const { token } = useLoginStore();
+
   const queries = [
-    { queryKey: ['getListByName', keyword], queryFn: () => getListByName(keyword), enabled: !!keyword },
+    { queryKey: ['getListByName', keyword], queryFn: () => getListByName(keyword, token), enabled: !!keyword },
     { queryKey: ['popularList'], queryFn: getNewList },
   ];
 
