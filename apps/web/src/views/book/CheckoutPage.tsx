@@ -73,7 +73,7 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
   };
 
   return (
-    <form className="flex flex-col items-center h-full" onSubmit={paymentButtonClickHandler}>
+    <div className="flex flex-col items-center h-full">
       <ChevronHeader title="결제하기" edit={false} />
       <div className="p-16 pb-[24px] w-full">
         <span className="block mb-20 text-gray-900 text-h2">예약자 정보</span>
@@ -200,7 +200,7 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
           {formatWithThousandsSeparator(bookData.price * bookData.people + security)}원 결제하기
         </PrimaryButton>
       </div>
-    </form>
+    </div>
   );
 };
 
