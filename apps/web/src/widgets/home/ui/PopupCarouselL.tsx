@@ -3,7 +3,7 @@
 import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '@/src/shared/ui/carousel';
 import { getClosingSoonList } from '..';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import Autoplay from 'embla-carousel-autoplay';
 import { useQuery } from 'react-query';
 import { CarouselSkeleton } from '@/src/shared';

@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import { cn } from '@/src/shared/lib/utils';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 import { Art, Fb, Food, Goods, Life } from '@/public/index';
 

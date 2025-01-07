@@ -4,7 +4,7 @@ import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '@/src/shared/ui/carousel';
 
 import { ArrowRightSmall } from '@/public';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useQuery } from 'react-query';
 import { getHotCategoryList } from '..';
 import { CarouselSkeleton, Skeleton, Title } from '@/src/shared';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { getNewList, PopupSlider } from '@/src/widgets';
 import {
   IconButton,

@@ -157,16 +157,3 @@ const Page = (props: Props) => {
 };
 
 export default Page;
-
-const mostSearched: Array<string> = [
-  '일둥이□■□□□□■□□□',
-  '이둥이',
-  '삼둥이',
-  '사둥이',
-  '오둥이',
-  '육둥이일이삼사오육칠팔구십십일',
-  '칠둥이',
-  '팔둥이',
-  '구둥이',
-  '십둥이',
-];

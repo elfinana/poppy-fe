@@ -1,6 +1,6 @@
 import { ChevronHeader } from '@/src/widgets';
 import React from 'react';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { Hr, IconButton, PrimaryButton, Textarea } from '@/src/shared';
 import { Camera } from '@/public';
 
