@@ -1,8 +1,7 @@
 'use client';
 
+import { Input, Textarea } from '@/src/shared';
 import React from 'react';
-
-import { Input, Textarea, IconButton, Calendar } from '../../src/shared/index';
 
 type Props = {};
 
