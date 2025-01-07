@@ -1,6 +1,7 @@
 'use client';
 import { DatePicker, PrimaryButton } from '@/src/shared';
 import useDatePicker from '@/src/shared/lib/useDatePicker';
+import useTimeList from '@/src/shared/lib/useTimeList';
 import { ChevronHeader } from '@/src/widgets';
 import TimeList from '@/src/widgets/book/ui/TimeList';
 import { useRouter } from 'next/navigation';
@@ -13,6 +14,7 @@ type Props = {
 const HistoryPage = (props: Props) => {
   const selectedDate = '2024. 11. 19(화) 오후 12:00';
   const { selectedDate: date, onSelect } = useDatePicker();
+  const { time, onSelect: onSelectTime } = useTimeList({ hour: 9, minute: 0 }, { hour: 18, minute: 0 });
   const router = useRouter();
   const onClickHandler = () => {
     router.push(`/mypage/popupstore/offline/history/${selectedDate}`);
@@ -30,7 +32,7 @@ const HistoryPage = (props: Props) => {
       <div className="flex flex-col justify-between h-full">
         <div className="py-16 flex flex-col gap-[16px]">
           <span className="pl-16 text-gray-900 text-h3">예약 시간</span>
-          <TimeList />
+          <TimeList time={time} onSelect={onSelectTime} />
         </div>
 
         <div className="mx-16 my-8">

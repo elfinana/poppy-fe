@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         orderId,
         orderName,
         successUrl: `http://localhost:3000/detail/${popupId}/book/completed`,
-        failUrl: 'http://localhost:3000/payment/fail',
+        failUrl: `http://localhost:3000/detail/${popupId}`,
       }),
     });
 
