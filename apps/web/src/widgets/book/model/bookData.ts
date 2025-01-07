@@ -1,10 +1,14 @@
 export interface BookData {
-  popupId: number;
-  date: string | undefined;
-  time: string | undefined;
-  people: number;
+  date: string;
+  time: string;
   price: number;
-  name: string;
   address: string;
   orderId: string;
+
+  popupStoreId?: number;
+  popupStoreName: string;
+  userId?: number;
+  thumbnail?: string;
+  status?: string;
+  person: number;
 }

@@ -12,16 +12,30 @@ import BookingForm from './ui/BookingForm';
 import useDatePicker from '@/src/shared/lib/useDatePicker';
 import { useRouter } from 'next/navigation';
 import useBooking from '@/src/shared/lib/useBooking';
+import { Time } from '@/src/entities/home/model/PopupData';
 
 type Props = {
   isBottomSheetOpen: boolean;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  popupId: number;
+  openingTime: Time;
+  closingTime: Time;
+  price: number;
+  storeName: string;
+  address: string;
 };
 
 const BookSheet = (props: Props) => {
   const router = useRouter();
-  const { bookData, onSelect, onReset, countHandler, discountHandler, time, onSelectTime } = useBooking();
-  const { date: selectedDate, people } = bookData;
+  const { bookData, onSelect, onReset, countHandler, discountHandler, time, onSelectTime } = useBooking({
+    popupId: props.popupId,
+    openingTime: props.openingTime,
+    closingTime: props.closingTime,
+    price: props.price,
+    storeName: props.storeName,
+    address: props.address,
+  });
+  const { date: selectedDate, person } = bookData;
 
   const bookButtonClickHandler = () => {
     console.log(bookData);
@@ -46,7 +60,7 @@ const BookSheet = (props: Props) => {
             )}
             {selectedDate && (
               <BookingForm
-                count={people}
+                count={person}
                 countHandler={countHandler}
                 discountHandler={discountHandler}
                 time={time}

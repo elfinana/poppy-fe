@@ -11,7 +11,7 @@ import BookingForm from './BookingForm';
 import { useRouter } from 'next/navigation';
 import useBooking from '@/src/shared/lib/useBooking';
 import { Time } from '@/src/entities/home/model/PopupData';
-import { nanoid } from 'nanoid';
+import { postReservation } from '../api/bookApi';
 type Props = {
   isBottomSheetOpen: boolean;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,12 +33,11 @@ const BookSheet = (props: Props) => {
     storeName: props.storeName,
     address: props.address,
   });
-  const { date: selectedDate, people } = bookData;
+  const { date: selectedDate, person } = bookData;
 
   const bookButtonClickHandler = async () => {
-    //const response = await postReservation(bookData);
-    //console.log(response);
-    const orderId = nanoid();
+    const response = await postReservation(bookData);
+    const orderId = response.orderId;
     router.push(`/detail/${props.popupId}/book?bookData=${JSON.stringify({ ...bookData, orderId })}`);
   };
 
@@ -60,7 +59,7 @@ const BookSheet = (props: Props) => {
             )}
             {selectedDate && (
               <BookingForm
-                count={people}
+                count={person}
                 countHandler={countHandler}
                 discountHandler={discountHandler}
                 time={time}

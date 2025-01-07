@@ -6,12 +6,11 @@ import { RadioGroup } from '@radix-ui/react-radio-group';
 import Image from "next/legacy/image";
 import React from 'react';
 import { TossIcon } from '@/public';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 import { security, userData } from './const';
 
 const CheckoutPage = ({ popupId }: { popupId: number }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const bookDataParams = searchParams.get('bookData');
   const bookData = bookDataParams && JSON.parse(bookDataParams);
@@ -47,27 +46,34 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
     }
     return 'disabled';
   };
-  const paymentHandler = () => {
+  const paymentHandler = async () => {
     if (paymentMethod === '토스페이') {
-      //requestPayment(bookData.orderId);
+      const response = await fetch('/api/toss-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: bookData.price, // 결제 금액
+          orderId: bookData.orderId,
+          orderName: bookData.name,
+          popupId: popupId,
+        }),
+      });
+      const { paymentUrl } = await response.json();
+      window.location.href = paymentUrl;
+    } else if (paymentMethod === '현장에서 결제') {
+      alert('현장 결제를 선택하셨습니다.');
+    } else {
+      alert('결제 방법을 선택해주세요.');
     }
   };
-  const paymentButtonClickHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const paymentButtonClickHandler = async () => {
     if (variantHandler() === 'enabled') {
-      // 결제
-      paymentHandler();
-      // router.push(
-      //   `/detail/${popupId}/book/completed?bookData=${JSON.stringify({
-      //     ...bookData,
-      //     paymentMethod,
-      //   })}`,
-      // );
+      await paymentHandler();
     }
   };
 
   return (
-    <form className="flex flex-col items-center h-full" onSubmit={paymentButtonClickHandler}>
+    <div className="flex flex-col items-center h-full">
       <ChevronHeader title="결제하기" edit={false} />
       <div className="p-16 pb-[24px] w-full">
         <span className="block mb-20 text-gray-900 text-h2">예약자 정보</span>
@@ -190,11 +196,11 @@ const CheckoutPage = ({ popupId }: { popupId: number }) => {
         통신판매의 당사자가 아닙니다.
       </p>
       <div className="px-16 py-8 w-full">
-        <PrimaryButton variant={variantHandler()} type="submit">
+        <PrimaryButton variant={variantHandler()} onClick={paymentButtonClickHandler}>
           {formatWithThousandsSeparator(bookData.price * bookData.people + security)}원 결제하기
         </PrimaryButton>
       </div>
-    </form>
+    </div>
   );
 };
 
