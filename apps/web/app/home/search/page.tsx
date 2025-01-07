@@ -18,24 +18,42 @@ import { getVisitedList, InputHeader, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useLoginStore } from 'store/login/loginStore';
-import { deleteAllSearchHistories, deleteSearchHistory, getSearchHistory } from '@/src/entities';
-import { useQuery } from 'react-query';
+import { deleteAllSearchHistories, deleteSearchHistory, getSearchHistory, getTop10Searches } from '@/src/entities';
+import { useQueries, useQuery } from 'react-query';
 
 type Props = {};
 
 const Page = (props: Props) => {
   const router = useRouter();
 
-  const lastUpdate = '12. 02 10:00 업데이트';
-
   const { token } = useLoginStore();
 
-  const [recentlySearched, setRecentlySearched] = React.useState<Array<string>>([]);
+  const today = new Date();
+  const lastUpdate = `${String(today.getMonth() + 1).padStart(2, '0')}. ${String(today.getDate()).padStart(2, '0')} ${today.getHours()}:00 업데이트`;
 
-  const { isLoading } = useQuery(['getSearchHistory'], () => getSearchHistory(token!), {
-    enabled: !!token,
-    onSuccess: results => setRecentlySearched(results),
-  });
+  const [recentlySearched, setRecentlySearched] = React.useState<Array<string>>([]);
+  const [top10Searches, setTop10Searches] = React.useState<Array<string>>([]);
+
+  const queries = [
+    {
+      queryKey: ['getSearchHistory'],
+      queryFn: () => getSearchHistory(token!),
+      enabled: !!token,
+      onSuccess: (result: Array<string>) => setRecentlySearched(result),
+    },
+    {
+      queryKey: ['getTop10Searches'],
+      queryFn: getTop10Searches,
+      onSuccess: (result: Array<string>) => setTop10Searches(result),
+    },
+  ];
+
+  const queriesResult = useQueries(queries);
+
+  // const { isLoading } = useQuery(['getSearchHistory'], () => getSearchHistory(token!), {
+  //   enabled: !!token,
+  //   onSuccess: results => setRecentlySearched(results),
+  // });
 
   const deleteChipHandler = (chip: string) => {
     if (token) {
@@ -93,7 +111,7 @@ const Page = (props: Props) => {
         </AlertDialog>
       </div>
       <div className="flex px-16 min-h-[64px]">
-        {isLoading ? (
+        {queriesResult[0].isLoading ? (
           <Skeleton className="w-full h-32" />
         ) : recentlySearched.length > 0 ? (
           // 최근 검색 기록이 하나 이상일 경우
@@ -114,12 +132,19 @@ const Page = (props: Props) => {
         <div className="text-gray-400 text-c2">{lastUpdate}</div>
       </div>
       <div className="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8 px-16 mt-16 mb-bottomMargin">
-        {mostSearched.map((item, idx) => (
-          <div key={`ITEM_${idx}`} className="flex items-center">
-            <div className="w-16 text-center text-gray-900 text-b2">{idx + 1}</div>
-            <div className="ml-16 text-gray-900 truncate text-b3 grow">{item}</div>
-          </div>
-        ))}
+        {queriesResult[1].isLoading
+          ? Array.from({ length: 10 }, (_, idx) => (
+              <div key={`ITEM_${idx}`} className="flex items-center">
+                <div className="w-16 text-center text-gray-900 text-b2">{idx + 1}</div>
+                <Skeleton className="w-3/4 h-20 ml-16 grow" />
+              </div>
+            ))
+          : top10Searches.map((item, idx) => (
+              <div key={`ITEM_${idx}`} className="flex items-center">
+                <div className="w-16 text-center text-gray-900 text-b2">{idx + 1}</div>
+                <div className="ml-16 text-gray-900 truncate text-b3 grow">{item}</div>
+              </div>
+            ))}
       </div>
       <div className="flex mt-16 mb-bottomMargin">
         <div className="flex flex-col w-full gap-y-12">

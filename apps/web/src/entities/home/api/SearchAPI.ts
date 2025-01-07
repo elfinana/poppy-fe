@@ -20,6 +20,21 @@ export const getSearchHistory = async (accessToken: string): Promise<Array<strin
   }
 };
 
+export const getTop10Searches = async (): Promise<Array<string>> => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/search-history/popular`);
+    const result = await response.json();
+
+    if (result && result.data) {
+      return result.data;
+    }
+
+    throw new Error('Response does not contain a data field');
+  } catch (e) {
+    throw new Error('Failed to fetch data');
+  }
+};
+
 export const deleteSearchHistory = async (keyword: string, accessToken: string): Promise<boolean> => {
   const options = {
     method: 'DELETE',

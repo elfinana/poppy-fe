@@ -1,2 +1,2 @@
 export type { ChipListItem } from './model/SearchData';
-export { getSearchHistory, deleteSearchHistory, deleteAllSearchHistories } from './api/SearchAPI';
+export { getSearchHistory, getTop10Searches, deleteSearchHistory, deleteAllSearchHistories } from './api/SearchAPI';

@@ -130,11 +130,13 @@ const Page = ({ params }: { params: { keyword: string } }) => {
         isFilterLocationOn.current.text =
           filterLocation.length > 2
             ? `${filterLocation[0]} 외 ${filterLocation.length - 1}개`
-            : `${filterLocation[0]}, ${filterLocation[1]}`;
+            : filterLocation.join(', ');
       } else {
         isFilterLocationOn.current.state = false;
         isFilterLocationOn.current.text = '위치';
       }
+
+      console.log(filterLocation);
 
       // ⭐ 평점 필터
       if (filterRating && filterRating !== 'all') {
@@ -153,7 +155,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
         isFilterCategoryOn.current.text =
           filterCategory.length > 2
             ? `${filterCategory[0]} 외 ${filterCategory.length - 1}개`
-            : `${filterCategory[0]}, ${filterCategory[1]}`;
+            : filterCategory.join(', ');
       } else {
         isFilterCategoryOn.current.state = false;
         isFilterCategoryOn.current.text = '카테고리';
