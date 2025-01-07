@@ -1,1 +1,1 @@
-export type { NoticeListItem, NoticeDetail } from './model/NoticeData';
+export type { NoticeListItem, NoticeDetail, ActivityListItem } from './model/NoticeData';

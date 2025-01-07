@@ -135,7 +135,7 @@ export default function Page({ params }: { params: { id: number } }) {
     }
   };
   return (
-    <div className="flex flex-col justify-between items-center w-full h-full">
+    <div className="flex flex-col items-center justify-between w-full h-full">
       {/* header  */}
       <header className="fixed flex w-full  px-[16px] justify-between h-[48px] items-center">
         <IconButton className={``} icon={'ic-back-white'} size={'md'} onClick={() => router.back()} />
@@ -144,7 +144,7 @@ export default function Page({ params }: { params: { id: number } }) {
 
       {/* content area */}
       <div className="flex flex-col w-full h-full">
-        <section className="overflow-auto items-center">
+        <section className="items-center overflow-auto">
           {/* img area */}
           <Image
             className="flex items-center w-full"
@@ -277,7 +277,7 @@ export default function Page({ params }: { params: { id: number } }) {
                     </div>
 
                     {/* pop list */}
-                    <PopupSlider variant="list" text2={`${title}`} text3={'와 유사한 팝업'} data={recommandData} />
+                    {/* <PopupSlider variant="list" text2={`${title}`} text3={'와 유사한 팝업'} data={recommandData} /> */}
                   </div>
                 )}
 

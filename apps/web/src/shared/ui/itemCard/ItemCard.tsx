@@ -84,7 +84,7 @@ export const ItemCard = memo(
               className="object-cover rounded-sm"
             />
           ) : (
-            <Image src={img} width={width} height={height} alt={title} className="rounded-sm" />
+            <Image src={img} fill alt={title} className="object-cover rounded-sm" />
           )}
           {variant === 'rank' && (
             <div className="absolute rounded-tl-sm rounded-br-sm w-[24px] h-[24px] flex text-center justify-center top-0 left-0 bg-gray-900 text-white ">
