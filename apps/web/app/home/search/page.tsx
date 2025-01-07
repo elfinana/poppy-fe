@@ -131,7 +131,7 @@ const Page = (props: Props) => {
         <div className="text-gray-900 text-h3">인기 검색어</div>
         <div className="text-gray-400 text-c2">{lastUpdate}</div>
       </div>
-      <div className="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8 px-16 mt-16 mb-bottomMargin">
+      <div className="grid grid-flow-col grid-cols-2 grid-rows-5 gap-8 px-16 mt-16 mb-[40px]">
         {queriesResult[1].isLoading
           ? Array.from({ length: 10 }, (_, idx) => (
               <div key={`ITEM_${idx}`} className="flex items-center">
@@ -142,11 +142,11 @@ const Page = (props: Props) => {
           : top10Searches.map((item, idx) => (
               <div key={`ITEM_${idx}`} className="flex items-center">
                 <div className="w-16 text-center text-gray-900 text-b2">{idx + 1}</div>
-                <div className="ml-16 text-gray-900 truncate text-b3 grow">{item}</div>
+                <div className="ml-12 text-gray-900 truncate text-b3 grow">{item}</div>
               </div>
             ))}
       </div>
-      <div className="flex mt-16 mb-bottomMargin">
+      <div className="flex mb-bottomMargin">
         <div className="flex flex-col w-full gap-y-12">
           <Title text1="최근 본 팝업" category={8} />
           <PopupSlider variant="list" queryKey="visitedList" queryFn={getVisitedList} />
