@@ -24,6 +24,7 @@ import { formatDay } from '../../lib/dateUtils';
 import Image from 'next/image';
 import FilterSheet from './filterSheet';
 import MarkerInfoSheet from './markerInfoSheet';
+import { useRouter } from 'next/navigation';
 
 type FilterStoreSheetProps = {
   isOpen: boolean;
@@ -71,6 +72,12 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
   useEffect(() => {
     setSortedData(data);
   }, [data]);
+
+  const router = useRouter();
+
+  const handleItemClick = (id: number) => {
+    router.push(`/detail/${id}`);
+  };
 
   const handleApplyFilter = (filters: {
     date: Date | null;
@@ -140,7 +147,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
               <div className="max-h-[380px] mx-16 overflow-y-auto">
                 {sortedData.map((store, index) => (
                   <>
-                    <div key={index} className={index > 0 ? 'mt-32' : ''}>
+                    <div key={index} className={index > 0 ? 'mt-32' : ''} onClick={() => handleItemClick(store.id)}>
                       <ImageSlider images={store.imageUrls} />
                       <div className="flex flex-row justify-between items-center mt-[8px]">
                         <span className="text-h2">{store.name}</span>
