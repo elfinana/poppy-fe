@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import useDatePicker from './useDatePicker';
 import { useCounter } from './useCounter';
 import useTimeList from './useTimeList';
 import { Time } from '@/src/entities/home/model/PopupData';
+import { BookData } from '@/src/widgets/book/model/bookData';
 
 type Props = {
   popupId: number;
@@ -12,29 +14,40 @@ type Props = {
   address: string;
 };
 
-const useBooking = (props: Props) => {
-  const { popupId, openingTime, closingTime, price, storeName, address } = props;
+const useBooking = ({ popupId, openingTime, closingTime, price, storeName, address }: Props) => {
   const { selectedDate, onSelect, onReset } = useDatePicker();
   const { count, countHandler, discountHandler } = useCounter();
   const { time, selectedTime, onSelect: onSelectTime } = useTimeList(openingTime, closingTime);
-  const bookData = {
-    popupId: popupId,
-    date: selectedDate,
-    time: selectedTime,
-    people: count,
+
+  const [bookData, setBookData] = useState<BookData>({
+    popupStoreId: popupId,
+    date: '',
+    time: '',
     price: price,
-    name: storeName,
     address: address,
-  };
+    popupStoreName: storeName,
+    person: 0,
+    orderId: '',
+  });
+
+  useEffect(() => {
+    setBookData(prevState => ({
+      ...prevState,
+      date: selectedDate || '',
+      time: selectedTime || '',
+      person: count,
+    }));
+  }, [selectedDate, selectedTime, count]);
 
   return {
+    bookData,
+    setBookData,
     onSelect,
     onReset,
     countHandler,
     discountHandler,
     time,
     onSelectTime,
-    bookData,
   };
 };
 

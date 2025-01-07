@@ -4,21 +4,54 @@ import { PrimaryButton, SecondaryButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { security } from './const';
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
+import { successPayment } from '@/src/widgets/book/api/bookApi';
 
 const BookCompletedPage = ({ popupId }: { popupId: number }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const bookDataParams = searchParams.get('bookData');
-  const bookData = bookDataParams && JSON.parse(bookDataParams);
+  const orderId = searchParams.get('orderId');
+  const paymentKey = searchParams.get('paymentKey');
+  const amount = searchParams.get('amount');
+  const [bookData, setBookData] = React.useState({
+    popupStoreName: '',
+    date: '',
+    time: '',
+    person: 0,
+    paymentMethod: '토스페이',
+    price: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!orderId || !paymentKey || !amount) {
+          console.error('orderId, paymentKey, amount를 참조하셨습니다.');
+          return;
+        }
+        const response = await successPayment(orderId, amount, paymentKey);
+        setBookData(prevState => ({
+          ...prevState,
+          popupStoreName: response.popupStoreName,
+          date: response.date,
+          time: response.time,
+          person: response.person,
+          price: response.price,
+        }));
+      } catch (error) {
+        console.error('데이터 로딩 중 오류 발생:', error);
+      }
+    };
+    fetchData();
+  }, [orderId, paymentKey, amount]);
 
   const detailButtonClickHandler = () => {
     router.push(`/detail/${popupId}/book/completed/detail?bookData=${JSON.stringify(bookData)}`);
   };
   const goBackButtonClickHandler = () => {
-    router.replace(`/detail/${popupId}`);
+    router.push(`/detail/${popupId}`);
   };
   return (
     <div className="flex flex-col items-center h-full">
@@ -35,7 +68,7 @@ const BookCompletedPage = ({ popupId }: { popupId: number }) => {
           <Image className="border rounded-4 min-w-[104px]" src={book} alt="book" width={72} height={72} />
 
           <div className="ml-12">
-            <span className="block mb-8 text-gray-900 text-h4">{bookData.name}</span>
+            <span className="block mb-8 text-gray-900 text-h4">{bookData.popupStoreName}</span>
             <div>
               <div className="mb-2">
                 <span className="mr-8 text-gray-400 text-b5">일정</span>
@@ -45,7 +78,7 @@ const BookCompletedPage = ({ popupId }: { popupId: number }) => {
               </div>
               <div>
                 <span className="mr-8 text-gray-400 text-b5">위치</span>
-                <span className="text-gray-700 text-b5">{bookData.people}명</span>
+                <span className="text-gray-700 text-b5">{bookData.person}명</span>
               </div>
             </div>
           </div>
@@ -63,7 +96,7 @@ const BookCompletedPage = ({ popupId }: { popupId: number }) => {
           <div className="mb-12">
             <span className="pr-12 text-gray-400 text-b3">결제금액</span>
             <span className="text-gray-600 text-b2">
-              {formatWithThousandsSeparator(bookData.price * bookData.people + security)}원
+              {formatWithThousandsSeparator(bookData.price * bookData.person + security)}원
             </span>
           </div>
         </div>
