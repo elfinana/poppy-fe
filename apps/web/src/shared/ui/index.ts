@@ -46,7 +46,13 @@ export { Textarea } from './textArea';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
 
-export { BottomSheet, BottomSheetHeader, BottomSheetTrigger, BottomSheetContent } from './bottomsheet/bottomsheet';
+export {
+  BottomSheet,
+  BottomSheetHeader,
+  BottomSheetTrigger,
+  BottomSheetContent,
+  BottomSheetTitle,
+} from './bottomsheet/bottomsheet';
 
 // Hr
 export { Hr } from './hr/Hr';
