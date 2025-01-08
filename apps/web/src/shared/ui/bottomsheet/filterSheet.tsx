@@ -18,8 +18,8 @@ import {
 } from '@/src/shared';
 
 import FilterStoreSheet from './filterStoreSheet';
-import { fetchFilteredPopupStores } from '@/app/search/api/filterSearchApi';
 import { FilterParams } from '@/app/search/model/searchData';
+import { fetchFilteredPopupStores } from '@/src/widgets/search/api/filterSearchApi';
 
 const tabsB = [
   { value: 'c', label: '날짜' },
@@ -52,17 +52,27 @@ const locations = [
 const category = ['전체', '패션 · 뷰티', '아트', '음식', '굿즈', '라이프'];
 const ratings = ['전체', '4점 이상', '3점 이상', '2점 이상', '1점 이상'];
 
+const categoryMap: Record<string, number> = {
+  '패션 · 뷰티': 1,
+  음식: 2,
+  아트: 3,
+  굿즈: 4,
+  라이프: 5,
+};
 interface FilterSheetProps {
   isOpen: boolean;
   onClose: () => void;
   activeTab: string;
-  // onApplyFilter: (params: FilterParams) => void;
+  filters?: { date: Date | null; location: string[]; rating: string; category: string[] }; // ���기 필터 상태
+  onApplyFilter: (filters: { date: Date | null; location: string[]; rating: string; category: string[] }) => void;
+  onResetFilter: () => void;
 }
 
-const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
+const FilterSheet = ({ isOpen, onClose, activeTab, filters, onApplyFilter, onResetFilter }: FilterSheetProps) => {
   const [currentDate, setCurrentDate] = useState<Date | undefined>(undefined);
   const [isStoreSheetOpen, setIsStoreSheetOpen] = useState(false);
   const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(isOpen);
 
   const [filterState, setFilterState] = React.useState<{
     date: Date | null;
@@ -76,6 +86,11 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
     category: ['전체'],
   });
 
+  React.useEffect(() => {
+    console.log('Filters prop received:', filters);
+    setFilterState(filters || { date: null, location: ['전체'], rating: '전체', category: ['전체'] });
+  }, [filters]);
+
   const updateFilterState = (key: string, value: any) => {
     setFilterState(prev => ({ ...prev, [key]: value }));
   };
@@ -87,12 +102,16 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
         date: filterState.date ? filterState.date.toISOString().split('T')[0] : null,
         locations: filterState.location.includes('전체') ? null : filterState.location,
         rating: filterState.rating === '전체' ? null : parseInt(filterState.rating),
-        categoryIds: filterState.category.includes('전체')
-          ? null
-          : filterState.category.map(cat => category.indexOf(cat) + 1),
+        categoryIds: filterState.category.includes('전체') ? null : filterState.category.map(cat => categoryMap[cat]),
       };
 
-      // onApplyFilter(params);
+      onApplyFilter({
+        date: filterState.date,
+        location: filterState.location,
+        rating: filterState.rating,
+        category: filterState.category,
+      });
+
       const data = await fetchFilteredPopupStores(params);
 
       setFilteredData(data);
@@ -102,6 +121,16 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
     } finally {
       onClose();
     }
+  };
+
+  const handleReset = () => {
+    setFilterState({
+      date: null,
+      location: ['전체'],
+      rating: '전체',
+      category: ['전체'],
+    }); // 로컬 상태 초기화
+    onResetFilter(); // 상위 컴포넌트에도 초기화 알림
   };
 
   return (
@@ -123,8 +152,11 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
                 {tab.value === 'c' && (
                   <div className="px-[16px] mt-16">
                     <DatePicker
-                      selectedDate={currentDate}
-                      onDateChange={(date: Date | undefined) => setCurrentDate(date)}
+                      selectedDate={filterState.date || undefined}
+                      onDateChange={(date: Date | undefined) => {
+                        console.log('Date selected:', date);
+                        updateFilterState('date', date || null);
+                      }}
                     />
                   </div>
                 )}
@@ -220,17 +252,7 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
             ))}
           </Tabs>
           <div className="flex flex-row gap-8 px-16 mb-8">
-            <SecondaryButton
-              className="flex-[1]"
-              onClick={() => {
-                setFilterState({
-                  date: null,
-                  location: ['전체'],
-                  rating: '전체',
-                  category: ['전체'],
-                });
-                setCurrentDate(undefined);
-              }}>
+            <SecondaryButton className="flex-[1]" onClick={handleReset}>
               초기화
             </SecondaryButton>
             <PrimaryButton className="flex-[2.5]" variant="enabled" onClick={applyFilters}>
@@ -240,7 +262,12 @@ const FilterSheet = ({ isOpen, onClose, activeTab }: FilterSheetProps) => {
         </BottomSheetContent>
       </BottomSheet>
 
-      <FilterStoreSheet isOpen={isStoreSheetOpen} onClose={() => setIsStoreSheetOpen(false)} data={filteredData} />
+      <FilterStoreSheet
+        isOpen={isStoreSheetOpen}
+        onClose={() => setIsStoreSheetOpen(false)}
+        data={filteredData}
+        onResetFilter={onResetFilter}
+      />
     </>
   );
 };

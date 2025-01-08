@@ -35,7 +35,7 @@ interface ToggleChipItemProps extends VariantProps<typeof toggleChipVariants> {
 const ToggleChipItem = ({ className, value, text, isSelected = false, onChange }: ToggleChipItemProps) => {
   const handleClick = () => {
     const newState = !isSelected;
-    onChange?.(value, newState); // 상태 변경을 부모로 전달
+    onChange?.(value, newState);
   };
 
   return (

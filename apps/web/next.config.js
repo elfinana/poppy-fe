@@ -26,6 +26,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'placehold.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'd1jch5cr8xrdjz.cloudfront.net',
+        pathname: '/**',
       },
       {
         protocol: 'https',

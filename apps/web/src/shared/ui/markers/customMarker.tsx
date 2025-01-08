@@ -2,7 +2,7 @@ import * as React from 'react';
 
 // 카테고리별 마커 아이콘 매핑
 const categoryIcons: { [key: string]: string } = {
-  fashion: '/icons/PinFashion.svg', // 아이콘 경로를 직접 명시
+  fashion: '/icons/PinFashion.svg',
   art: '/icons/PinArt.svg',
   food: '/icons/PinFood.svg',
   goods: '/icons/PinGoods.svg',
@@ -26,7 +26,6 @@ export const createCustomMarker = ({ map, lat, lng, category, name, onMarkerClic
     icon: {
       url: iconUrl, // 마커에 사용할 아이콘 URL
       size: new naver.maps.Size(60, 60), // 마커 크기
-      // anchor: new naver.maps.Point(18, 18),
     },
   });
 
