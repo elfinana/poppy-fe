@@ -1,5 +1,6 @@
 'use client';
 
+import { getRecent10Popups } from '@/src/entities';
 import { formatToMD, ItemCard, ItemCardSkeleton } from '@/src/shared';
 import {
   ChevronHeader,
@@ -13,9 +14,11 @@ import {
 } from '@/src/widgets';
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useLoginStore } from 'store/login/loginStore';
 
 const Page = ({ params }: { params: { category: string } }) => {
   const categoryId = params.category;
+  const { token } = useLoginStore();
 
   const category = React.useRef({ categoryId: categoryId, categoryName: '' });
 
@@ -62,6 +65,10 @@ const Page = ({ params }: { params: { category: string } }) => {
     case '10':
       category.current.categoryName = '주목해야 할 팝업';
       fetchCategoryData = () => getListByCategory(categoryId);
+      break;
+    case '11':
+      category.current.categoryName = '최근 본 팝업';
+      fetchCategoryData = () => getRecent10Popups(token);
       break;
     default:
       throw new Error('Invalid category ID');

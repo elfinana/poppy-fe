@@ -14,25 +14,35 @@ import {
   Skeleton,
   Title,
 } from '@/src/shared';
-import { getVisitedList, InputHeader, PopupSlider } from '@/src/widgets';
+import { getVisitedList, InputHeader, PopupListItem, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoginStore } from 'store/login/loginStore';
-import { deleteAllSearchHistories, deleteSearchHistory, getSearchHistory, getTop10Searches } from '@/src/entities';
-import { useQueries, useQuery } from 'react-query';
+import {
+  deleteAllSearchHistories,
+  deleteSearchHistory,
+  getRecent10Popups,
+  getSearchHistory,
+  getTop10Searches,
+} from '@/src/entities';
+import { useQueries } from 'react-query';
 
 type Props = {};
 
 const Page = (props: Props) => {
   const router = useRouter();
-
   const { token } = useLoginStore();
 
   const today = new Date();
   const lastUpdate = `${String(today.getMonth() + 1).padStart(2, '0')}. ${String(today.getDate()).padStart(2, '0')} ${today.getHours()}:00 업데이트`;
 
-  const [recentlySearched, setRecentlySearched] = React.useState<Array<string>>([]);
-  const [top10Searches, setTop10Searches] = React.useState<Array<string>>([]);
+  const [recentlySearched, setRecentlySearched] = useState<Array<string>>([]);
+  const [top10Searches, setTop10Searches] = useState<Array<string>>([]);
+  const [isClient, setIsClient] = useState(false); // 클라이언트 사이드 여부
+
+  useEffect(() => {
+    setIsClient(true); // 클라이언트 사이드에서만 실행
+  }, []);
 
   const queries = [
     {
@@ -50,11 +60,6 @@ const Page = (props: Props) => {
 
   const queriesResult = useQueries(queries);
 
-  // const { isLoading } = useQuery(['getSearchHistory'], () => getSearchHistory(token!), {
-  //   enabled: !!token,
-  //   onSuccess: results => setRecentlySearched(results),
-  // });
-
   const deleteChipHandler = (chip: string) => {
     if (token) {
       deleteSearchHistory(chip, token).then(result => {
@@ -68,14 +73,6 @@ const Page = (props: Props) => {
   };
 
   const deleteAllChipsHandler = () => {
-    // setRecentlySearched(prev => {
-    //   const arr = [...prev];
-    //   while (arr.length > 0) {
-    //     const deleted = arr.pop();
-    //     // 삭제 API 요청
-    //   }
-    //   return arr;
-    // });
     if (token) {
       deleteAllSearchHistories(token).then(result => {
         if (result) {
@@ -86,6 +83,10 @@ const Page = (props: Props) => {
       });
     }
   };
+
+  if (!isClient) {
+    return <div />;
+  }
 
   return (
     <div>
@@ -114,14 +115,12 @@ const Page = (props: Props) => {
         {queriesResult[0].isLoading ? (
           <Skeleton className="w-full h-32" />
         ) : recentlySearched.length > 0 ? (
-          // 최근 검색 기록이 하나 이상일 경우
           <div className="flex flex-wrap w-full gap-8 h-fit">
             {recentlySearched.map((item, idx) => (
               <InputChip key={`CHIP_${idx}`} value={item} onDelete={deleteChipHandler} />
             ))}
           </div>
         ) : (
-          // 최근 검색 기록이 하나도 없을 경우
           <div className="flex items-center justify-center w-full text-gray-400 text-b3">
             최근 검색 내역이 없습니다.
           </div>
@@ -148,8 +147,8 @@ const Page = (props: Props) => {
       </div>
       <div className="flex mb-bottomMargin">
         <div className="flex flex-col w-full gap-y-12">
-          <Title text1="최근 본 팝업" category={8} />
-          <PopupSlider variant="list" queryKey="visitedList" queryFn={getVisitedList} />
+          <Title text1="최근 본 팝업" category={11} />
+          <PopupSlider variant="list" queryKey="getRecent10Popups" queryFn={() => getRecent10Popups(token)} />
         </div>
       </div>
     </div>

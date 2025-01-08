@@ -128,7 +128,7 @@ export const getListByName = async (keyword: string, accessToken?: string): Prom
       return result.data;
     }
 
-    if (result.code === 404) {
+    if (result.code !== 200) {
       return [];
     }
 
