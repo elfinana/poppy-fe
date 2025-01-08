@@ -9,7 +9,7 @@ const Page = (props: Props) => {
     <div>
       <ChevronHeader title="알림 설정" edit={false} />
       <div className="px-16 mt-16">
-        <Input label="닉네임" existingName={'가나다'} />
+        <Input label="닉네임" />
       </div>
     </div>
   );
