@@ -3,7 +3,6 @@ import React from 'react';
 import { BottomSheet, BottomSheetContent, BottomSheetHeader, IconButton } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
-import { BottomSheetOverlay } from './bottomsheet';
 
 type MarkerInfoSheetProps = {
   isOpen: boolean;
@@ -12,7 +11,6 @@ type MarkerInfoSheetProps = {
 };
 
 const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) => {
-  // console.log('MarkerInfoSheet - 전달된 markerData:', markerData);
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent className="px-16" dimmed={false}>
@@ -21,11 +19,11 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
           {markerData.isActive ? (
             <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
               <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-              <p className="text-[#5599FF] text-c1 font-medium">영업 중</p>
+              <p className="text-[#5599FF] text-c1 ">영업 중</p>
             </div>
           ) : (
             <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
-              <p className="font-medium text-purple-600 text-c1">영업종료</p>
+              <p className="text-purple-600 text-c1">영업종료</p>
             </div>
           )}
         </div>

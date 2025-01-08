@@ -18,8 +18,8 @@ import {
 } from '@/src/shared';
 
 import FilterStoreSheet from './filterStoreSheet';
-import { fetchFilteredPopupStores } from '@/app/search/api/filterSearchApi';
 import { FilterParams } from '@/app/search/model/searchData';
+import { fetchFilteredPopupStores } from '@/src/widgets/search/api/filterSearchApi';
 
 const tabsB = [
   { value: 'c', label: '날짜' },

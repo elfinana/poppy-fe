@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import {
   BottomSheet,
   BottomSheetContent,
-  BottomSheetHeader,
   IconButton,
   AlertDialog,
   AlertDialogAction,
@@ -23,7 +22,6 @@ import { Sort } from '@/public';
 import { formatDay } from '../../lib/dateUtils';
 import Image from 'next/image';
 import FilterSheet from './filterSheet';
-import MarkerInfoSheet from './markerInfoSheet';
 
 type FilterStoreSheetProps = {
   isOpen: boolean;
@@ -147,11 +145,11 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                         {store.isActive ? (
                           <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
                             <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-                            <p className="text-[#5599FF] text-c1 font-medium">영업 중</p>
+                            <p className="text-[#5599FF] text-c1">영업 중</p>
                           </div>
                         ) : (
                           <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
-                            <p className="font-medium text-purple-600 text-c1">영업종료</p>
+                            <p className="text-purple-600 text-c1">영업종료</p>
                           </div>
                         )}
                       </div>
