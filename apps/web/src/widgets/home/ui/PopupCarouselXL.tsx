@@ -4,7 +4,7 @@ import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '@/src/shared/ui/carousel';
 
 import { ArrowRightSmall } from '@/public';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useQuery } from 'react-query';
 import { getHotCategoryList } from '..';
 import { CarouselSkeleton, Skeleton, Title } from '@/src/shared';
@@ -72,7 +72,7 @@ const PopupCarouselXL = (props: Props) => {
                 <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-16">
                   <div className="relative flex items-center justify-center w-full overflow-hidden rounded h-fit aspect-square">
                     <Image
-                      src="https://placehold.co/500/webp"
+                      src={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                       alt={`ITEM_${item.id}`}
                       layout="fill"
                       objectFit="cover"

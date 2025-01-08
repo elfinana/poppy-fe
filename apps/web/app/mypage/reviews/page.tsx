@@ -1,7 +1,7 @@
 import { IconButton, LikeIconButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
 import React from 'react';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { Sort } from '@/public';
 
 type Props = {};

@@ -2,7 +2,7 @@
 import { book } from '@/public';
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 import { ChevronHeader } from '@/src/widgets';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import React from 'react';
 import { bookData, security, storeData, userData } from './const';
 

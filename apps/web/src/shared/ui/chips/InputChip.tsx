@@ -5,17 +5,15 @@ import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '@/src/shared/lib/utils';
 import { Delete } from '@/public';
-import { ChipListItem } from '@/src/entities';
 
 export interface InputChipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
-  value: number;
-  text: string;
-  onDelete: (chips: ChipListItem) => void;
+  value: string;
+  onDelete: (chips: string) => void;
 }
 
 const InputChip = React.forwardRef<HTMLButtonElement, InputChipProps>(
-  ({ className, value, text, onDelete, asChild = false, ...props }, ref) => {
+  ({ className, value, onDelete, asChild = false, ...props }, ref) => {
     const chipRef = React.useRef<HTMLButtonElement | null>(null);
 
     // const handleDeleteClick = (e: React.MouseEvent<HTMLSpanElement>) => {
@@ -38,8 +36,8 @@ const InputChip = React.forwardRef<HTMLButtonElement, InputChipProps>(
           className,
         )}
         {...props}>
-        <div className="mr-4 text-nowrap">{text}</div>
-        <span onClick={() => onDelete({ id: value, text: text })} className="cursor-pointer">
+        <div className="mr-4 text-nowrap">{value}</div>
+        <span onClick={() => onDelete(value)} className="cursor-pointer">
           <Delete />
         </span>
       </Comp>
