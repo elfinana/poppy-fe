@@ -1,5 +1,6 @@
 'use client';
 
+import { getRecent10Popups } from '@/src/entities';
 import { formatToMD, ItemCard, ItemCardSkeleton } from '@/src/shared';
 import {
   ChevronHeader,
@@ -13,9 +14,11 @@ import {
 } from '@/src/widgets';
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useLoginStore } from 'store/login/loginStore';
 
 const Page = ({ params }: { params: { category: string } }) => {
   const categoryId = params.category;
+  const { token } = useLoginStore();
 
   const category = React.useRef({ categoryId: categoryId, categoryName: '' });
 
@@ -63,6 +66,10 @@ const Page = ({ params }: { params: { category: string } }) => {
       category.current.categoryName = '주목해야 할 팝업';
       fetchCategoryData = () => getListByCategory(categoryId);
       break;
+    case '11':
+      category.current.categoryName = '최근 본 팝업';
+      fetchCategoryData = () => getRecent10Popups(token);
+      break;
     default:
       throw new Error('Invalid category ID');
   }
@@ -86,7 +93,7 @@ const Page = ({ params }: { params: { category: string } }) => {
                 <ItemCard
                   id={item.id}
                   variant={variant}
-                  img={item.thumbnail}
+                  img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                   location={item.location}
                   title={item.name}
                   day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}

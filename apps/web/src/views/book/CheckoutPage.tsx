@@ -3,7 +3,7 @@ import { ArrowRight, book, CheckActive, CheckIcon } from '@/public';
 import { CheckboxButton, PrimaryButton, RadioGroupItem, SecondaryButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
 import { RadioGroup } from '@radix-ui/react-radio-group';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import React from 'react';
 import { TossIcon } from '@/public';
 import { useSearchParams } from 'next/navigation';

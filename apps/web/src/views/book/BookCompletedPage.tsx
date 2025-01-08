@@ -2,10 +2,10 @@
 import { bell, book } from '@/public';
 import { PrimaryButton, SecondaryButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { security } from './const';
+import { bookData, security, storeData } from './const';
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 import { successPayment } from '@/src/widgets/book/api/bookApi';
 
@@ -60,7 +60,7 @@ const BookCompletedPage = ({ popupId }: { popupId: number }) => {
         <Image src={bell} alt="bell-img" width={160} height={160} />
         <span className="text-gray-900 text-h2">예약이 완료되었습니다.</span>
       </div>
-      <hr className="w-full h-2 bg-gray-50 border-0" />
+      <hr className="w-full h-2 border-0 bg-gray-50" />
 
       <div className="pt-[20px] px-16 pb-[24px] w-full flex flex-col gap-[16px]">
         <span className="text-gray-900 text-h2">예약 정보</span>
@@ -84,7 +84,7 @@ const BookCompletedPage = ({ popupId }: { popupId: number }) => {
           </div>
         </div>
       </div>
-      <hr className="w-full h-2 bg-gray-50 border-0" />
+      <hr className="w-full h-2 border-0 bg-gray-50" />
 
       <div className="pt-[24px] px-16 pb-[94px] w-full flex flex-col gap-[20px]">
         <span className="text-gray-900 text-h2">결제 정보</span>
@@ -101,7 +101,7 @@ const BookCompletedPage = ({ popupId }: { popupId: number }) => {
           </div>
         </div>
       </div>
-      <div className="flex gap-8 px-16 py-8 w-full">
+      <div className="flex w-full gap-8 px-16 py-8">
         <SecondaryButton variant={'default'} onClick={detailButtonClickHandler} className="w-full">
           상세보기
         </SecondaryButton>

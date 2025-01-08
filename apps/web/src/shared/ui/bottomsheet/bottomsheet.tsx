@@ -30,10 +30,10 @@ BottomSheetOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
 const BottomSheetContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & { dimmed?: boolean }
+>(({ className, children, dimmed = true, ...props }, ref) => (
   <BottomSheetPortal>
-    <BottomSheetOverlay />
+    {dimmed && <BottomSheetOverlay />}
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
@@ -41,7 +41,8 @@ const BottomSheetContent = React.forwardRef<
         className,
       )}
       {...props}>
-      <div className="mx-auto mt-2 w-10 h-1 bg-gray-100 rounded-full" />
+      <div className="w-10 h-1 mx-auto mt-2 bg-gray-300 rounded-full" />
+
       <div>{children}</div>
     </DrawerPrimitive.Content>
   </BottomSheetPortal>
@@ -49,7 +50,7 @@ const BottomSheetContent = React.forwardRef<
 BottomSheetContent.displayName = 'BottomSheetContent';
 
 const BottomSheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('grid px-16  text-center font-semibold', className)} {...props} />
+  <div className={cn('grid  text-center font-semibold', className)} {...props} />
 );
 BottomSheetHeader.displayName = 'BottomSheetHeader';
 

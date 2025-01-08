@@ -50,11 +50,11 @@ const BookSheet = (props: Props) => {
             <span className="mt-[18px] mb-16">예약 정보</span>
           </BottomSheetHeader>
           <div className="mx-24 mb-8 mt-[25px]">
-            <DatePicker selectedDate={selectedDate} onSelect={onSelect} />
+            <DatePicker selectedDate={selectedDate} onDateChange={onSelect} />
           </div>
           <div className=" border-t-[1px] border-gray-100">
             {!selectedDate && (
-              <div className="flex justify-center items-center py-12 m-16 bg-gray-100 rounded">
+              <div className="flex items-center justify-center py-12 m-16 bg-gray-100 rounded">
                 <span className="text-gray-700 text-b3">날짜를 선택해주세요.</span>
               </div>
             )}

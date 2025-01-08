@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { SubHeader } from '@/src/widgets';
 import { IconButton, PrimaryButton, Textarea } from '@/src/shared';
 import Camera from '../../public/icons/ic-camera.svg';

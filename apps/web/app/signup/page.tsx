@@ -28,9 +28,9 @@ export default function Page() {
 
   const mutation = useMutation((inputValue: string) => patchNickName(inputValue, code), {
     onSuccess: res => {
-      if (res.result.data.accessToken) {
-        setToken(res.result.data.accessToken);
-        setRefreshToken(res.result.data.refreshToken);
+      if (res.data.accessToken) {
+        setToken(res.data.accessToken);
+        setRefreshToken(res.data.refreshToken);
         setUserInfo([
           {
             userEmail: res.data.userEmail,
@@ -39,11 +39,11 @@ export default function Page() {
         ]);
         router.push('/home');
       }
-      console.log('Nickname updated successfully:', res);
+      // console.log('Nickname updated successfully:', res);
     },
     onError: error => {
       setNickNameCheck(true);
-      console.error('Failed to update nickname:', error);
+      // console.error('Failed to update nickname:', error);
     },
   });
 

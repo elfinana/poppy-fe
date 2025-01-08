@@ -51,7 +51,8 @@ export interface PopupListItem {
   rating: number;
   categoryName: string;
   reservationType: string;
-  thumbnail: string;
+  thumbnailUrl: string;
+  imageUrls: Array<string>;
   price: number;
   homepageUrl: string;
   instagramUrl: string;
