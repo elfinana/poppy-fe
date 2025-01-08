@@ -32,6 +32,14 @@ export default function Page() {
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(prev => !prev);
   };
+  const [sortType, setSortType] = useState<string>('RECENT');
+  const [page, setPage] = useState<number>(0);
+  const size = 10;
+
+  const handleSortChange = (value: string) => {
+    setSortType(value);
+    setPage(0); // 정렬 기준 변경 시 페이지를 초기화
+  };
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
@@ -46,19 +54,19 @@ export default function Page() {
 
   const { id } = useParams(); // URL에서 id 가져오기
 
-  // React Query로 팝업스토어상세세 데이터를 가져오기
+  //팝업스토어상세데이터터
   const { data, error, isLoading } = useQuery(['popupStoreDetail', id], () => fetchPopupStoreDetail(Number(id)), {
     enabled: !!id, // id가 존재할 때만 API 호출
   });
 
-  //리뷰데이터가져오기
-  const {
-    data: reviewData,
-    error: reviewError,
-    isLoading: reviewLoading,
-  } = useQuery(['reviews', id], () => fetchReviews(Number(id), 'RECENT', 0, 10), {
-    enabled: !!id, // id가 존재할 때만 API 호출
-  });
+  //리뷰데이터
+  const { data: reviewData, isFetching: isReviewFetching } = useQuery(
+    ['reviews', id, sortType], // query key에 sortType 포함
+    () => fetchReviews(Number(id), sortType, page, size),
+    {
+      keepPreviousData: true, // 이전 데이터를 유지하여 UI 깜빡임 방지
+    },
+  );
 
   const title = recommandData.length > 0 ? recommandData[0].title : '유사한 팝업';
 
@@ -100,15 +108,16 @@ export default function Page() {
         <div className="flex flex-col w-full h-full">
           <section className="items-center overflow-auto">
             {/* img area */}
-            {data?.thumbnailUrl && (
-              <Image
-                className="flex items-center w-full"
-                width={375}
-                height={400}
-                src={data.thumbnailUrl}
-                alt="info-img"
-              />
-            )}
+            <div className="relative h-[400px]">
+              {data?.thumbnailUrl && (
+                <Image
+                  className="items-center object-cover w-full"
+                  layout="fill"
+                  src={data.thumbnailUrl}
+                  alt="info-img"
+                />
+              )}
+            </div>
             {/* description */}
             <div className="flex flex-col px-[16px] mb-[48px]">
               <div className="flex items-center my-[12px] w-[64px] h-[24px] rounded-4 ">
@@ -328,7 +337,12 @@ export default function Page() {
           }
         </div>
 
-        <SortSheet isOpen={isSortSheetOpen} onClose={() => setIsSortSheetOpen(false)} />
+        <SortSheet
+          isOpen={isSortSheetOpen}
+          onClose={() => setIsSortSheetOpen(false)}
+          sortType={sortType}
+          onSortChange={handleSortChange}
+        />
       </div>
     );
   }

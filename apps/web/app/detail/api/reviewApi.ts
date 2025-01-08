@@ -22,7 +22,7 @@ export interface ReviewData {
   };
 }
 
-export const fetchReviews = async (id: number, sortType: string, page: number, size: number): Promise<ReviewData> => {
+export const fetchReviews = async (id: number, sortType: string, page?: number, size?: number): Promise<ReviewData> => {
   const url = `http://pop-py.duckdns.org/reviews/store/${id}?sortType=${sortType}&page=${page}&size=${size}`;
 
   const response = await fetch(url);
