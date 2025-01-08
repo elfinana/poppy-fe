@@ -23,7 +23,7 @@ const HistoryPage = (props: Props) => {
 
       <DatePicker
         selectedDate={date}
-        onSelect={onSelect}
+        onDateChange={onSelect}
         className="mt-12 px-12 pt-[20px] pb-16 rounded-12 mx-12 border-[1px] border-gray-100 bg-white"
       />
 

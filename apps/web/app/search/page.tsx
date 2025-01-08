@@ -2,94 +2,244 @@
 
 import * as React from 'react';
 import { BottomNavigation } from '@/src/widgets';
-import {
-  CategoryIconButton,
-  ChoiceChipGroup,
-  ChoiceChipGroupItem,
-  DatePicker,
-  DropdownButton,
-  FilterIconButton,
-  FocusIconButton,
-  IconButton,
-  Input,
-  SecondaryButton,
-  BottomSheet,
-  BottomSheetHeader,
-  BottomSheetTrigger,
-  BottomSheetContent,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/src/shared';
+import { DropdownButton, FilterIconButton, FocusIconButton, IconButton, Input, MapSearchButton } from '@/src/shared';
 
-import { MapSearchButton } from '@/src/shared/ui/buttons/MapSearchButton';
 import { createCustomMarker } from '@/src/shared/ui/markers/customMarker';
-import useDatePicker from '@/src/shared/lib/useDatePicker';
+import MarkerInfoSheet from '@/src/shared/ui/bottomsheet/markerInfoSheet';
+import FilterSheet from '@/src/shared/ui/bottomsheet/filterSheet';
+import { FilterParams } from './model/searchData';
+import { useQuery } from 'react-query';
+import FilterStoreSheet from '@/src/shared/ui/bottomsheet/filterStoreSheet';
+import { ko } from 'date-fns/locale';
+import { format } from 'date-fns';
+import { fetchAddress } from '@/src/widgets/search/api/addressApi';
+import { fetchNamePopupStores } from '@/src/widgets/search/api/nameSearchApi';
 
-const tabsB = [
-  { value: 'c', label: '날짜', content: '날짜' },
-  { value: 'd', label: '위치', content: '위치' },
-  { value: 'e', label: '평점', content: '평점' },
-  { value: 'f', label: '카테고리', content: '카테고리' },
-];
-
-const locations = [
-  '전체',
-  '서울',
-  '경기',
-  '인천',
-  '부산',
-  '대구',
-  '대전',
-  '광주',
-  '울산',
-  '세종',
-  '강원',
-  '경남',
-  '경북',
-  '전남',
-  '전북',
-  '충남',
-  '충북',
-  '제주',
-];
 type Props = {};
+
+declare global {
+  interface Window {
+    initMap?: () => void;
+  }
+}
 
 const Page = (props: Props) => {
   const mapRef = React.useRef<HTMLDivElement>(null);
   const mapInstance = React.useRef<naver.maps.Map | null>(null);
-  const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = React.useState(false);
-  const { selectedDate, onSelect } = useDatePicker();
-  const toggleBottomSheet = () => {
-    setIsBottomSheetOpen(prev => !prev);
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = React.useState(false);
+  const [isFilterStoreSheetOpen, setIsFilterStoreOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [activeTab, setActiveTab] = React.useState<string>('c');
+  const [selectedFilters, setSelectedFilters] = React.useState<{
+    date: Date | null;
+    location: string[];
+    rating: string;
+    category: string[];
+  }>({
+    date: null,
+    location: [],
+    rating: '',
+    category: [],
+  });
+
+  const [selectedMarkerData, setSelectedMarkerData] = React.useState<{
+    title: string;
+    date: string;
+    description: string;
+    images: string[];
+    startDate?: { year: number; month: number; day: number };
+    endDate?: { year: number; month: number; day: number };
+  }>({
+    title: '',
+    date: '',
+    description: '',
+    images: [], // 초기값으로 빈 배열 설정
+    startDate: undefined,
+    endDate: undefined,
+  });
+
+  const applyFilters = (
+    filters: React.SetStateAction<{ date: Date | null; location: string[]; rating: string; category: string[] }>,
+  ) => {
+    setSelectedFilters(filters); // Filtersheet에서 적용된 필터 반영
+  };
+
+  const toggleFilterSheet = (tab: string) => {
+    setActiveTab(tab);
+    setIsFilterSheetOpen(prev => !prev);
   };
 
   React.useEffect(() => {
-    // 스크립트 로드
     const script = document.createElement('script');
-    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr`;
+    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr&submodules=geocoder&callback=initMap`;
     script.async = true;
 
-    script.onload = () => {
-      if (window.naver && window.naver.maps) {
-        if (!mapRef.current) return;
+    window.initMap = () => {
+      if (!mapRef.current) return;
 
-        mapInstance.current = new window.naver.maps.Map(mapRef.current, {
-          center: new window.naver.maps.LatLng(37.5665, 126.978),
-          zoom: 13,
-        });
-      }
+      const mapOptions = {
+        center: new naver.maps.LatLng(37.5665, 126.978), // 초기 중심 좌표
+        zoom: 13,
+        logoControl: false,
+        mapDataControl: false,
+        scaleControl: false,
+      };
+
+      mapInstance.current = new naver.maps.Map(mapRef.current, mapOptions);
     };
 
     document.head.appendChild(script);
 
     return () => {
       document.head.removeChild(script);
+      window.initMap = undefined;
     };
   }, []);
 
+  const handleMarkerClick = (store: any) => {
+    setSelectedMarkerData(store); // 팝업스토어 데이터를 그대로 저장
+    setIsBottomSheetOpen(true); // BottomSheet 열기
+  };
+
+  const normalizeAddress = (address: string): string => {
+    if (address.startsWith('서울시')) {
+      return address.replace('서울시', '서울특별시');
+    }
+    return address;
+  };
+
+  //도로명 -> 위도경도로
+  const searchAddressToCoordinate = (address: string, callback: (lat: number | null, lng: number | null) => void) => {
+    const normalizedAddress = normalizeAddress(address);
+
+    if (!naver.maps.Service || !naver.maps.Service.geocode) {
+      callback(null, null);
+      return;
+    }
+
+    naver.maps.Service.geocode(
+      {
+        query: normalizedAddress, // 변환할 주소
+      },
+      (status, response) => {
+        if (status !== naver.maps.Service.Status.OK) {
+          console.error('Geocoding 오류:', status);
+          callback(null, null);
+          return;
+        }
+
+        const result = response.v2.addresses[0]; // 첫 번째 결과
+        if (!result) {
+          console.error('주소 결과를 찾을 수 없습니다.');
+          callback(null, null);
+          return;
+        }
+
+        const { x, y } = result; // x = 경도(lng), y = 위도(lat)
+        const lat = parseFloat(y); // 문자열을 숫자로 변환
+        const lng = parseFloat(x); // 문자열을 숫자로 변환
+
+        console.log('주소 변환 결과 - 위도:', lat, '경도:', lng);
+        callback(lat, lng);
+      },
+    );
+  };
+
+  //위도경도 -> 도로명으로
+  const searchCoordinateToAddress = (latlng: naver.maps.LatLng, callback: (jibunAddress: string | null) => void) => {
+    if (!naver.maps.Service || !naver.maps.Service.reverseGeocode) {
+      callback(null);
+      return;
+    }
+
+    naver.maps.Service.reverseGeocode(
+      {
+        coords: latlng,
+        orders: [naver.maps.Service.OrderType.ADDR, naver.maps.Service.OrderType.ROAD_ADDR].join(','),
+      },
+      (status, response) => {
+        if (status === naver.maps.Service.Status.ERROR) {
+          console.error('Reverse Geocoding 오류 발생:', status);
+          callback(null);
+          return;
+        }
+
+        const items = response.v2.results;
+        if (!items || items.length === 0) {
+          console.error('결과를 찾을 수 없습니다.');
+          callback(null);
+          return;
+        }
+
+        // 지역 정보 추출
+        let area1 = items[0]?.region?.area1?.name || ''; // 시도 (서울특별시)
+        const area2 = items[0]?.region?.area2?.name || ''; // 시군구 (중구)
+
+        if (area1 === '서울특별시') {
+          area1 = '서울시';
+        }
+
+        const fullAddress = `${area1} ${area2}`.trim(); // '서울특별시 중구' 형식으로 조합
+        console.log('지역', fullAddress);
+        callback(fullAddress);
+      },
+    );
+  };
+
+  //이 지역에서 검색
+  const handleMapSearch = async () => {
+    if (!mapInstance.current) {
+      console.error('지도 인스턴스가 초기화되지 않았습니다.');
+      return;
+    }
+
+    const center = mapInstance.current.getCenter(); // 현재 지도 중심 좌표 가져오기
+    const latLng = new naver.maps.LatLng(center.y, center.x); // LatLng로 변환
+
+    searchCoordinateToAddress(latLng, async jibunAddress => {
+      if (jibunAddress) {
+        try {
+          const popupStores = await fetchAddress(jibunAddress); // API 호출
+          console.log('팝업스토어 데이터:', popupStores);
+
+          const categoryMapping: { [key: string]: string } = {
+            '패션/뷰티': 'fashion',
+            아트: 'art',
+            음식: 'food',
+            굿즈: 'goods',
+            라이프: 'life',
+          };
+
+          // 받은 팝업스토어 데이터를 하나씩 처리하여 마커 생성
+          popupStores.forEach((store: any) => {
+            const address = store.address;
+
+            const category = categoryMapping[store.categoryName] || 'default'; // 매핑되지 않은 경우 기본값
+
+            // 주소를 위도/경도로 변환하여 마커 추가
+            searchAddressToCoordinate(address, (lat, lng) => {
+              if (lat !== null && lng !== null && mapInstance.current) {
+                // createCustomMarker 함수 사용
+                createCustomMarker({
+                  map: mapInstance.current,
+                  lat,
+                  lng,
+                  category,
+                  name: store.name, // 팝업스토어 이름
+                  onMarkerClick: () => handleMarkerClick(store),
+                });
+              }
+            });
+          });
+        } catch (error) {
+          console.error('팝업스토어 데이터를 가져오는 중 에러 발생:', error);
+        }
+      }
+    });
+  };
+
+  //내 현재위치
   const handleFocusButtonClick = () => {
     if (!navigator.geolocation) {
       return;
@@ -108,92 +258,157 @@ const Page = (props: Props) => {
     });
   };
 
-  //이 위치에서 검색
-  const handleMapSearch = async () => {
-    // 예시 데이터 (실제 API 응답 형식을 시뮬레이션)
-    const mockData = [
-      { id: 1, name: '팝업스토어 A', category: 'fashion', lat: 37.5705, lng: 126.982 },
-      { id: 2, name: '팝업스토어 B', category: 'food', lat: 37.5663, lng: 126.9784 },
-      { id: 3, name: '팝업스토어 C', category: 'goods', lat: 37.563, lng: 126.975 },
-    ];
+  const {
+    data: nameSearchResult,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery(
+    ['popupStores', searchQuery], // Query 키와 검색어
+    () => fetchNamePopupStores(searchQuery), // API 호출 함수
+    {
+      enabled: false,
+    },
+  );
 
-    mockData.forEach(store => {
-      createCustomMarker({
-        map: mapInstance.current!,
-        lat: store.lat,
-        lng: store.lng,
-        category: store.category,
-        name: store.name,
-      });
-    });
+  // 검색 실행 함수
+  const handleSearch = () => {
+    if (!searchQuery.trim()) {
+      return;
+    }
+    refetch();
+    setIsFilterStoreOpen(true);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleClear = () => {
+    setSearchQuery('');
+  };
+
+  const handleResetFilter = () => {
+    setIsFilterStoreOpen(false); // FilterStoreSheet 닫기
+    setSelectedFilters({
+      date: null,
+      location: [],
+      rating: '',
+      category: [],
+    }); // 필터 초기화
+    setActiveTab('c'); // 기본 탭 설정
+    setIsFilterSheetOpen(true); // FilterSheet 열기
+  };
+
   return (
-    <div className="flex relative flex-col h-screen">
+    <div className="relative flex flex-col h-screen">
       <div ref={mapRef} className="flex-grow"></div>
       <div className="absolute flex-col top-[38px] left-0 w-full px-16 z-10 flex items-center gap-2 ">
-        <Input variantType="search" placeholder="팜업스토어명 검색" className="flex-grow" />
-        <div className="flex gap-2 justify-start w-full">
-          <FilterIconButton variant="inactive" onClick={toggleBottomSheet} />
-          <DropdownButton value="날짜" variant="inactive" />
-          <DropdownButton value="위치" variant="inactive" />
-          <DropdownButton value="평점" variant="inactive" />
-          <DropdownButton value="카테고리" variant="inactive" />
+        <Input
+          variantType="search"
+          placeholder="팜업스토어명 검색"
+          className="flex-grow"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onClick={handleClear}
+        />
+        <div className="flex justify-start w-full gap-2 mt-8">
+          <FilterIconButton
+            variant={
+              selectedFilters.date ||
+              (selectedFilters.location.length > 0 && !selectedFilters.location.includes('전체')) ||
+              (selectedFilters.rating && selectedFilters.rating !== '전체') ||
+              (selectedFilters.category.length > 0 && !selectedFilters.category.includes('전체'))
+                ? 'active'
+                : 'inactive'
+            }
+            onClick={() => toggleFilterSheet('c')}
+          />
+          <DropdownButton
+            value={
+              selectedFilters.date
+                ? format(selectedFilters.date, 'MM.dd(E)', { locale: ko }) // 원하는 형식으로 날짜 표시
+                : '날짜'
+            }
+            variant={selectedFilters.date ? 'active' : 'inactive'}
+            onClick={() => toggleFilterSheet('c')}
+          />
+          <DropdownButton
+            value={
+              selectedFilters.location.length > 0 && !selectedFilters.location.includes('전체')
+                ? selectedFilters.location.length > 2
+                  ? `${selectedFilters.location[0]} 외 ${selectedFilters.location.length - 1}개`
+                  : selectedFilters.location.join(', ')
+                : '위치'
+            }
+            variant={
+              selectedFilters.location.length > 0 && !selectedFilters.location.includes('전체') ? 'active' : 'inactive'
+            }
+            onClick={() => toggleFilterSheet('d')}
+          />
+          <DropdownButton
+            value={selectedFilters.rating && selectedFilters.rating !== '전체' ? `${selectedFilters.rating}` : '평점'}
+            variant={selectedFilters.rating && selectedFilters.rating !== '전체' ? 'active' : 'inactive'}
+            onClick={() => toggleFilterSheet('e')}
+          />
+          <DropdownButton
+            value={
+              selectedFilters.category.length > 0 && !selectedFilters.category.includes('전체')
+                ? selectedFilters.category.includes('패션 · 뷰티')
+                  ? selectedFilters.category.length > 1
+                    ? `패션 · 뷰티 외 ${selectedFilters.category.length - 1}개`
+                    : '패션 · 뷰티'
+                  : selectedFilters.category.length > 2
+                    ? `${selectedFilters.category[0]} 외 ${selectedFilters.category.length - 1}개`
+                    : selectedFilters.category.join(', ')
+                : '카테고리'
+            }
+            variant={
+              selectedFilters.category.length > 0 && !selectedFilters.category.includes('전체') ? 'active' : 'inactive'
+            }
+            onClick={() => toggleFilterSheet('f')}
+          />
         </div>
       </div>
-      <div className="absolute bottom-[100px] left-3">
+      <div className={`absolute left-3 ${isBottomSheetOpen ? 'bottom-[320px]' : 'bottom-[100px]'}`}>
         <FocusIconButton variant="inactive" onClick={handleFocusButtonClick} />
       </div>
       <div className="absolute bottom-[100px] left-1/2 transform -translate-x-1/2">
         <MapSearchButton onClick={handleMapSearch}>이 지역에서 검색</MapSearchButton>
       </div>
 
-      {/* 바텀시트 */}
-      <BottomSheet open={isBottomSheetOpen} onOpenChange={setIsBottomSheetOpen}>
-        <BottomSheetContent>
-          {/* Tabs는 BottomSheetContent 내부로 이동 */}
-          <Tabs defaultValue="c" className="w-full">
-            <BottomSheetHeader>
-              <TabsList className="flex gap-x-12 justify-start">
-                {tabsB.map(tab => (
-                  <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </BottomSheetHeader>
-            {tabsB.map(tab => (
-              <TabsContent key={tab.value} value={tab.value}>
-                {tab.value === 'c' && (
-                  <div className=" p-[24px]">
-                    <DatePicker selectedDate={selectedDate} onSelect={onSelect} />
-                  </div>
-                )}
-              </TabsContent>
-            ))}
-          </Tabs>
-          <Tabs defaultValue="d" className="w-full">
-            {tabsB.map(tab => (
-              <TabsContent key={tab.value} value={tab.value}>
-                {tab.value === 'd' && (
-                  <div className=" p-[24px]">
-                    <ChoiceChipGroup className="flex flex-row">
-                      {locations.map(location => (
-                        <ChoiceChipGroupItem key={location} value={location}>
-                          {location}
-                        </ChoiceChipGroupItem>
-                      ))}
-                    </ChoiceChipGroup>
-                  </div>
-                )}
-              </TabsContent>
-            ))}
-          </Tabs>
-        </BottomSheetContent>
-      </BottomSheet>
-
       <div className="fixed bottom-0 z-20 w-full">
         <BottomNavigation />
       </div>
+
+      <FilterSheet
+        isOpen={isFilterSheetOpen}
+        onClose={() => setIsFilterSheetOpen(false)}
+        activeTab={activeTab}
+        filters={selectedFilters || { date: null, location: ['전체'], rating: '전체', category: ['전체'] }}
+        onApplyFilter={filters => {
+          setSelectedFilters(filters);
+        }}
+        onResetFilter={handleResetFilter}
+      />
+
+      {isBottomSheetOpen && (
+        <MarkerInfoSheet
+          isOpen={isBottomSheetOpen}
+          onClose={() => setIsBottomSheetOpen(false)}
+          markerData={selectedMarkerData || []}
+        />
+      )}
+
+      <FilterStoreSheet
+        isOpen={isFilterStoreSheetOpen}
+        onClose={() => setIsFilterStoreOpen(false)}
+        data={nameSearchResult || []}
+        onResetFilter={handleResetFilter}
+      />
     </div>
   );
 };
