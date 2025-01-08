@@ -25,7 +25,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        // hostname: 'placehold.co',
+        hostname: 'placehold.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'd1jch5cr8xrdjz.cloudfront.net',
         pathname: '/**',
       },

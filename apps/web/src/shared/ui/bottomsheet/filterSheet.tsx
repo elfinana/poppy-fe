@@ -15,11 +15,12 @@ import {
   PrimaryButton,
   ToggleChipGroup,
   ToggleChipItem,
+  BottomSheetTitle,
 } from '@/src/shared';
 
 import FilterStoreSheet from './filterStoreSheet';
-import { fetchFilteredPopupStores } from '@/app/search/api/filterSearchApi';
 import { FilterParams } from '@/app/search/model/searchData';
+import { fetchFilteredPopupStores } from '@/src/widgets/search/api/filterSearchApi';
 
 const tabsB = [
   { value: 'c', label: '날짜' },
@@ -138,15 +139,16 @@ const FilterSheet = ({ isOpen, onClose, activeTab, filters, onApplyFilter, onRes
       <BottomSheet open={isOpen} onOpenChange={onClose}>
         <BottomSheetContent>
           <Tabs defaultValue={activeTab} className="w-full mt-24">
-            <BottomSheetHeader>
-              <TabsList className="flex justify-start gap-x-12">
-                {tabsB.map(tab => (
-                  <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </BottomSheetHeader>
+            <BottomSheetHeader> </BottomSheetHeader>
+            <BottomSheetTitle></BottomSheetTitle>
+            <TabsList className="flex justify-start gap-x-12">
+              {tabsB.map(tab => (
+                <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
             {tabsB.map(tab => (
               <TabsContent key={tab.value + JSON.stringify(filterState)} value={tab.value} className="min-h-[350px]">
                 {tab.value === 'c' && (

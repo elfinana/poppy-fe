@@ -6,11 +6,10 @@ type Props = {
   className?: string;
   selectedDate: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
-  // onSelect?: (date: Date | undefined) => void;
 };
 const DatePicker = ({ className, selectedDate, onDateChange }: Props) => {
   const onSelect = (date: Date | undefined) => {
-    if (!date) return;
+    // if (!date) return;
     onDateChange(date);
   };
 

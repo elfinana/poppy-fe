@@ -8,12 +8,12 @@ import { createCustomMarker } from '@/src/shared/ui/markers/customMarker';
 import MarkerInfoSheet from '@/src/shared/ui/bottomsheet/markerInfoSheet';
 import FilterSheet from '@/src/shared/ui/bottomsheet/filterSheet';
 import { FilterParams } from './model/searchData';
-import { fetchAddress } from './api/addressApi';
-import { fetchNamePopupStores } from './api/nameSearchApi';
 import { useQuery } from 'react-query';
 import FilterStoreSheet from '@/src/shared/ui/bottomsheet/filterStoreSheet';
 import { ko } from 'date-fns/locale';
 import { format } from 'date-fns';
+import { fetchAddress } from '@/src/widgets/search/api/addressApi';
+import { fetchNamePopupStores } from '@/src/widgets/search/api/nameSearchApi';
 
 type Props = {};
 

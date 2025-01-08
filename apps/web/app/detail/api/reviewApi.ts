@@ -24,7 +24,6 @@ export interface ReviewData {
 
 export const fetchReviews = async (id: number, sortType: string, page: number, size: number): Promise<ReviewData> => {
   const url = `http://pop-py.duckdns.org/reviews/store/${id}?sortType=${sortType}&page=${page}&size=${size}`;
-  console.log('받은 ID 값:', id); // ID 값 확인
 
   const response = await fetch(url);
   if (!response.ok) {

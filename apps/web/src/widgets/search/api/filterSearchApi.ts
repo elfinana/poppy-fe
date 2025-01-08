@@ -1,4 +1,4 @@
-import { FilterParams } from '../model/searchData';
+import { FilterParams } from '@/app/search/model/searchData';
 
 export const fetchFilteredPopupStores = async (filters: FilterParams) => {
   const { date, locations, rating, categoryIds } = filters;

@@ -22,11 +22,13 @@ import AddressMap from '@/app/map/addressMap';
 import { formatDay } from '@/src/shared/lib/dateUtils';
 import { Sort } from '@/public';
 import { fetchReviews } from '../api/reviewApi';
+import { SortSheet } from '@/src/shared/ui/bottomsheet/sortSheet';
 
 export default function Page() {
   const router = useRouter();
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(prev => !prev);
   };
@@ -243,7 +245,12 @@ export default function Page() {
                         <span className="text-gray-900 text-h2">
                           리뷰 <span className="text-gray-300 ml-[4px]">{reviewData?.content.length}</span>
                         </span>
-                        <button className="flex items-center gap-x-[4px]" type="button" onClick={() => {}}>
+                        <button
+                          className="flex items-center gap-x-[4px]"
+                          type="button"
+                          onClick={() => {
+                            setIsSortSheetOpen(true);
+                          }}>
                           <Sort />
                           <span className="text-gray-500 text-b2">최근 등록순</span>
                         </button>
@@ -320,6 +327,8 @@ export default function Page() {
             </footer>
           }
         </div>
+
+        <SortSheet isOpen={isSortSheetOpen} onClose={() => setIsSortSheetOpen(false)} />
       </div>
     );
   }
