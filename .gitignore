@@ -28,7 +28,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Yarn files
-.yarn/install-state.gz
+.yarn/
 
 # local env files
 .env.local

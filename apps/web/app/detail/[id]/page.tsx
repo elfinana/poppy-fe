@@ -96,7 +96,8 @@ export default function Page() {
     if (selectedTab === 'a') {
       toggleBottomSheet();
     } else {
-      router.push('/review');
+      console.log('Navigating to /review/'); // 네비게이션 실행 확인
+      router.push(`/review/[id]`);
     }
   };
 
