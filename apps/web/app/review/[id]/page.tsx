@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { SubHeader } from '@/src/widgets';
 import { IconButton, PrimaryButton, Textarea } from '@/src/shared';
-import Camera from '../../public/icons/ic-camera.svg';
-import Delete from '../../public/icons/ic-delete.svg';
+// import Camera from '../../public/icons/ic-camera.svg';
+// import Delete from '../../public/icons/ic-delete.svg';
 import { useState, useRef } from 'react';
 
 export default function Page() {
@@ -84,7 +84,7 @@ export default function Page() {
                   className="flex flex-col items-center justify-center w-full h-full"
                   type="button"
                   onClick={handleButtonClick}>
-                  <Camera />
+                  {/* <Camera /> */}
                   <span className="text-gray-400 text-c1">{selectedImages.length} / 5</span>
                 </button>
               </div>
@@ -115,7 +115,7 @@ export default function Page() {
                       className="absolute top-[4px] right-[4px]   "
                       type="button"
                       onClick={() => handleRemoveImage(index)}>
-                      <Delete />
+                      {/* <Delete /> */}
                     </button>
                   </div>
                 ))}
