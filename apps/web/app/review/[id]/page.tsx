@@ -11,9 +11,10 @@ import { useLoginStore } from 'store/login/loginStore';
 export default function Page() {
   const [textareaValue, setTextareaValue] = useState('');
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [star, setStar] = useState(0);
+  const router = useRouter();
 
   const handleStarClick = (index: number) => {
     setStar(index);
@@ -34,47 +35,33 @@ export default function Page() {
     if (files) {
       const newImages = Array.from(files).map(file => URL.createObjectURL(file));
       setSelectedImages(prevImages => [...prevImages, ...newImages]);
+      setSelectedFiles(prevFiles => [...prevFiles, ...Array.from(files)]);
     }
   };
 
   const handleRemoveImage = (index: number) => {
     setSelectedImages(prevImages => prevImages.filter((_, i) => i !== index));
+    setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
   };
 
   const { id } = useParams();
-
-  const { token, refreshToken } = useLoginStore();
-  console.log('토큰', token);
+  const { token } = useLoginStore();
 
   const handleSubmit = async () => {
     if (!isButtonEnabled) return;
-    // const accessToken = Cookies.get('accessToken');
     const formData = new FormData();
 
-    // Append images to formData
-    selectedImages.forEach(image => {
-      formData.append('images', image);
+    selectedFiles.forEach((file: File) => {
+      formData.append('images', file);
     });
 
-    // Append content and rating
     formData.append('content', textareaValue);
     formData.append('rating', star.toString());
     try {
-      // useParams에서 가져온 id를 사용하여 API 호출
-      // const response = await createReview(Number(id), formData, token);
-
-      // 성공적으로 리뷰가 작성된 경우
-      // console.log('리뷰 작성 성공:', response);
-      alert('리뷰 작성이 성공적으로 완료되었습니다.');
-
-      // 필요하면 상태 초기화
-      setTextareaValue('');
-      setSelectedImages([]);
-      setStar(0);
+      await createReview(Number(id), formData, token as string);
+      router.push(`detail/${id}`);
     } catch (error) {
-      // 에러 처리
       console.error('리뷰 작성 실패:', error);
-      alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
