@@ -52,6 +52,7 @@ export {
   BottomSheetTrigger,
   BottomSheetContent,
   BottomSheetTitle,
+  BottomSheetDescription,
 } from './bottomsheet/bottomsheet';
 
 // Hr

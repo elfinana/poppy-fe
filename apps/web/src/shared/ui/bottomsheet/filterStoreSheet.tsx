@@ -17,6 +17,7 @@ import {
   RadioGroupItem,
   SecondaryButton,
   BottomSheetHeader,
+  BottomSheetDescription,
 } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { Sort } from '@/public';
@@ -96,7 +97,10 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
     <>
       <BottomSheet open={isOpen} onOpenChange={onClose}>
         <BottomSheetContent dimmed={false}>
-          <BottomSheetTitle></BottomSheetTitle>
+          <BottomSheetHeader className="invisible">
+            <BottomSheetDescription className="invisible" />
+            <BottomSheetTitle className="invisible" />
+          </BottomSheetHeader>
 
           <div className="flex flex-col items-center justify-center w-full h-full pt-28">
             <span className="text-h3">팝업스토어 목록</span>
@@ -156,7 +160,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                       {store.isActive ? (
                         <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
                           <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-                          <p className="text-[#5599FF] text-c1">영업 중</p>
+                          <p className="text-informative text-c1">영업 중</p>
                         </div>
                       ) : (
                         <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
@@ -170,8 +174,8 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                           year: store.startDate.year,
                           month: store.startDate.month,
                           day: store.startDate.day,
-                        })}{' '}
-                        ~{' '}
+                        })}
+                        ~
                         {formatDay({
                           year: store.endDate.year,
                           month: store.endDate.month,

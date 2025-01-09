@@ -16,6 +16,7 @@ import {
   ToggleChipGroup,
   ToggleChipItem,
   BottomSheetTitle,
+  BottomSheetDescription,
 } from '@/src/shared';
 
 import FilterStoreSheet from './filterStoreSheet';
@@ -139,8 +140,11 @@ const FilterSheet = ({ isOpen, onClose, activeTab, filters, onApplyFilter, onRes
       <BottomSheet open={isOpen} onOpenChange={onClose}>
         <BottomSheetContent>
           <Tabs defaultValue={activeTab} className="w-full mt-24">
-            <BottomSheetHeader> </BottomSheetHeader>
-            <BottomSheetTitle></BottomSheetTitle>
+            <BottomSheetHeader className="invisible">
+              <BottomSheetDescription className="invisible" />
+              <BottomSheetTitle className="invisible" />
+            </BottomSheetHeader>
+
             <TabsList className="flex justify-start gap-x-12">
               {tabsB.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value} className="w-fit">
