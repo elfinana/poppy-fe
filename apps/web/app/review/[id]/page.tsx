@@ -3,10 +3,10 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { SubHeader } from '@/src/widgets';
 import { IconButton, PrimaryButton, Textarea } from '@/src/shared';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Camera, ImageDelete } from '@/public';
 import { createReview } from '@/src/widgets/review/api/reviewCreateApi';
-import { useLoginStore } from 'store/login/loginStore';
+import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 
 export default function Page() {
   const [textareaValue, setTextareaValue] = useState('');
@@ -29,6 +29,9 @@ export default function Page() {
       fileInputRef.current.click();
     }
   };
+
+
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
