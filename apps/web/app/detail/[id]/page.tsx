@@ -17,12 +17,12 @@ import { useRef, useEffect, useState, JSXElementConstructor, Key, ReactElement, 
 import { useDetailStore } from 'store/detail/detailStore';
 import { useQuery } from 'react-query';
 import BookSheet from '@/src/widgets/book/BookSheet';
-import { fetchPopupStoreDetail } from '../api/popupstoreDetailApi';
-import AddressMap from '@/app/map/addressMap';
+import AddressMap from '@/src/widgets/map/addressMap';
 import { formatDay } from '@/src/shared/lib/dateUtils';
 import { Sort } from '@/public';
-import { fetchReviews } from '../api/reviewApi';
 import { SortSheet } from '@/src/shared/ui/bottomsheet/sortSheet';
+import { fetchReviews } from '@/src/widgets/detail/api/reviewApi';
+import { fetchPopupStoreDetail } from '@/src/widgets/detail/api/popupstoreDetailApi';
 
 export default function Page() {
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function Page() {
     }
   };
 
-  const { id } = useParams(); // URL에서 id 가져오기
+  const { id } = useParams();
 
   //팝업스토어상세데이터터
   const { data, error, isLoading } = useQuery(['popupStoreDetail', id], () => fetchPopupStoreDetail(Number(id)), {
@@ -105,8 +105,8 @@ export default function Page() {
         </header>
 
         {/* content area */}
-        <div className="flex flex-col w-full h-full">
-          <section className="items-center overflow-auto">
+        <div className="flex flex-col w-full h-full overflow-auto">
+          <section className="items-center ">
             {/* img area */}
             <div className="relative h-[400px]">
               {data?.thumbnailUrl && (
@@ -323,18 +323,16 @@ export default function Page() {
             </Tabs>
           </section>
 
-          {
-            <footer className="sticky w-full bottom-0 py-[8px] bg-white flex px-[8px] h-[64px] gap-x-[12px] items-center ">
-              <div className="flex items-center flex-col gap-x-[4px]">
-                <IconButton className={``} icon={'ic-bookmark'} size={'md'} onClick={() => {}} />
-                <p className="text-gray-400 text-c1">50</p>
-              </div>
-              <PrimaryButton variant={'enabled'} onClick={buttonHandle}>
-                {selectedTab === 'a' ? '예약하기' : '리뷰 남기기'}
-              </PrimaryButton>
-              <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
-            </footer>
-          }
+          <footer className="sticky w-full bottom-0 py-[8px] bg-white flex px-[8px] h-[64px] gap-x-[12px] items-center ">
+            <div className="flex items-center flex-col gap-x-[4px]">
+              <IconButton className={``} icon={'ic-bookmark'} size={'md'} onClick={() => {}} />
+              <p className="text-gray-400 text-c1">50</p>
+            </div>
+            <PrimaryButton variant={'enabled'} onClick={buttonHandle}>
+              {selectedTab === 'a' ? '예약하기' : '리뷰 남기기'}
+            </PrimaryButton>
+            <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
+          </footer>
         </div>
 
         <SortSheet
