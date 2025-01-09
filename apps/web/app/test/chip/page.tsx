@@ -17,13 +17,10 @@ const tdStyle = 'p-8 text-center item-center';
 type Props = {};
 
 const Page = (props: Props) => {
-  const [recentlySearched, setRecentlySearched] = React.useState([
-    { id: 0, text: '일둥이' },
-    { id: 1, text: '이둥이' },
-  ]);
+  const [recentlySearched, setRecentlySearched] = React.useState(['일둥이', '이둥이']);
 
-  const deleteChipsHandler = (chip: ChipListItem) => {
-    setRecentlySearched(recentlySearched.filter(val => val.id !== chip.id));
+  const deleteChipsHandler = (chip: string) => {
+    setRecentlySearched(recentlySearched.filter(val => val !== chip));
     // 삭제 API 요청
   };
 
@@ -63,7 +60,7 @@ const Page = (props: Props) => {
             <td className={`text-h1 ${tdStyle}`}>Input</td>
             <td className={tdStyle}>
               {recentlySearched.map((item, idx) => (
-                <InputChip key={`CHIP_${idx}`} value={item.id} text={item.text} onDelete={deleteChipsHandler} />
+                <InputChip key={`CHIP_${idx}`} value={item} onDelete={deleteChipsHandler} />
               ))}
             </td>
           </tr>

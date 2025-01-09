@@ -2,7 +2,7 @@
 import { bell, book } from '@/public';
 import { PrimaryButton, SecondaryButton } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { bookData, security, storeData } from './const';

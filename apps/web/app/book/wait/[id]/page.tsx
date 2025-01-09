@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import React from 'react';
 
 const page = ({ params }: { params: { id: string } }) => {

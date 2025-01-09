@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { DateLabel } from '../..';
 import { useRouter } from 'next/navigation';
 import { memo } from 'react';
@@ -81,10 +81,10 @@ export const ItemCard = memo(
               width={500}
               height={500}
               alt={title}
-              className="object-cover rounded-sm"
+              className="object-cover rounded-sm aspect-square"
             />
           ) : (
-            <Image src={img} fill alt={title} className="object-cover rounded-sm" />
+            <Image src={img} layout="fill" alt={title} className="object-cover rounded-sm" />
           )}
           {variant === 'rank' && (
             <div className="absolute rounded-tl-sm rounded-br-sm w-[24px] h-[24px] flex text-center justify-center top-0 left-0 bg-gray-900 text-white ">

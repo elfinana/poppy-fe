@@ -92,9 +92,9 @@ export default function Page() {
       day: today.getDate(),
     };
 
-    const daysLeft = data?.endDate
-      ? getDateDifference({ year: data.endDate.year, month: data.endDate.month, day: data.endDate.day }, todayDate)
-      : null;
+    // const daysLeft = data?.endDate
+    //   ? getDateDifference({ year: data.endDate.year, month: data.endDate.month, day: data.endDate.day }, todayDate)
+    //   : null;
 
     return (
       <div className="flex flex-col items-center justify-between w-full h-full">
@@ -121,7 +121,7 @@ export default function Page() {
             {/* description */}
             <div className="flex flex-col px-[16px] mb-[48px]">
               <div className="flex items-center my-[12px] w-[64px] h-[24px] rounded-4 ">
-                <p className="text-blue-500 text-c1">종료 D-{daysLeft}</p>
+                {/* <p className="text-blue-500 text-c1">종료 D-{daysLeft}</p> */}
               </div>
 
               <div className="flex flex-col gap-y-[8px]">
