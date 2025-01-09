@@ -34,7 +34,7 @@ export default function Page() {
     setSelectedImages(prevImages => prevImages.filter((_, i) => i !== index));
   };
 
-  const isButtonEnabled = textareaValue.length > 20;
+  const isButtonEnabled = textareaValue.length > 0;
 
   return (
     <div className="flex flex-col items-center w-full h-full px-[16px]">

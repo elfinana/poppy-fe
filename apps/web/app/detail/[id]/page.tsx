@@ -75,7 +75,7 @@ export default function Page() {
       toggleBottomSheet();
     } else {
       console.log('Navigating to /review/'); // 네비게이션 실행 확인
-      router.push(`/review/[id]`);
+      router.push(`/review/${id}`);
     }
   };
 
