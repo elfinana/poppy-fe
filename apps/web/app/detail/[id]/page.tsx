@@ -75,7 +75,7 @@ export default function Page() {
       toggleBottomSheet();
     } else {
       console.log('Navigating to /review/'); // 네비게이션 실행 확인
-      router.push(`/review/[id]`);
+      router.push(`/review/${id}`);
     }
   };
 
@@ -144,8 +144,8 @@ export default function Page() {
                         year: data.startDate.year,
                         month: data.startDate.month,
                         day: data.startDate.day,
-                      })}{' '}
-                      ~{' '}
+                      })}
+                      ~
                       {formatDay({
                         year: data.endDate.year,
                         month: data.endDate.month,
@@ -157,9 +157,9 @@ export default function Page() {
                 <div className="flex gap-x-[8px] h-[24px] items-center">
                   <IconButton icon={'ic-info-time'} size={'sm'} />
                   <p className="text-gray-800 text-b3_com">
-                    {data?.isActive ? '영업 중' : '영업 종료'} · 매일{' '}
+                    {data?.isActive ? '영업 중' : '영업 종료'} · 매일
                     {data?.openingTime?.hour?.toString().padStart(2, '0')}:
-                    {data?.openingTime?.minute?.toString().padStart(2, '0')} -{' '}
+                    {data?.openingTime?.minute?.toString().padStart(2, '0')} -
                     {data?.closingTime?.hour?.toString().padStart(2, '0')}:
                     {data?.closingTime?.minute?.toString().padStart(2, '0')}
                   </p>

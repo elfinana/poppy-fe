@@ -1,6 +1,13 @@
 'use client';
 import React from 'react';
-import { BottomSheet, BottomSheetContent, BottomSheetHeader, IconButton } from '@/src/shared';
+import {
+  BottomSheet,
+  BottomSheetContent,
+  BottomSheetHeader,
+  IconButton,
+  BottomSheetDescription,
+  BottomSheetTitle,
+} from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
 
@@ -14,12 +21,16 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent className="px-16" dimmed={false}>
+        <BottomSheetHeader className="invisible">
+          <BottomSheetDescription className="invisible" />
+          <BottomSheetTitle className="invisible" />
+        </BottomSheetHeader>
         <div className="flex flex-row justify-between items-center mt-[32px]">
           <span className="text-h2">{markerData.name}</span>
           {markerData.isActive ? (
             <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
               <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-              <p className="text-[#5599FF] text-c1 ">영업 중</p>
+              <p className="text-informative text-c1 ">영업 중</p>
             </div>
           ) : (
             <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
@@ -33,8 +44,8 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
             year: markerData.startDate.year,
             month: markerData.startDate.month,
             day: markerData.startDate.day,
-          })}{' '}
-          ~{' '}
+          })}
+          ~
           {formatDay({
             year: markerData.endDate.year,
             month: markerData.endDate.month,
