@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BottomSheet,
   BottomSheetContent,
@@ -7,9 +7,11 @@ import {
   IconButton,
   BottomSheetDescription,
   BottomSheetTitle,
+  Skeleton,
 } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
+import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkelton';
 
 type MarkerInfoSheetProps = {
   isOpen: boolean;
@@ -18,6 +20,34 @@ type MarkerInfoSheetProps = {
 };
 
 const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (markerData) {
+      setIsLoading(false);
+    }
+  }, [markerData]);
+
+  if (isLoading) {
+    return (
+      <BottomSheet open={isOpen} onOpenChange={onClose}>
+        <BottomSheetContent className="px-16" dimmed={false}>
+          <Skeleton className="w-2/3 h-8 mt-[32px]" />
+          <Skeleton className="w-[64px] h-[24px] mt-4 rounded-[20px]" />
+          <Skeleton className="w-1/2 h-4 mt-4" />
+          <div className="flex items-center mt-4 mb-8">
+            <Skeleton className="w-6 h-6 rounded-full" />
+            <Skeleton className="w-16 h-4 ml-2" />
+            <Skeleton className="w-32 h-4 ml-8" />
+          </div>
+          <div className="mb-[14px]">
+            <ImageSliderSkeleton count={3} height="168px" width="144px" />
+          </div>
+        </BottomSheetContent>
+      </BottomSheet>
+    );
+  }
   return (
     <BottomSheet open={isOpen} onOpenChange={onClose}>
       <BottomSheetContent className="px-16" dimmed={false}>
@@ -40,17 +70,19 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
         </div>
 
         <span className="text-gray-500 text-b3_com">
-          {formatDay({
-            year: markerData.startDate.year,
-            month: markerData.startDate.month,
-            day: markerData.startDate.day,
-          })}
+          {`
+             ${formatDay({
+               year: markerData.startDate.year,
+               month: markerData.startDate.month,
+               day: markerData.startDate.day,
+             })}
           ~
-          {formatDay({
+          ${formatDay({
             year: markerData.endDate.year,
             month: markerData.endDate.month,
             day: markerData.endDate.day,
           })}
+          `}
         </span>
         <div className="flex items-center mt-4 mb-8">
           <IconButton icon={'ic-star-active'} size={'smmd'} />

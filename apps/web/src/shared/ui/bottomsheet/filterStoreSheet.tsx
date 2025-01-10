@@ -18,6 +18,7 @@ import {
   SecondaryButton,
   BottomSheetHeader,
   BottomSheetDescription,
+  Skeleton,
 } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { Sort } from '@/public';
@@ -27,6 +28,8 @@ import FilterSheet from './filterSheet';
 import MarkerInfoSheet from './markerInfoSheet';
 import { useRouter } from 'next/navigation';
 import { BottomSheetTitle } from './bottomsheet';
+import { useReviewStore } from 'store/review/reviewStore';
+import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkelton';
 
 type FilterStoreSheetProps = {
   isOpen: boolean;
@@ -40,6 +43,8 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
   const [sortedData, setSortedData] = useState(data);
   const [activeTab, setActiveTab] = React.useState<string>('c');
   const [testOpen, setTestOpen] = React.useState(false);
+  const { reviewCounts } = useReviewStore();
+  const [isLoading, setIsLoading] = useState(true);
 
   const sort = ['조회 순', '리뷰 많은 순', '오픈일순', '종료일순'];
 
@@ -50,7 +55,11 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
         sorted.sort((a, b) => b.viewCount - a.viewCount);
         break;
       case '리뷰 많은 순':
-        sorted.sort((a, b) => b.scrapCount - a.scrapCount);
+        sorted.sort((a, b) => {
+          const reviewCountA = reviewCounts[a.id] || 0;
+          const reviewCountB = reviewCounts[b.id] || 0;
+          return reviewCountB - reviewCountA;
+        });
         break;
       case '오픈일순':
         sorted.sort((a, b) => {
@@ -72,7 +81,12 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
   };
 
   useEffect(() => {
-    setSortedData(data);
+    if (!data || data.length === 0) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+      setSortedData(data);
+    }
   }, [data]);
 
   const router = useRouter();
@@ -93,6 +107,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
     setSortedData(data);
     console.log('Initial sortedData:', data); // 데이터 초기화 시 출력
   }, [data]);
+
   return (
     <>
       <BottomSheet open={isOpen} onOpenChange={onClose}>
@@ -107,7 +122,17 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
             <hr className="w-full mt-16 border-t border-gray-100" />
           </div>
 
-          {sortedData && sortedData.length > 0 ? (
+          {isLoading ? (
+            <div className="max-h-[380px] mx-16 overflow-y-auto">
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <div key={idx} className="mt-32">
+                  <ImageSliderSkeleton count={3} height="168px" width="144px" />
+                  <Skeleton className="w-1/2 h-6 mt-4 rounded-md" />
+                  <Skeleton className="w-1/3 h-6 mt-4 rounded-md" />
+                </div>
+              ))}
+            </div>
+          ) : sortedData && sortedData.length > 0 ? (
             <>
               <div className="flex items-center justify-end py-12 text-gray-500 text-b2 ">
                 <AlertDialog>
@@ -170,23 +195,21 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                     </div>
                     {
                       <span className="text-gray-500 text-b3_com">
-                        {formatDay({
+                        {`${formatDay({
                           year: store.startDate.year,
                           month: store.startDate.month,
                           day: store.startDate.day,
-                        })}
-                        ~
-                        {formatDay({
+                        })} ~ ${formatDay({
                           year: store.endDate.year,
                           month: store.endDate.month,
                           day: store.endDate.day,
-                        })}
+                        })}`}
                       </span>
                     }
                     <div className="flex items-center mt-4">
                       <IconButton icon={'ic-star-active'} size={'smmd'} />
                       <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>
-                      <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {store.scrapCount}</span>
+                      <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {reviewCounts[store.id]}</span>
                     </div>
                   </div>
                 ))}
@@ -197,11 +220,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
               <Image src="/empty/emptystore.webp" alt="Empty Store" width={200} height={200} />
               <span className="text-gray-900 text-b1">조건에 맞는 스토어가 없어요.</span>
               <span className="mt-4 text-gray-500 text-b3">필터를 변경하거나 초기화해 보세요.</span>
-              <SecondaryButton
-                size="sm"
-                className="mt-[40px]"
-                onClick={onResetFilter} // 상위 컴포넌트에서 처리
-              >
+              <SecondaryButton size="sm" className="mt-[40px]" onClick={onResetFilter}>
                 필터 초기화하기
               </SecondaryButton>
 

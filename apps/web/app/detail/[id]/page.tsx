@@ -4,10 +4,12 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   getDateDifference,
+  Hr,
   IconButton,
   LikeIconButton,
   PrimaryButton,
   SecondaryXSButton,
+  Skeleton,
   Tabs,
   TabsContent,
   TabsList,
@@ -25,7 +27,7 @@ import {
   useMemo,
 } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
-import { useQuery } from 'react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import BookSheet from '@/src/widgets/book/BookSheet';
 import AddressMap from '@/src/widgets/map/addressMap';
 import { formatDay } from '@/src/shared/lib/dateUtils';
@@ -33,11 +35,15 @@ import { Sort } from '@/public';
 import { SortSheet } from '@/src/shared/ui/bottomsheet/sortSheet';
 import { fetchReviews } from '@/src/widgets/detail/api/reviewApi';
 import { fetchPopupStoreDetail } from '@/src/widgets/detail/api/popupstoreDetailApi';
-import { useUserInfo } from 'store/login/loginStore';
+import { useLoginStore, useUserInfo } from 'store/login/loginStore';
+import { useReviewStore } from 'store/review/reviewStore';
+
+import { reviewLike } from '@/src/widgets/review/api/reviewLikeApi';
 
 export default function Page() {
   const router = useRouter();
   const { id } = useParams();
+  const { setReviewCount } = useReviewStore();
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
@@ -47,6 +53,11 @@ export default function Page() {
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
+  useEffect(() => {
+    if (!selectedTab) {
+      setSelectedTab('a');
+    }
+  }, [selectedTab, setSelectedTab]);
   const addressRef = useRef<HTMLParagraphElement>(null);
 
   const toggleBottomSheet = () => {
@@ -66,15 +77,42 @@ export default function Page() {
   };
 
   //팝업스토어상세데이터터
-  const { data, error, isLoading } = useQuery(['popupStoreDetail', id], () => fetchPopupStoreDetail(Number(id)), {
-    enabled: !!id, // id가 존재할 때만 API 호출
-  });
+  const { data, isLoading: isDetailLoading } = useQuery(
+    ['popupStoreDetail', id],
+    () => fetchPopupStoreDetail(Number(id)),
+    {
+      enabled: !!id,
+    },
+  );
 
   //리뷰데이터
-  const { data: reviewData } = useQuery(
+  const { data: reviewData, isLoading: isReviewLoading } = useQuery(
     ['reviews', id, sortType],
     () => fetchReviews(Number(id), sortType, page, size),
-    { keepPreviousData: true },
+    {
+      keepPreviousData: true,
+      onSuccess: data => {
+        if (data && data.content) {
+          setReviewCount(Number(id), data.content.length);
+        }
+      },
+    },
+  );
+
+  const { token, refreshToken } = useLoginStore();
+
+  const queryClient = useQueryClient();
+
+  const { mutate: handleLike, isLoading: isLiking } = useMutation(
+    (reviewId: number) => reviewLike(reviewId, refreshToken as string),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['reviews', id]);
+      },
+      onError: error => {
+        console.error('좋아요 실패:', error);
+      },
+    },
   );
 
   const userNickname = useUserInfo(state => {
@@ -143,6 +181,7 @@ export default function Page() {
               />
             )}
           </div>
+
           {/* description */}
           <div className="flex flex-col px-[16px] mb-[48px]">
             <div className="flex items-center my-[12px] w-[64px] h-[24px] rounded-4 ">
@@ -165,24 +204,22 @@ export default function Page() {
                 <IconButton icon={'ic-info-date'} size={'sm'} />
                 {data && (
                   <p className="text-gray-800 text-b3_com">
-                    {formatDay({
+                    {`${formatDay({
                       year: data.startDate.year,
                       month: data.startDate.month,
                       day: data.startDate.day,
-                    })}
-                    ~
-                    {formatDay({
+                    })} ~ ${formatDay({
                       year: data.endDate.year,
                       month: data.endDate.month,
                       day: data.endDate.day,
-                    })}
+                    })}`}
                   </p>
                 )}
               </div>
               <div className="flex gap-x-[8px] h-[24px] items-center">
                 <IconButton icon={'ic-info-time'} size={'sm'} />
                 <p className="text-gray-800 text-b3_com">
-                  {data?.isActive ? '영업 중' : '영업 종료'} · 매일
+                  {`${data?.isActive ? '영업 중' : '영업 종료'} · 매일 `}
                   {data?.openingTime?.hour?.toString().padStart(2, '0')}:
                   {data?.openingTime?.minute?.toString().padStart(2, '0')} -
                   {data?.closingTime?.hour?.toString().padStart(2, '0')}:
@@ -330,8 +367,18 @@ export default function Page() {
 
                               {/* Like Button */}
                               <div className="flex w-full justify-end mt-[4px] px-[16px]">
-                                <LikeIconButton variant="inactive" value={review.likes} />
+                                <LikeIconButton
+                                  variant="inactive"
+                                  value={review.likes}
+                                  onClick={() => {
+                                    console.log('Like button clicked:', review.id);
+                                    if (!isLiking) {
+                                      handleLike(review.id);
+                                    }
+                                  }}
+                                />
                               </div>
+                              <Hr variant="heavy" className="mt-24" />
                             </div>
                           ))}
                         </div>

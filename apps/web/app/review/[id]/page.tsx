@@ -30,9 +30,6 @@ export default function Page() {
     }
   };
 
-
-
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
@@ -49,9 +46,10 @@ export default function Page() {
 
   const { id } = useParams();
   const { token } = useLoginStore();
+  console.log('토큰1', token);
 
   const handleSubmit = async () => {
-    if (!isButtonEnabled) return;
+    if (!isButtonEnabled || textareaValue.length > 300) return;
     const formData = new FormData();
 
     selectedFiles.forEach((file: File) => {
