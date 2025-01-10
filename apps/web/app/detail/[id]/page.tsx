@@ -172,91 +172,117 @@ export default function Page() {
         <section className="items-center ">
           {/* img area */}
           <div className="relative h-[400px]">
-            {data?.thumbnailUrl && (
-              <Image
-                className="items-center object-cover w-full"
-                layout="fill"
-                src={data.thumbnailUrl}
-                alt="info-img"
-              />
+            {isDetailLoading ? (
+              <Skeleton className="w-full h-full rounded-lg" />
+            ) : (
+              data?.thumbnailUrl && (
+                <Image
+                  className="items-center object-cover w-full"
+                  layout="fill"
+                  src={data.thumbnailUrl}
+                  alt="info-img"
+                />
+              )
             )}
           </div>
 
           {/* description */}
           <div className="flex flex-col px-[16px] mb-[48px]">
-            <div className="flex items-center my-[12px] w-[64px] h-[24px] rounded-4 ">
-              <p className="text-blue-500 text-c1">종료 D-{daysLeft}</p>
-            </div>
+            {isDetailLoading ? (
+              <>
+                <Skeleton className="w-[64px] h-[24px] rounded-lg mt-[12px]" />
+                <Skeleton className="w-[200px] h-[32px] mt-[16px]" />
+                <Skeleton className="w-[150px] h-[20px] mt-[8px]" />
+              </>
+            ) : (
+              <>
+                <div className="flex items-center my-[12px] w-[64px] h-[24px] rounded-4 ">
+                  <p className="text-blue-500 text-c1">종료 D-{daysLeft}</p>
+                </div>
 
-            <div className="flex flex-col gap-y-[8px]">
-              <p className="text-black text-h1">{data?.name}</p>
-              <div className="flex items-center">
-                <IconButton className={`ml-[2px]`} icon={'ic-star-active'} size={'smmd'} />
-                <p className="text-gray-900 text-b2 mr-[8px]">{data?.rating}</p>
-                <p className="text-gray-500 text-b3_com">방문자 리뷰 {reviewData?.content.length}</p>
-              </div>
-            </div>
+                <div className="flex flex-col gap-y-[8px]">
+                  <p className="text-black text-h1">{data?.name}</p>
+                  <div className="flex items-center">
+                    <IconButton className={`ml-[2px]`} icon={'ic-star-active'} size={'smmd'} />
+                    <p className="text-gray-900 text-b2 mr-[8px]">{data?.rating}</p>
+                    <p className="text-gray-500 text-b3_com">방문자 리뷰 {reviewData?.content.length}</p>
+                  </div>
+                </div>
+              </>
+            )}
 
             <hr className="mt-[20px] mb-[12px]" />
 
             <div className="flex flex-col gap-y-[2px]">
-              <div className="flex gap-x-[8px] h-[24px] items-center">
-                <IconButton icon={'ic-info-date'} size={'sm'} />
-                {data && (
-                  <p className="text-gray-800 text-b3_com">
-                    {`${formatDay({
-                      year: data.startDate.year,
-                      month: data.startDate.month,
-                      day: data.startDate.day,
-                    })} ~ ${formatDay({
-                      year: data.endDate.year,
-                      month: data.endDate.month,
-                      day: data.endDate.day,
-                    })}`}
-                  </p>
-                )}
-              </div>
-              <div className="flex gap-x-[8px] h-[24px] items-center">
-                <IconButton icon={'ic-info-time'} size={'sm'} />
-                <p className="text-gray-800 text-b3_com">
-                  {`${data?.isActive ? '영업 중' : '영업 종료'} · 매일 `}
-                  {data?.openingTime?.hour?.toString().padStart(2, '0')}:
-                  {data?.openingTime?.minute?.toString().padStart(2, '0')} -
-                  {data?.closingTime?.hour?.toString().padStart(2, '0')}:
-                  {data?.closingTime?.minute?.toString().padStart(2, '0')}
-                </p>
-              </div>
-              <div className="flex gap-x-[8px] h-[24px] items-center">
-                <IconButton icon={'ic-info-location'} size={'sm'} />
-                <p className="text-gray-800 text-b3_com">{data?.address}</p>
-              </div>
-              <div className="flex gap-x-[8px] h-[24px] items-center">
-                <IconButton icon={'ic-info-ticket'} size={'sm'} />
-                <p className="text-gray-800 text-b3_com"> {data?.price?.toLocaleString()} </p>
-              </div>
-              <div className="flex gap-x-[8px] h-[24px] items-center">
-                <IconButton icon={'ic-info-share'} size={'sm'} />
-                {data?.homepageUrl ? (
-                  <SecondaryXSButton onClick={() => window.open(data.homepageUrl, '_blank')}>
-                    공식 홈페이지
-                  </SecondaryXSButton>
-                ) : (
-                  ''
-                )}
+              {isDetailLoading ? (
+                <>
+                  <Skeleton className="w-1/2 h-[24px] mb-4" />
+                  <Skeleton className="w-3/4 h-[24px] mb-4" />
+                  <Skeleton className="w-full h-[24px] mb-4" />
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-x-[8px] h-[24px] items-center">
+                    <IconButton icon={'ic-info-date'} size={'sm'} />
+                    {data && (
+                      <p className="text-gray-800 text-b3_com">
+                        {`${formatDay({
+                          year: data.startDate.year,
+                          month: data.startDate.month,
+                          day: data.startDate.day,
+                        })} ~ ${formatDay({
+                          year: data.endDate.year,
+                          month: data.endDate.month,
+                          day: data.endDate.day,
+                        })}`}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-x-[8px] h-[24px] items-center">
+                    <IconButton icon={'ic-info-time'} size={'sm'} />
+                    <p className="text-gray-800 text-b3_com">
+                      {`${data?.isActive ? '영업 중' : '영업 종료'} · 매일 `}
+                      {data?.openingTime?.hour?.toString().padStart(2, '0')}:
+                      {data?.openingTime?.minute?.toString().padStart(2, '0')} -
+                      {data?.closingTime?.hour?.toString().padStart(2, '0')}:
+                      {data?.closingTime?.minute?.toString().padStart(2, '0')}
+                    </p>
+                  </div>
+                  <div className="flex gap-x-[8px] h-[24px] items-center">
+                    <IconButton icon={'ic-info-location'} size={'sm'} />
+                    <p className="text-gray-800 text-b3_com">{data?.address}</p>
+                  </div>
+                  <div className="flex gap-x-[8px] h-[24px] items-center">
+                    <IconButton icon={'ic-info-ticket'} size={'sm'} />
+                    <p className="text-gray-800 text-b3_com"> {data?.price?.toLocaleString()} </p>
+                  </div>
+                  <div className="flex gap-x-[8px] h-[24px] items-center">
+                    <IconButton icon={'ic-info-share'} size={'sm'} />
+                    {data?.homepageUrl ? (
+                      <SecondaryXSButton onClick={() => window.open(data.homepageUrl, '_blank')}>
+                        공식 홈페이지
+                      </SecondaryXSButton>
+                    ) : (
+                      ''
+                    )}
 
-                {data?.instagramUrl ? (
-                  <SecondaryXSButton onClick={() => window.open(data.homepageUrl, '_blank')}>
-                    인스타그램
-                  </SecondaryXSButton>
-                ) : (
-                  ''
-                )}
-                {data?.blogUrl ? (
-                  <SecondaryXSButton onClick={() => window.open(data.homepageUrl, '_blank')}>블로그</SecondaryXSButton>
-                ) : (
-                  ''
-                )}
-              </div>
+                    {data?.instagramUrl ? (
+                      <SecondaryXSButton onClick={() => window.open(data.homepageUrl, '_blank')}>
+                        인스타그램
+                      </SecondaryXSButton>
+                    ) : (
+                      ''
+                    )}
+                    {data?.blogUrl ? (
+                      <SecondaryXSButton onClick={() => window.open(data.homepageUrl, '_blank')}>
+                        블로그
+                      </SecondaryXSButton>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 

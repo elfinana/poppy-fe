@@ -11,7 +11,7 @@ import {
 } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
-import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkelton';
+import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
 
 type MarkerInfoSheetProps = {
   isOpen: boolean;

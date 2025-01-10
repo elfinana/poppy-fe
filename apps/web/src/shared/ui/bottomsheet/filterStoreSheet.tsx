@@ -29,7 +29,7 @@ import MarkerInfoSheet from './markerInfoSheet';
 import { useRouter } from 'next/navigation';
 import { BottomSheetTitle } from './bottomsheet';
 import { useReviewStore } from 'store/review/reviewStore';
-import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkelton';
+import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
 
 type FilterStoreSheetProps = {
   isOpen: boolean;
