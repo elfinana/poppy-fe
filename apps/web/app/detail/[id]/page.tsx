@@ -15,17 +15,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/src/shared';
-import {
-  useRef,
-  useEffect,
-  useState,
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useMemo,
-} from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import BookSheet from '@/src/widgets/book/BookSheet';
@@ -36,20 +26,25 @@ import { SortSheet } from '@/src/shared/ui/bottomsheet/sortSheet';
 import { fetchReviews } from '@/src/widgets/detail/api/reviewApi';
 import { fetchPopupStoreDetail } from '@/src/widgets/detail/api/popupstoreDetailApi';
 import { useLoginStore, useUserInfo } from 'store/login/loginStore';
-import { useReviewStore } from 'store/review/reviewStore';
-
 import { reviewLike } from '@/src/widgets/review/api/reviewLikeApi';
+import { fetchScrap } from '@/src/widgets/detail/api/popupstroeScrapApi';
 
 export default function Page() {
   const router = useRouter();
   const { id } = useParams();
-  const { setReviewCount } = useReviewStore();
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isTruncated, setIsTruncated] = useState(false);
+  const contentRef = useRef<HTMLSpanElement>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const [sortType, setSortType] = useState<string>('RECENT');
   const [page, setPage] = useState<number>(0);
   const size = 10;
+  const [isScrapped, setIsScrapped] = useState(false);
+  const [scrapCountState, setScrapCountState] = useState(0);
+  const { token, refreshToken } = useLoginStore();
+  const queryClient = useQueryClient();
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
@@ -62,6 +57,10 @@ export default function Page() {
 
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen(prev => !prev);
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(prev => !prev);
   };
 
   const handleSortChange = (value: string) => {
@@ -91,17 +90,43 @@ export default function Page() {
     () => fetchReviews(Number(id), sortType, page, size),
     {
       keepPreviousData: true,
-      onSuccess: data => {
-        if (data && data.content) {
-          setReviewCount(Number(id), data.content.length);
-        }
-      },
     },
   );
 
-  const { token, refreshToken } = useLoginStore();
+  // 스크랩 여부 데이터
+  const { data: scrapStatus, isLoading: isScrapLoading } = useQuery(
+    ['scrapStatus', id],
+    () => fetchScrap(Number(id), refreshToken as string),
+    {
+      enabled: !!id && !!refreshToken,
+    },
+  );
 
-  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (scrapStatus && scrapStatus.data) {
+      setScrapCountState(scrapStatus.data.scrapCount); // 초기화
+      setIsScrapped(scrapStatus.data.isScraped); // 스크랩 여부 초기화
+    }
+  }, [scrapStatus]);
+
+  const handleScrap = async () => {
+    if (!refreshToken) {
+      alert('로그인이 필요합니다!');
+      return;
+    }
+
+    try {
+      const result = await fetchScrap(Number(id), refreshToken); // API 호출
+
+      if (result?.success) {
+        queryClient.invalidateQueries(['scrapStatus', id]);
+      } else {
+        console.error('북마크 데이터 변경 실패');
+      }
+    } catch (error) {
+      console.error('스크랩 요청 실패:', error);
+    }
+  };
 
   const { mutate: handleLike, isLoading: isLiking } = useMutation(
     (reviewId: number) => reviewLike(reviewId, refreshToken as string),
@@ -387,12 +412,20 @@ export default function Page() {
 
                               {/* Comment */}
                               <div className="text-b3 px-[16px]">
-                                <span className="text-gray-900">{review.userName} &nbsp;</span>
-                                <span className="text-gray-800">{review.content}</span>
+                                <span className="inline text-gray-900">{review.userName}&nbsp;</span>
+                                <span
+                                  className={`text-gray-800 inline ${!isExpanded ? 'line-clamp-4 overflow-hidden' : ''}`}>
+                                  {review.content}
+                                </span>
+                                {!isExpanded && review.content.split('\n').length > 4 && (
+                                  <button onClick={toggleExpand} className="inline ml-2 text-blue-500 cursor-pointer">
+                                    더보기
+                                  </button>
+                                )}
                               </div>
 
                               {/* Like Button */}
-                              <div className="flex w-full justify-end mt-[4px] px-[16px]">
+                              <div className="flex w-full justify-end mt-[24px] px-[16px]">
                                 <LikeIconButton
                                   variant="inactive"
                                   value={review.likes}
@@ -421,8 +454,13 @@ export default function Page() {
 
         <footer className="sticky w-full bottom-0 py-[8px] bg-white flex px-[8px] h-[64px] gap-x-[12px] items-center ">
           <div className="flex items-center flex-col gap-x-[4px]">
-            <IconButton className={``} icon={'ic-bookmark'} size={'md'} onClick={() => {}} />
-            <p className="text-gray-400 text-c1">50</p>
+            <IconButton
+              className={``}
+              icon={isScrapped ? 'ic-bookmark-active' : 'ic-bookmark'}
+              size={'md'}
+              onClick={handleScrap}
+            />
+            <p className="text-gray-400 text-c1">{scrapCountState}</p>
           </div>
           <PrimaryButton
             variant={selectedTab === 'a' || !isReviewWritten ? 'enabled' : 'disabled'}

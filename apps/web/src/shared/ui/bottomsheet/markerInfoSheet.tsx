@@ -87,7 +87,7 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
         <div className="flex items-center mt-4 mb-8">
           <IconButton icon={'ic-star-active'} size={'smmd'} />
           <span className="ml-2 text-gray-900 text-b2">{markerData.rating}</span>
-          <span className="ml-8 text-gray-400 text-b5">방문자 리뷰 {markerData.scrapCount}</span>
+          <span className="ml-8 text-gray-400 text-b5">방문자 리뷰 {markerData.reviewCnt}</span>
         </div>
 
         <div className="mb-[14px]">

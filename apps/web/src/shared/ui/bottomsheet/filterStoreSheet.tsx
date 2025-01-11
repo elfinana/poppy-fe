@@ -28,8 +28,8 @@ import FilterSheet from './filterSheet';
 import MarkerInfoSheet from './markerInfoSheet';
 import { useRouter } from 'next/navigation';
 import { BottomSheetTitle } from './bottomsheet';
-import { useReviewStore } from 'store/review/reviewStore';
 import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
+import { storeData } from '@/src/views/book/const';
 
 type FilterStoreSheetProps = {
   isOpen: boolean;
@@ -43,7 +43,6 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
   const [sortedData, setSortedData] = useState(data);
   const [activeTab, setActiveTab] = React.useState<string>('c');
   const [testOpen, setTestOpen] = React.useState(false);
-  const { reviewCounts } = useReviewStore();
   const [isLoading, setIsLoading] = useState(true);
 
   const sort = ['조회 순', '리뷰 많은 순', '오픈일순', '종료일순'];
@@ -55,11 +54,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
         sorted.sort((a, b) => b.viewCount - a.viewCount);
         break;
       case '리뷰 많은 순':
-        sorted.sort((a, b) => {
-          const reviewCountA = reviewCounts[a.id] || 0;
-          const reviewCountB = reviewCounts[b.id] || 0;
-          return reviewCountB - reviewCountA;
-        });
+        sorted.sort((a, b) => b.scrapCount - a.scrapCount);
         break;
       case '오픈일순':
         sorted.sort((a, b) => {
@@ -100,12 +95,9 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
     location: string[];
     rating: string;
     category: string[];
-  }) => {
-    console.log('필터 적용:', filters);
-  };
+  }) => {};
   useEffect(() => {
     setSortedData(data);
-    console.log('Initial sortedData:', data); // 데이터 초기화 시 출력
   }, [data]);
 
   return (
@@ -180,7 +172,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                 {sortedData.map((store, index) => (
                   <div key={index} className={index > 0 ? 'mt-32' : ''} onClick={() => handleItemClick(store.id)}>
                     <ImageSlider images={store.imageUrls} />
-                    <div className="flex flex-row justify-between items-center mt-[8px]">
+                    <div className="flex flex-row items-center justify-between pt-8">
                       <span className="text-h2">{store.name}</span>
                       {store.isActive ? (
                         <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
@@ -209,7 +201,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                     <div className="flex items-center mt-4">
                       <IconButton icon={'ic-star-active'} size={'smmd'} />
                       <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>
-                      <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {reviewCounts[store.id]}</span>
+                      <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {store.reviewCnt}</span>
                     </div>
                   </div>
                 ))}

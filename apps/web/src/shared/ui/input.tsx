@@ -36,7 +36,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const [charCount, setCharCount] = React.useState<number>(0);
     const [message, setMessage] = React.useState<string>('');
     const [messageColor, setMessageColor] = React.useState<string>('text-warning');
-    console.log(nickNameCheck);
+    // console.log(nickNameCheck);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
 
