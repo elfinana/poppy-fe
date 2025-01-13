@@ -40,7 +40,7 @@ export interface PopupStoreDetail {
 }
 
 export const fetchPopupStoreDetail = async (id: number): Promise<PopupStoreDetail> => {
-  const response = await fetch(`http://pop-py.duckdns.org/popup-stores/detail/${id}`);
+  const response = await fetch(`https://pop-py.duckdns.org/popup-stores/detail/${id}`);
   if (!response.ok) {
     throw new Error('팝업스토어를 찾을 수 없습니다.');
   }

@@ -2,7 +2,7 @@ export const fetchScrap = async (storeId: number, accessToken: string): Promise<
   const options = {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: 'Bearer ' + accessToken,
     },
   };
 

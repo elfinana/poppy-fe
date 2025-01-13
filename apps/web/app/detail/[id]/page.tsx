@@ -34,8 +34,6 @@ export default function Page() {
   const { id } = useParams();
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isTruncated, setIsTruncated] = useState(false);
-  const contentRef = useRef<HTMLSpanElement>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const [sortType, setSortType] = useState<string>('RECENT');
@@ -43,8 +41,10 @@ export default function Page() {
   const size = 10;
   const [isScrapped, setIsScrapped] = useState(false);
   const [scrapCountState, setScrapCountState] = useState(0);
-  const { token, refreshToken } = useLoginStore();
+  const { token } = useLoginStore();
   const queryClient = useQueryClient();
+  const [isLiked, setIsLiked] = useState(false); // 좋아요 여부 관리
+  const [likeCount, setLikeCount] = useState(0);
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
@@ -80,7 +80,10 @@ export default function Page() {
     ['popupStoreDetail', id],
     () => fetchPopupStoreDetail(Number(id)),
     {
-      enabled: !!id,
+      onSuccess: data => {
+        setScrapCountState(data.scrapCount); // scrapCount 초기화
+        // setIsScrapped(data.isScrapped); // isScrapped 초기화
+      },
     },
   );
 
@@ -93,52 +96,91 @@ export default function Page() {
     },
   );
 
-  // 스크랩 여부 데이터
-  const { data: scrapStatus, isLoading: isScrapLoading } = useQuery(
-    ['scrapStatus', id],
-    () => fetchScrap(Number(id), refreshToken as string),
+  //리뷰좋아요api 연결
+  const { mutate: likeReview } = useMutation(
+    ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token), // reviewLike 호출
     {
-      enabled: !!id && !!refreshToken,
-    },
-  );
+      onSuccess: (data, variables) => {
+        console.log('좋아요 응답 데이터:', data); // 전체 응답 출력
+        console.log('좋아요 갯수:', data?.data?.likeCount); // 좋아요 갯수 출력
+        console.log('좋아요 여부:', data?.data?.liked); // 좋아요 여부 출력
 
-  useEffect(() => {
-    if (scrapStatus && scrapStatus.data) {
-      setScrapCountState(scrapStatus.data.scrapCount); // 초기화
-      setIsScrapped(scrapStatus.data.isScraped); // 스크랩 여부 초기화
-    }
-  }, [scrapStatus]);
+        // 서버와 동기화
 
-  const handleScrap = async () => {
-    if (!refreshToken) {
-      alert('로그인이 필요합니다!');
-      return;
-    }
-
-    try {
-      const result = await fetchScrap(Number(id), refreshToken); // API 호출
-
-      if (result?.success) {
-        queryClient.invalidateQueries(['scrapStatus', id]);
-      } else {
-        console.error('북마크 데이터 변경 실패');
-      }
-    } catch (error) {
-      console.error('스크랩 요청 실패:', error);
-    }
-  };
-
-  const { mutate: handleLike, isLoading: isLiking } = useMutation(
-    (reviewId: number) => reviewLike(reviewId, refreshToken as string),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['reviews', id]);
+        // 좋아요 상태 업데이트
+        setLikeCount(data?.data?.likeCount ?? 0);
+        setIsLiked(data?.data?.liked ?? false);
+        queryClient.invalidateQueries(['likeStatus', variables.reviewId]);
       },
       onError: error => {
         console.error('좋아요 실패:', error);
       },
     },
   );
+
+  const handleLike = (reviewId: number) => {
+    if (!token) {
+      console.error('로그인이 필요합니다.');
+      return;
+    }
+    likeReview({ reviewId, token });
+  };
+
+  //스크랩
+  useQuery(
+    ['scrapStatus', Number(id)],
+    async () => {
+      // 북마크 API로 스크랩 상태와 카운트 가져오기
+      const response = await fetchScrap(Number(id), token as string);
+      return response;
+    },
+    {
+      enabled: !!token,
+      onSuccess: data => {
+        setIsScrapped(data.isScrapped); // 스크랩 여부 초기화
+        setScrapCountState(data.scrapCount); // 스크랩 카운트 초기화
+      },
+      onError: error => {
+        console.error('스크랩 상태 가져오기 실패:', error);
+      },
+    },
+  );
+
+  const { mutate: toggleScrap } = useMutation(
+    async () => {
+      return await fetchScrap(Number(id), token as string);
+    },
+    {
+      onMutate: async () => {
+        // 기존 데이터 저장
+        const previousData = { isScrapped, scrapCountState };
+
+        // 낙관적 업데이트 적용
+        setScrapCountState(prev => (isScrapped ? prev - 1 : prev + 1));
+        setIsScrapped(prev => !prev);
+
+        // 반환값으로 이전 데이터를 저장 (오류 발생 시 복구 가능)
+        return { previousData };
+      },
+      onError: (err, variables, context) => {
+        // 오류 발생 시 이전 상태로 복구
+        if (context?.previousData) {
+          setIsScrapped(context.previousData.isScrapped);
+          setScrapCountState(context.previousData.scrapCountState);
+        }
+        console.error('스크랩 요청 실패:', err);
+      },
+      onSettled: () => {
+        // 요청 완료 후 캐시 무효화
+        queryClient.invalidateQueries(['popupStoreDetail', id]);
+      },
+    },
+  );
+
+  const handleScrap = () => {
+    console.log(token);
+    toggleScrap(); // 스크랩 요청 실행
+  };
 
   const userNickname = useUserInfo(state => {
     return state.userInfoData.length > 0 ? state.userInfoData[0].userNickname : undefined;
@@ -428,13 +470,8 @@ export default function Page() {
                               <div className="flex w-full justify-end mt-[24px] px-[16px]">
                                 <LikeIconButton
                                   variant="inactive"
-                                  value={review.likes}
-                                  onClick={() => {
-                                    console.log('Like button clicked:', review.id);
-                                    if (!isLiking) {
-                                      handleLike(review.id);
-                                    }
-                                  }}
+                                  value={likeCount}
+                                  onClick={() => handleLike(review.id)}
                                 />
                               </div>
                               <Hr variant="heavy" className="mt-24" />

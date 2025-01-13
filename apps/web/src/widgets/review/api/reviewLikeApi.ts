@@ -1,7 +1,16 @@
+interface ReviewLikeResponse {
+  success: boolean; // 요청 성공 여부
+  message: string; // 성공 또는 실패 메시지
+  data: {
+    likeCount: number; // 좋아요 개수
+    liked: boolean; // 좋아요 여부
+  };
+}
+
 export const reviewLike = async (
   reviewId: number,
   accessToken: string, // 액세스 토큰을 매개변수로 추가
-): Promise<any> => {
+): Promise<ReviewLikeResponse> => {
   const options = {
     method: 'POST',
     headers: {
@@ -13,11 +22,18 @@ export const reviewLike = async (
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/reviews/${reviewId}/like`, options);
 
     if (!response.ok) {
-      throw new Error('리뷰 작성에 실패했습니다.');
+      throw new Error('좋아요 요청 실패');
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    // API 응답 형식이 예상과 다르면 오류 처리
+    if (!result || typeof result.success !== 'boolean' || typeof result.data !== 'object') {
+      throw new Error('응답 데이터 형식이 잘못되었습니다.');
+    }
+
+    return result;
   } catch (e) {
-    throw new Error('Failed to create review: ' + (e instanceof Error ? e.message : 'Unknown error'));
+    throw new Error('좋아요 요청 실패: ' + (e instanceof Error ? e.message : 'Unknown error'));
   }
 };
