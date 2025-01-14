@@ -1,6 +1,6 @@
 import BookCompletedPage from '@/src/views/book/BookCompletedPage';
 
-const page = ({ params: { id } }: { params: { id: number } }) => {
+const page = () => {
   return <BookCompletedPage />;
 };
 
