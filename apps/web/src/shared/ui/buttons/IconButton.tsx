@@ -44,6 +44,7 @@ export interface ButtonProps
     | 'ic-info-location'
     | 'ic-info-share'
     | 'ic-info-time'
+    | 'ic-info-bluetime'
     | 'ic-search'
     | 'ic-share'
     | 'ic-star'
@@ -55,6 +56,9 @@ export interface ButtonProps
     | 'reload'
     | 'search'
     | 'searchLarge'
+    | 'ic-noti-cal'
+    | 'ic-noti-wait'
+    | 'ic-noti-locate'
     | 'setting';
 }
 

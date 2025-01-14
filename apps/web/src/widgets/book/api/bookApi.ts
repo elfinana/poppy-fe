@@ -1,4 +1,5 @@
-import { BookData } from '../model/bookData';
+import { PopupListItem } from '../../home';
+import { BookData, ReservationData } from '../model/bookData';
 
 const BASE_URL = 'http://pop-py.duckdns.org';
 type UserData = {
@@ -39,9 +40,9 @@ export const getUserData = async (): Promise<UserData> => {
   }
 };
 
-export const getPopupDetail = async (id: number) => {
+export const getPopupDetail = async (id: number): Promise<PopupListItem> => {
   try {
-    const response = await fetch(`http://pop-py.duckdns.org/popup-stores/${id}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${id}`);
     const result = await response.json();
 
     // 'data' 필드가 있는 경우 반환
@@ -56,7 +57,7 @@ export const getPopupDetail = async (id: number) => {
   }
 };
 
-export const postReservation = async (bookData: BookData) => {
+export const postReservation = async (bookData: BookData, token: string) => {
   if (!bookData.time || !bookData.date) return;
   const requestBody = {
     popupStoreId: bookData.popupStoreId,
@@ -64,9 +65,9 @@ export const postReservation = async (bookData: BookData) => {
     time: convertTimeFormat(bookData.time),
     person: bookData.person,
   };
-  const token = await getToken();
+
   try {
-    const response = await fetch(`${BASE_URL}/reservation`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/reservation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -75,16 +76,9 @@ export const postReservation = async (bookData: BookData) => {
       body: JSON.stringify(requestBody),
     });
 
-    // 응답 상태 코드 확인
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error response:', errorText);
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const result = await response.json();
 
-    return result.data || result;
+    return result;
   } catch (e) {
     console.error('Reservation error:', e);
     throw e;
@@ -116,21 +110,55 @@ export const convertTimeFormat = (koreanTime: string): string => {
   return `${hour.toString().padStart(2, '0')}:${minutes}`;
 };
 
-export const successPayment = async (orderId: string, amount: string, paymentKey: string): Promise<BookData> => {
-  const token = await getToken();
-  console.log(token);
+export const successPayment = async (
+  orderId: string,
+  amount: string,
+  paymentKey: string,
+  token: string,
+): Promise<BookData> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   try {
-    const response = await fetch(`${BASE_URL}/success?orderId=${orderId}&paymentKey=${paymentKey}&amount=${amount}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/payments/success?orderId=${orderId}&paymentKey=${paymentKey}&amount=${amount}`,
+      options,
+    );
     const result = await response.json();
-    return result.data;
+    if (result && result.data) return result.data;
+
+    throw new Error('Response does not contain a data field');
   } catch (e) {
     console.error('Reservation error:', e);
     throw e;
+  }
+};
+
+export const getReservationDetail = async (reservationId: string, accessToken: string): Promise<ReservationData> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  };
+
+  try {
+    if (!accessToken) throw new Error('accessToken is empty');
+    if (!reservationId) throw new Error('reservationId is empty');
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/reservations/${reservationId}`, options);
+    const result = await response.json();
+
+    if (result && result.data) {
+      return result.data;
+    }
+
+    throw new Error('Response does not contain a data field');
+  } catch (e) {
+    throw new Error('Failed to fetch data');
   }
 };

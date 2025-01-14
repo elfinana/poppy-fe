@@ -1,16 +1,47 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Image from "next/legacy/image";
 import Link from 'next/link';
+import { useQuery } from 'react-query';
+import { getLoginToken } from '@/src/widgets/login';
+
+import React from 'react';
+import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 
 export default function Page() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { setToken, setRefreshToken } = useLoginStore();
+  const { setUserInfo, userInfoData } = useUserInfo();
+  const code = searchParams.get('code'); // code state
 
   // 네이버 로그인 이벤트
-  const handleButtonClick = () => {
-    router.push('signup');
+  const handleButtonClick = async () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_CLIENT_URL}/oauth2/authorization/naver`;
   };
+
+  // URL의 쿼리 파라미터로부터 토큰 및 사용자 정보 처리
+  const { data, error, isLoading } = useQuery(['loginToken', code], () => getLoginToken(code || ''), {
+    enabled: !!code, // code가 있을 때만 실행
+    onSuccess: res => {
+      setToken(res.data.accessToken);
+      setRefreshToken(res.data.refreshToken);
+      setUserInfo([
+        {
+          userEmail: res.data.userEmail,
+          userNickname: res.data.nickname,
+        },
+      ]);
+
+      router.push('/home');
+    },
+    onError: (error: any) => {
+      console.error('Failed to fetch login token:', error.message);
+    },
+  });
+
+  console.log(userInfoData);
 
   return (
     <div className="flex flex-col items-center w-full h-full">

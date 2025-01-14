@@ -1,8 +1,7 @@
 'use client';
 
+import { Input, Textarea } from '@/src/shared';
 import React from 'react';
-
-import { Input, Textarea, IconButton, Calendar } from '../../src/shared/index';
 
 type Props = {};
 
@@ -17,7 +16,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col w-full gap-4">
-      <Input label="닉네임" existingName={data.nickName} />
+      <Input label="닉네임" />
       <Textarea />
       <Input variantType="search" onClick={handleClick} />
     </div>

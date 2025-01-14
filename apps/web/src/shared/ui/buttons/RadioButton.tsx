@@ -38,18 +38,23 @@ export interface RadioProps
 }
 
 const RadioGroupItem = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>, RadioProps>(
-  ({ className, size, label, id, ...props }, ref) => {
+  ({ className, size, label, id, onChange, ...props }, ref) => {
     const itemId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
-      <div className="flex items-center gap-2">
-        <RadioGroupPrimitive.Item ref={ref} className={cn(radioVariants({ size, className }))} id={itemId} {...props}>
+      <div className="flex items-center gap-8">
+        <RadioGroupPrimitive.Item
+          ref={ref}
+          className={cn(radioVariants({ size, className }))}
+          id={itemId}
+          onChange={onChange}
+          {...props}>
           <RadioGroupPrimitive.Indicator>
             {size === 'lg' ? <Radio20Active /> : <Radio16Active />}
           </RadioGroupPrimitive.Indicator>
         </RadioGroupPrimitive.Item>
         {label && (
-          <label htmlFor={itemId} className="text-sm text-gray-800 cursor-pointer">
+          <label htmlFor={itemId} className="text-sm text-gray-800 cursor-pointer ">
             {label}
           </label>
         )}
