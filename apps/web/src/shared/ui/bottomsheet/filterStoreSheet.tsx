@@ -19,6 +19,7 @@ import {
   BottomSheetHeader,
   BottomSheetDescription,
   Skeleton,
+  StatusLabel,
 } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { Sort } from '@/public';
@@ -30,6 +31,7 @@ import { useRouter } from 'next/navigation';
 import { BottomSheetTitle } from './bottomsheet';
 import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
 import { storeData } from '@/src/views/book/const';
+import { operations } from '../../lib/operations';
 
 type FilterStoreSheetProps = {
   isOpen: boolean;
@@ -126,7 +128,7 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
             </div>
           ) : sortedData && sortedData.length > 0 ? (
             <>
-              <div className="flex items-center justify-end py-12 text-gray-500 text-b2 ">
+              <div className="flex items-center justify-end py-12 text-gray-500 text-b2">
                 <AlertDialog>
                   <AlertDialogTrigger variant="enabled" asChild>
                     <button className="flex items-center gap-4 mr-16">
@@ -143,14 +145,14 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                             className="flex flex-col"
                             value={selectedOption}
                             onValueChange={value => setSelectedOption(value)}>
-                            {sort.map((sort, index) => (
+                            {sort.map((sortOption, index) => (
                               <div key={index} className="flex items-center">
                                 <RadioGroupItem
                                   size="lg"
-                                  value={sort}
-                                  label={sort}
-                                  checked={selectedOption === sort}
-                                  onChange={() => setSelectedOption(sort)}
+                                  value={sortOption}
+                                  label={sortOption}
+                                  checked={selectedOption === sortOption}
+                                  onChange={() => setSelectedOption(sortOption)}
                                 />
                               </div>
                             ))}
@@ -158,7 +160,6 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                         </div>
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-
                     <AlertDialogFooter>
                       <AlertDialogCancel>취소</AlertDialogCancel>
                       <AlertDialogAction variant="informative" onClick={handleSort}>
@@ -168,24 +169,21 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
+
               <div className="max-h-[380px] mx-16 overflow-y-auto">
-                {sortedData.map((store, index) => (
-                  <div key={index} className={index > 0 ? 'mt-32' : ''} onClick={() => handleItemClick(store.id)}>
-                    <ImageSlider images={store.imageUrls} />
-                    <div className="flex flex-row items-center justify-between pt-8">
-                      <span className="text-h2">{store.name}</span>
-                      {store.isActive ? (
-                        <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
-                          <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-                          <p className="text-informative text-c1">영업 중</p>
-                        </div>
-                      ) : (
-                        <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
-                          <p className="text-purple-600 text-c1">영업종료</p>
-                        </div>
-                      )}
-                    </div>
-                    {
+                {sortedData.map((store, index) => {
+                  const status = operations(
+                    { hour: store.openingTime?.hour ?? 0, minute: store.openingTime?.minute ?? 0 },
+                    { hour: store.closingTime?.hour ?? 0, minute: store.closingTime?.minute ?? 0 },
+                  );
+
+                  return (
+                    <div key={index} className={index > 0 ? 'mt-32' : ''} onClick={() => handleItemClick(store.id)}>
+                      <ImageSlider images={store.imageUrls} />
+                      <div className="flex flex-row items-center justify-between pt-8">
+                        <span className="text-h2">{store.name}</span>
+                        <StatusLabel status={status} />
+                      </div>
                       <span className="text-gray-500 text-b3_com">
                         {`${formatDay({
                           year: store.startDate.year,
@@ -197,14 +195,14 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
                           day: store.endDate.day,
                         })}`}
                       </span>
-                    }
-                    <div className="flex items-center mt-4">
-                      <IconButton icon={'ic-star-active'} size={'smmd'} />
-                      <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>
-                      <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {store.reviewCnt}</span>
+                      <div className="flex items-center mt-4">
+                        <IconButton icon={'ic-star-active'} size={'smmd'} />
+                        <span className="ml-2 text-gray-900 text-b2">{store.rating}</span>
+                        <span className="ml-8 text-gray-400 text-b3">· 방문자 리뷰 {store.reviewCnt}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </>
           ) : (
@@ -215,7 +213,6 @@ const FilterStoreSheet = ({ isOpen, onClose, data, onResetFilter }: FilterStoreS
               <SecondaryButton size="sm" className="mt-[40px]" onClick={onResetFilter}>
                 필터 초기화하기
               </SecondaryButton>
-
               <FilterSheet
                 isOpen={testOpen}
                 onClose={() => setTestOpen(false)}

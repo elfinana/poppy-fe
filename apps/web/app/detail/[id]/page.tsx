@@ -15,7 +15,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/src/shared';
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo, useLayoutEffect } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import BookSheet from '@/src/widgets/book/BookSheet';
@@ -28,6 +28,7 @@ import { fetchPopupStoreDetail } from '@/src/widgets/detail/api/popupstoreDetail
 import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 import { reviewLike } from '@/src/widgets/review/api/reviewLikeApi';
 import { fetchScrap } from '@/src/widgets/detail/api/popupstroeScrapApi';
+import { operations } from '@/src/shared/lib/operations';
 
 export default function Page() {
   const router = useRouter();
@@ -45,6 +46,10 @@ export default function Page() {
   const queryClient = useQueryClient();
   const [isLiked, setIsLiked] = useState(false); // 좋아요 여부 관리
   const [likeCount, setLikeCount] = useState(0);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isMoreView, setIsMoreView] = useState(false);
+  const originalTextRef = useRef<HTMLDivElement>(null);
+  const [isEllipsed, setIsEllipsed] = useState(false);
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
@@ -101,12 +106,6 @@ export default function Page() {
     ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token), // reviewLike 호출
     {
       onSuccess: (data, variables) => {
-        console.log('좋아요 응답 데이터:', data); // 전체 응답 출력
-        console.log('좋아요 갯수:', data?.data?.likeCount); // 좋아요 갯수 출력
-        console.log('좋아요 여부:', data?.data?.liked); // 좋아요 여부 출력
-
-        // 서버와 동기화
-
         // 좋아요 상태 업데이트
         setLikeCount(data?.data?.likeCount ?? 0);
         setIsLiked(data?.data?.liked ?? false);
@@ -171,7 +170,6 @@ export default function Page() {
         console.error('스크랩 요청 실패:', err);
       },
       onSettled: () => {
-        // 요청 완료 후 캐시 무효화
         queryClient.invalidateQueries(['popupStoreDetail', id]);
       },
     },
@@ -197,7 +195,6 @@ export default function Page() {
     if (selectedTab === 'a') {
       toggleBottomSheet();
     } else {
-      console.log('Navigating to /review/'); // 네비게이션 실행 확인
       router.push(`/review/${id}`);
     }
   };
@@ -220,6 +217,33 @@ export default function Page() {
   const daysLeft = data?.endDate
     ? getDateDifference(formatDateToString(data.endDate), formatDateToString(todayDate))
     : null;
+
+  const status = operations(
+    {
+      hour: data?.openingTime?.hour ?? 0, // 기본값 0 설정
+      minute: data?.openingTime?.minute ?? 0, // 기본값 0 설정
+    },
+    {
+      hour: data?.closingTime?.hour ?? 0, // 기본값 0 설정
+      minute: data?.closingTime?.minute ?? 0, // 기본값 0 설정
+    },
+  );
+
+  useEffect(() => {
+    const contentHeight = textRef.current?.scrollHeight || 0; // 전체 텍스트 높이 계산
+    const visibleHeight = textRef.current?.clientHeight || 0; // 제한된 텍스트 높이
+
+    console.log('전체 텍스트 높이 (scrollHeight):', contentHeight);
+    console.log('제한된 텍스트 높이 (clientHeight):', visibleHeight);
+
+    // 제한된 높이보다 전체 텍스트 높이가 크면 "더보기" 버튼 표시
+    if (contentHeight > visibleHeight) {
+      setIsMoreView(true);
+      console.log('더보기 버튼 표시: true');
+    } else {
+      setIsMoreView(false);
+    }
+  }, []);
 
   const tabsA = [
     { value: 'a', label: '정보' },
@@ -308,7 +332,7 @@ export default function Page() {
                   <div className="flex gap-x-[8px] h-[24px] items-center">
                     <IconButton icon={'ic-info-time'} size={'sm'} />
                     <p className="text-gray-800 text-b3_com">
-                      {`${data?.isActive ? '영업 중' : '영업 종료'} · 매일 `}
+                      {`${status === 'operational' ? '영업 중' : '영업 종료'} · 매일 `}
                       {data?.openingTime?.hour?.toString().padStart(2, '0')}:
                       {data?.openingTime?.minute?.toString().padStart(2, '0')} -
                       {data?.closingTime?.hour?.toString().padStart(2, '0')}:
@@ -419,7 +443,7 @@ export default function Page() {
                     </div>
 
                     {selectedValue === 'visit' && (
-                      <div className="flex flex-col gap-y-[20px]">
+                      <div className="flex flex-col gap-y-[20px] mt-20">
                         {reviewData?.content && reviewData.content.length > 0 ? (
                           <div className="flex flex-col gap-y-[52px]">
                             {reviewData?.content?.map(review => (
@@ -454,12 +478,21 @@ export default function Page() {
                                 {/* Comment */}
                                 <div className="text-b3 px-[16px]">
                                   <span className="inline text-gray-900">{review.userName}&nbsp;</span>
+                                  {/* 텍스트 내용 */}
+                                  {/* 텍스트 내용 */}
                                   <span
-                                    className={`text-gray-800 inline ${!isExpanded ? 'line-clamp-4 overflow-hidden' : ''}`}>
+                                    ref={textRef}
+                                    className={`text-gray-800 block transition-all duration-300 ${
+                                      isExpanded ? 'max-h-full' : 'max-h-[60px] overflow-hidden'
+                                    }`}>
                                     {review.content}
                                   </span>
-                                  {!isExpanded && review.content.split('\n').length > 4 && (
-                                    <button onClick={toggleExpand} className="inline ml-2 text-blue-500 cursor-pointer">
+
+                                  {/* 더보기 버튼 */}
+                                  {isMoreView && !isExpanded && (
+                                    <button
+                                      onClick={() => setIsExpanded(true)} // "더보기" 버튼 클릭 시 전체 텍스트 보기
+                                      className="block mt-2 text-left text-blue-500 cursor-pointer">
                                       더보기
                                     </button>
                                   )}

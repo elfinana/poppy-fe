@@ -8,10 +8,12 @@ import {
   BottomSheetDescription,
   BottomSheetTitle,
   Skeleton,
+  StatusLabel,
 } from '@/src/shared';
 import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
 import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
+import { operations } from '../../lib/operations';
 
 type MarkerInfoSheetProps = {
   isOpen: boolean;
@@ -28,6 +30,11 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
       setIsLoading(false);
     }
   }, [markerData]);
+
+  const status = operations(
+    { hour: markerData.openingTime?.hour ?? 0, minute: markerData.openingTime?.minute ?? 0 },
+    { hour: markerData.closingTime?.hour ?? 0, minute: markerData.closingTime?.minute ?? 0 },
+  );
 
   if (isLoading) {
     return (
@@ -57,16 +64,7 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
         </BottomSheetHeader>
         <div className="flex flex-row justify-between items-center mt-[32px]">
           <span className="text-h2">{markerData.name}</span>
-          {markerData.isActive ? (
-            <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-blue-100 rounded-[20px] items-center justify-center">
-              <IconButton icon={'ic-info-bluetime'} size={'sm'} />
-              <p className="text-informative text-c1 ">영업 중</p>
-            </div>
-          ) : (
-            <div className="flex gap-x-[4px] h-[24px] w-[64px] bg-purple-100 rounded-[20px] items-center justify-center">
-              <p className="text-purple-600 text-c1">영업종료</p>
-            </div>
-          )}
+          <StatusLabel status={status} />
         </div>
 
         <span className="text-gray-500 text-b3_com">
