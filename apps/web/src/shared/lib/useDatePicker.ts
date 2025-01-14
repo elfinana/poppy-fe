@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { formatDateDotFormat } from './utils';
 
 const useDatePicker = () => {
-  const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
+  const [selectedDate, setSelectedDate] = useState<string>('');
 
   const onSelect = (date: Date | undefined) => {
     if (!date) return;
@@ -11,7 +11,7 @@ const useDatePicker = () => {
     // api ...
   };
   const onReset = () => {
-    setSelectedDate(undefined);
+    setSelectedDate('');
   };
 
   return { selectedDate, onSelect, onReset };

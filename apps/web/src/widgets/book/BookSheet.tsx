@@ -9,7 +9,6 @@ import {
 } from '@/src/shared';
 import React from 'react';
 import BookingForm from './ui/BookingForm';
-import useDatePicker from '@/src/shared/lib/useDatePicker';
 import { useRouter } from 'next/navigation';
 import useBooking from '@/src/shared/lib/useBooking';
 import { Time } from '@/src/entities/home/model/PopupData';

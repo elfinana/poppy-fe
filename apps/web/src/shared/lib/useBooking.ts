@@ -26,8 +26,10 @@ const useBooking = ({ popupId, openingTime, closingTime, price, storeName, addre
     price: price,
     address: address,
     popupStoreName: storeName,
+    thumbnail: '',
     person: 0,
     orderId: '',
+    reservationId: 0,
   });
 
   useEffect(() => {

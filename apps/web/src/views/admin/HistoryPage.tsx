@@ -12,8 +12,7 @@ type Props = {
 };
 
 const HistoryPage = (props: Props) => {
-  const selectedDate = '2024. 11. 19(화) 오후 12:00';
-  const { selectedDate: date, onSelect } = useDatePicker();
+  const { selectedDate, onSelect } = useDatePicker();
   const { time, onSelect: onSelectTime } = useTimeList({ hour: 9, minute: 0 }, { hour: 18, minute: 0 });
   const router = useRouter();
   const onClickHandler = () => {
@@ -24,7 +23,7 @@ const HistoryPage = (props: Props) => {
       <ChevronHeader title={props.title} edit={false} />
 
       <DatePicker
-        selectedDate={date}
+        selectedDate={new Date(selectedDate)}
         onDateChange={onSelect}
         className="mt-12 px-12 pt-[20px] pb-16 rounded-12 mx-12 border-[1px] border-gray-100 bg-white"
       />
