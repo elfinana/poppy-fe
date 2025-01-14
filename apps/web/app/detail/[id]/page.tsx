@@ -22,13 +22,9 @@ import { formatDay } from '@/src/shared/lib/dateUtils';
 import { Sort } from '@/public';
 import { fetchReviews } from '../api/reviewApi';
 import { SortSheet } from '@/src/shared/ui/bottomsheet/sortSheet';
-import { useUserInfo } from 'store/login/loginStore';
 
 export default function Page() {
   const router = useRouter();
-
-  const { userInfoData } = useUserInfo();
-  console.log(userInfoData);
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);

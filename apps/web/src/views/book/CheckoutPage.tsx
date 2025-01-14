@@ -34,7 +34,7 @@ const CheckoutPage = () => {
   const { token } = useLoginStore();
 
   const { userInfoData } = useUserInfo();
-  console.log(userInfoData);
+  if (!userInfoData || !userInfoData[0]) throw Error('userInfo is empty');
 
   const [paymentMethod, setPaymentMethod] = React.useState<string>('토스페이');
   const [checked, setChecked] = React.useState<{ [key: number]: boolean }>({

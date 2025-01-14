@@ -13,16 +13,11 @@ import {
   getVisitedList,
   getPlannedList,
 } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
-import { useUserInfo } from 'store/login/loginStore';
 
 type Props = {};
 
 const Page = (props: Props) => {
-  const { userInfoData } = useUserInfo();
-  console.log(userInfoData);
-
   return (
     <div>
       <div className="sticky top-0 z-50 w-full">
