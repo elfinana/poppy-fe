@@ -420,68 +420,71 @@ export default function Page() {
 
                     {selectedValue === 'visit' && (
                       <div className="flex flex-col gap-y-[20px]">
-                        <div className="mt-[24px]  px-[16px]"></div>
-
-                        <div className="flex flex-col gap-y-[52px]">
-                          {reviewData?.content?.map(review => (
-                            <div key={review.id}>
-                              {/* Rating and Date */}
-                              <div className="flex items-center justify-between mb-[8px] px-[16px]">
-                                <div className="flex items-center">
-                                  <IconButton className="mr-[4px]" icon="ic-star-active" size="sm" />
-                                  <p className="text-gray-900 text-h1">{review.rating.toFixed(1)}</p>
-                                </div>
-                                <p className="text-gray-300 text-b5">{review.date}</p>
-                              </div>
-
-                              {/* Image Section */}
-                              {review.imageUrls && review.imageUrls.length > 0 && (
-                                <div className="pl-[16px]">
-                                  <div className="flex gap-x-[2px] overflow-auto">
-                                    {review.imageUrls.map((imageSrc, index) => (
-                                      <Image
-                                        key={index}
-                                        width={160}
-                                        height={160}
-                                        src={imageSrc}
-                                        alt={`리뷰 이미지 ${index}`}
-                                        className="w-[160px] h-[160px] object-cover"
-                                      />
-                                    ))}
+                        {reviewData?.content && reviewData.content.length > 0 ? (
+                          <div className="flex flex-col gap-y-[52px]">
+                            {reviewData?.content?.map(review => (
+                              <div key={review.id}>
+                                {/* Rating and Date */}
+                                <div className="flex items-center justify-between mb-[8px] px-[16px]">
+                                  <div className="flex items-center">
+                                    <IconButton className="mr-[4px]" icon="ic-star-active" size="sm" />
+                                    <p className="text-gray-900 text-h1">{review.rating.toFixed(1)}</p>
                                   </div>
+                                  <p className="text-gray-300 text-b5">{review.date}</p>
                                 </div>
-                              )}
 
-                              {/* Comment */}
-                              <div className="text-b3 px-[16px]">
-                                <span className="inline text-gray-900">{review.userName}&nbsp;</span>
-                                <span
-                                  className={`text-gray-800 inline ${!isExpanded ? 'line-clamp-4 overflow-hidden' : ''}`}>
-                                  {review.content}
-                                </span>
-                                {!isExpanded && review.content.split('\n').length > 4 && (
-                                  <button onClick={toggleExpand} className="inline ml-2 text-blue-500 cursor-pointer">
-                                    더보기
-                                  </button>
+                                {/* Image Section */}
+                                {review.imageUrls && review.imageUrls.length > 0 && (
+                                  <div className="pl-[16px]">
+                                    <div className="flex gap-x-[2px] overflow-auto">
+                                      {review.imageUrls.map((imageSrc, index) => (
+                                        <Image
+                                          key={index}
+                                          width={160}
+                                          height={160}
+                                          src={imageSrc}
+                                          alt={`리뷰 이미지 ${index}`}
+                                          className="w-[160px] h-[160px] object-cover"
+                                        />
+                                      ))}
+                                    </div>
+                                  </div>
                                 )}
-                              </div>
 
-                              {/* Like Button */}
-                              <div className="flex w-full justify-end mt-[24px] px-[16px]">
-                                <LikeIconButton
-                                  variant="inactive"
-                                  value={likeCount}
-                                  onClick={() => handleLike(review.id)}
-                                />
+                                {/* Comment */}
+                                <div className="text-b3 px-[16px]">
+                                  <span className="inline text-gray-900">{review.userName}&nbsp;</span>
+                                  <span
+                                    className={`text-gray-800 inline ${!isExpanded ? 'line-clamp-4 overflow-hidden' : ''}`}>
+                                    {review.content}
+                                  </span>
+                                  {!isExpanded && review.content.split('\n').length > 4 && (
+                                    <button onClick={toggleExpand} className="inline ml-2 text-blue-500 cursor-pointer">
+                                      더보기
+                                    </button>
+                                  )}
+                                </div>
+
+                                {/* Like Button */}
+                                <div className="flex w-full justify-end mt-[24px] px-[16px]">
+                                  <LikeIconButton
+                                    variant="inactive"
+                                    value={likeCount}
+                                    onClick={() => handleLike(review.id)}
+                                  />
+                                </div>
+                                <Hr variant="heavy" className="mt-24" />
                               </div>
-                              <Hr variant="heavy" className="mt-24" />
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center mt-[50px]">
+                            <Image src="/empty/emptyreview.webp" alt="Empty Store" width={200} height={200} />
+                            <span className="text-gray-900 text-b1">작성한 리뷰가 없어요.</span>
+                          </div>
+                        )}
                       </div>
                     )}
-
-                    <div></div>
                   </div>
                 )}
               </TabsContent>
