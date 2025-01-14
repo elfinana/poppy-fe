@@ -44,8 +44,8 @@ export default function Page() {
   const [scrapCountState, setScrapCountState] = useState(0);
   const { token } = useLoginStore();
   const queryClient = useQueryClient();
-  const [isLiked, setIsLiked] = useState(false); // 좋아요 여부 관리
-  const [likeCount, setLikeCount] = useState(0);
+  const [likedState, setLikedState] = useState<{ [key: number]: boolean }>({});
+  const [likesState, setLikesState] = useState<{ [key: number]: number }>({});
   const textRef = useRef<HTMLDivElement>(null);
   const [isMoreView, setIsMoreView] = useState(false);
   const originalTextRef = useRef<HTMLDivElement>(null);
@@ -83,11 +83,11 @@ export default function Page() {
   //팝업스토어상세데이터터
   const { data, isLoading: isDetailLoading } = useQuery(
     ['popupStoreDetail', id],
-    () => fetchPopupStoreDetail(Number(id)),
+    () => fetchPopupStoreDetail(Number(id), token as string),
     {
       onSuccess: data => {
         setScrapCountState(data.scrapCount); // scrapCount 초기화
-        // setIsScrapped(data.isScrapped); // isScrapped 초기화
+        setIsScrapped(data.isScraped); // isScrapped 초기화
       },
     },
   );
@@ -95,24 +95,39 @@ export default function Page() {
   //리뷰데이터
   const { data: reviewData, isLoading: isReviewLoading } = useQuery(
     ['reviews', id, sortType],
-    () => fetchReviews(Number(id), sortType, page, size),
+    () => fetchReviews(Number(id), sortType, token as string, page, size),
     {
+      onSuccess: data => {
+        const initialLikedState = data.content.reduce((acc: { [key: number]: boolean }, review) => {
+          acc[review.id] = review.isLiked;
+          return acc;
+        }, {});
+
+        const initialLikesState = data.content.reduce((acc: { [key: number]: number }, review) => {
+          acc[review.id] = review.likes;
+          return acc;
+        }, {});
+
+        setLikedState(initialLikedState);
+        setLikesState(initialLikesState);
+      },
+
       keepPreviousData: true,
     },
   );
 
   //리뷰좋아요api 연결
   const { mutate: likeReview } = useMutation(
-    ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token), // reviewLike 호출
+    ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token as string), // reviewLike 호출
     {
-      onSuccess: (data, variables) => {
-        // 좋아요 상태 업데이트
-        setLikeCount(data?.data?.likeCount ?? 0);
-        setIsLiked(data?.data?.liked ?? false);
-        queryClient.invalidateQueries(['likeStatus', variables.reviewId]);
+      onSuccess: () => {
+        queryClient.invalidateQueries(['reviews', id, sortType]);
       },
       onError: error => {
-        console.error('좋아요 실패:', error);
+        console.error('좋아요 요청 실패:', error);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(['reviews', id, sortType]); // 리뷰 관련 쿼리 무효화
       },
     },
   );
@@ -126,47 +141,17 @@ export default function Page() {
   };
 
   //스크랩
-  useQuery(
-    ['scrapStatus', Number(id)],
-    async () => {
-      // 북마크 API로 스크랩 상태와 카운트 가져오기
-      const response = await fetchScrap(Number(id), token as string);
-      return response;
-    },
-    {
-      enabled: !!token,
-      onSuccess: data => {
-        setIsScrapped(data.isScrapped); // 스크랩 여부 초기화
-        setScrapCountState(data.scrapCount); // 스크랩 카운트 초기화
-      },
-      onError: error => {
-        console.error('스크랩 상태 가져오기 실패:', error);
-      },
-    },
-  );
-
   const { mutate: toggleScrap } = useMutation(
     async () => {
       return await fetchScrap(Number(id), token as string);
     },
     {
-      onMutate: async () => {
-        // 기존 데이터 저장
-        const previousData = { isScrapped, scrapCountState };
-
-        // 낙관적 업데이트 적용
-        setScrapCountState(prev => (isScrapped ? prev - 1 : prev + 1));
-        setIsScrapped(prev => !prev);
-
-        // 반환값으로 이전 데이터를 저장 (오류 발생 시 복구 가능)
-        return { previousData };
+      onSuccess: data => {
+        // 서버 응답으로 상태 강제 동기화
+        setScrapCountState(data.scrapCount);
+        setIsScrapped(data.isScraped);
       },
-      onError: (err, variables, context) => {
-        // 오류 발생 시 이전 상태로 복구
-        if (context?.previousData) {
-          setIsScrapped(context.previousData.isScrapped);
-          setScrapCountState(context.previousData.scrapCountState);
-        }
+      onError: err => {
         console.error('스크랩 요청 실패:', err);
       },
       onSettled: () => {
@@ -176,7 +161,6 @@ export default function Page() {
   );
 
   const handleScrap = () => {
-    console.log(token);
     toggleScrap(); // 스크랩 요청 실행
   };
 
@@ -220,18 +204,18 @@ export default function Page() {
 
   const status = operations(
     {
-      hour: data?.openingTime?.hour ?? 0, // 기본값 0 설정
-      minute: data?.openingTime?.minute ?? 0, // 기본값 0 설정
+      hour: data?.openingTime?.hour ?? 0,
+      minute: data?.openingTime?.minute ?? 0,
     },
     {
-      hour: data?.closingTime?.hour ?? 0, // 기본값 0 설정
-      minute: data?.closingTime?.minute ?? 0, // 기본값 0 설정
+      hour: data?.closingTime?.hour ?? 0,
+      minute: data?.closingTime?.minute ?? 0,
     },
   );
 
   useEffect(() => {
-    const contentHeight = textRef.current?.scrollHeight || 0; // 전체 텍스트 높이 계산
-    const visibleHeight = textRef.current?.clientHeight || 0; // 제한된 텍스트 높이
+    const contentHeight = textRef.current?.scrollHeight || 0;
+    const visibleHeight = textRef.current?.clientHeight || 0;
 
     console.log('전체 텍스트 높이 (scrollHeight):', contentHeight);
     console.log('제한된 텍스트 높이 (clientHeight):', visibleHeight);
@@ -501,8 +485,8 @@ export default function Page() {
                                 {/* Like Button */}
                                 <div className="flex w-full justify-end mt-[24px] px-[16px]">
                                   <LikeIconButton
-                                    variant="inactive"
-                                    value={likeCount}
+                                    variant={likedState[review.id] ? 'active' : 'inactive'}
+                                    value={likesState[review.id]}
                                     onClick={() => handleLike(review.id)}
                                   />
                                 </div>

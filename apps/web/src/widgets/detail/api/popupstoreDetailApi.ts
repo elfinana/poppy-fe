@@ -37,10 +37,18 @@ export interface PopupStoreDetail {
   scrapCount: number;
   isAlmostFull: boolean;
   viewCount: number;
+  reviewCnt: number;
+  isScraped: boolean;
 }
 
-export const fetchPopupStoreDetail = async (id: number): Promise<PopupStoreDetail> => {
-  const response = await fetch(`https://pop-py.duckdns.org/popup-stores/detail/${id}`);
+export const fetchPopupStoreDetail = async (id: number, accessToken: string): Promise<PopupStoreDetail> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer ' + accessToken,
+    },
+  };
+  const response = await fetch(`https://pop-py.duckdns.org/popup-stores/detail/${id}`, options);
   if (!response.ok) {
     throw new Error('팝업스토어를 찾을 수 없습니다.');
   }
