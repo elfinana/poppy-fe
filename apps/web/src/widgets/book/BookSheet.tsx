@@ -74,6 +74,12 @@ const BookSheet = (props: Props) => {
         .catch(err => {
           alert(JSON.stringify(err));
         });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: '예약 불가',
+        description: '로그인 세션이 만료되었습니다.',
+      });
     }
   };
 

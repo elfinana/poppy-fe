@@ -191,12 +191,12 @@ const CheckoutPage = () => {
                 </label>
               </div>
             </div>
-            <div className="flex items-center gap-8">
+            {/* <div className="flex items-center gap-8">
               <RadioGroupItem value="현장에서 결제" size="lg" id="현장에서 결제" />
               <label className="text-gray-800 text-b1" htmlFor="현장에서 결제">
                 현장에서 결제
               </label>
-            </div>
+            </div> */}
           </RadioGroup>
         </div>
       </div>
