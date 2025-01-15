@@ -13,7 +13,6 @@ import {
   getVisitedList,
   getPlannedList,
 } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
 
 type Props = {};
@@ -21,7 +20,7 @@ type Props = {};
 const Page = (props: Props) => {
   return (
     <div>
-      <div className="w-full sticky top-0 z-50">
+      <div className="sticky top-0 z-50 w-full">
         <HomeHeader />
       </div>
       <div className="w-full">
@@ -30,7 +29,7 @@ const Page = (props: Props) => {
       <div className="w-full px-16">
         <CategoryIconList />
       </div>
-      <div className="flex flex-col gap-y-48 mt-48 mb-bottomMargin">
+      <div className="flex flex-col mt-48 gap-y-48 mb-bottomMargin">
         <div className="w-full">
           <div className="flex flex-col w-full gap-y-12">
             <Title text1="지금 많이 찾는 팝업" category={6} />

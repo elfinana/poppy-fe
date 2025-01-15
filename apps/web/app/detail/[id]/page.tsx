@@ -13,12 +13,11 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/src/shared';
-import { useRef, useEffect, useState, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from 'react';
+import { useRef, useState } from 'react';
 import { useDetailStore } from 'store/detail/detailStore';
 import { useQuery } from 'react-query';
 import BookSheet from '@/src/widgets/book/BookSheet';
 import { fetchPopupStoreDetail } from '../api/popupstoreDetailApi';
-import AddressMap from '@/app/map/addressMap';
 import { formatDay } from '@/src/shared/lib/dateUtils';
 import { Sort } from '@/public';
 import { fetchReviews } from '../api/reviewApi';
@@ -93,7 +92,10 @@ export default function Page() {
     };
 
     const daysLeft = data?.endDate
-      ? getDateDifference({ year: data.endDate.year, month: data.endDate.month, day: data.endDate.day }, todayDate)
+      ? getDateDifference(
+          `${data.endDate.year}${data.endDate.month}${data.endDate.day}`,
+          `${todayDate.year}${todayDate.month}${todayDate.day}`,
+        )
       : null;
 
     return (
@@ -233,7 +235,7 @@ export default function Page() {
                         <div className="flex flex-col gap-y-[12px]">
                           {/* 지도 api 수정 */}
 
-                          <AddressMap address={data?.address || ''} />
+                          {/* <AddressMap address={data?.address || ''} /> */}
                           <div className="flex gap-x-[4px]">
                             <p ref={addressRef} className="text-gray-900 text-b3_com">
                               {data?.address}
@@ -323,7 +325,7 @@ export default function Page() {
             </Tabs>
           </section>
 
-          {
+          {data && (
             <footer className="sticky w-full bottom-0 py-[8px] bg-white flex px-[8px] h-[64px] gap-x-[12px] items-center ">
               <div className="flex items-center flex-col gap-x-[4px]">
                 <IconButton className={``} icon={'ic-bookmark'} size={'md'} onClick={() => {}} />
@@ -332,9 +334,18 @@ export default function Page() {
               <PrimaryButton variant={'enabled'} onClick={buttonHandle}>
                 {selectedTab === 'a' ? '예약하기' : '리뷰 남기기'}
               </PrimaryButton>
-              <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
+              <BookSheet
+                isBottomSheetOpen={isBottomSheetOpen}
+                setIsBottomSheetOpen={setIsBottomSheetOpen}
+                popupId={data.id}
+                openingTime={data.openingTime}
+                closingTime={data.closingTime}
+                price={data.price}
+                storeName={data.name}
+                address={data.address}
+              />
             </footer>
-          }
+          )}
         </div>
 
         <SortSheet

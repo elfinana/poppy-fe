@@ -3,6 +3,7 @@
 import '../styles/globals.css';
 import localFont from 'next/font/local';
 import { ReactQueryProvider } from './ReactQueryProvider';
+import { Toaster } from '@/src/shared/ui/toaster';
 
 const pretendard = localFont({
   src: '../public/fonts/PretendardVariable.woff2',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en">
         <body className={`min-w-[320px] h-screen max-w-[780px] ${pretendard.variable} font-pretendard`}>
           {children}
+          <Toaster />
         </body>
       </html>
     </ReactQueryProvider>

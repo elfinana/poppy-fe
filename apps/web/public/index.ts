@@ -111,3 +111,7 @@ import CheckIcon from './book/check.svg';
 import CheckActive from './book/check_active.svg';
 import bell from './images/bell.png';
 export { book, TossIcon, CheckIcon, CheckActive, bell };
+
+//detail
+import TextFilter from './icons/ic-text-filter.svg';
+export { TextFilter };

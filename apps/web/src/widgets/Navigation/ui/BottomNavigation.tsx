@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useLoginStore } from 'store/login/loginStore';
+import { useMenu } from 'store/bottomNavigation/menuStore';
 import { Home, AcHome, Search, AcSearch, Myplan, MyPage, AcMyPage, AcMyPlan } from '@/public';
 import {
   AlertDialog,
@@ -46,13 +47,14 @@ const navArr = [
 
 export const BottomNavigation = () => {
   const router = useRouter();
-  const [active, setActive] = useState('홈');
+  const { menu, setMenu } = useMenu();
+  const [active, setActive] = useState(menu);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [redirectPath, setRedirectPath] = useState<string | null>(null);
   const { token } = useLoginStore();
 
   const handleNavigation = (text: string, action: string, requiresAuth?: boolean) => {
-    setActive(text); // 클릭된 버튼을 활성화
+    setMenu(text); // 클릭된 버튼을 활성화
     if (requiresAuth && !token) {
       setRedirectPath(action);
       setDialogOpen(true);

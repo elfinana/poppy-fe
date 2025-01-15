@@ -5,6 +5,8 @@ type Props = {
   className?: string;
 };
 
+/**@description heavy = 16px | bold = 8px | regular = 4px | light = 2px | hairline = 1px
+ */
 export const Hr = (props: Props) => {
   switch (props.variant) {
     case 'heavy':
