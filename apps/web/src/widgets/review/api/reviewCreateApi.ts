@@ -6,7 +6,7 @@ export const createReview = async (
   const options = {
     method: 'POST',
     headers: {
-      Authorization: 'Bearer ' + accessToken,
+      Authorization: `Bearer ${accessToken}`,
     },
     body: formData, // form-data로 전달
   };

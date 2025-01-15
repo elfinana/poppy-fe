@@ -3,6 +3,7 @@
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
+  DateLabel,
   getDateDifference,
   Hr,
   IconButton,
@@ -80,54 +81,21 @@ export default function Page() {
     }
   };
 
-  //팝업스토어상세데이터터
-  const { data, isLoading: isDetailLoading } = useQuery(
-    ['popupStoreDetail', id],
-    () => fetchPopupStoreDetail(Number(id), token as string),
-    {
-      onSuccess: data => {
-        setScrapCountState(data.scrapCount); // scrapCount 초기화
-        setIsScrapped(data.isScraped); // isScrapped 초기화
-      },
-    },
-  );
-
-  //리뷰데이터
+  //리뷰조회데이터터
   const { data: reviewData, isLoading: isReviewLoading } = useQuery(
     ['reviews', id, sortType],
     () => fetchReviews(Number(id), sortType, token as string, page, size),
     {
-      onSuccess: data => {
-        const initialLikedState = data.content.reduce((acc: { [key: number]: boolean }, review) => {
-          acc[review.id] = review.isLiked;
-          return acc;
-        }, {});
-
-        const initialLikesState = data.content.reduce((acc: { [key: number]: number }, review) => {
-          acc[review.id] = review.likes;
-          return acc;
-        }, {});
-
-        setLikedState(initialLikedState);
-        setLikesState(initialLikesState);
-      },
-
       keepPreviousData: true,
     },
   );
 
-  //리뷰좋아요api 연결
+  //리뷰좋아요요
   const { mutate: likeReview } = useMutation(
-    ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token as string), // reviewLike 호출
+    ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['reviews', id, sortType]);
-      },
-      onError: error => {
-        console.error('좋아요 요청 실패:', error);
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(['reviews', id, sortType]); // 리뷰 관련 쿼리 무효화
       },
     },
   );
@@ -140,28 +108,29 @@ export default function Page() {
     likeReview({ reviewId, token });
   };
 
+  //팝업스토어상세데이터(안에 스크랩개수있음음)
+  const { data, isLoading: isDetailLoading } = useQuery(
+    ['popupStoreDetail', id],
+    () => fetchPopupStoreDetail(Number(id), token as string),
+    {
+      keepPreviousData: true,
+    },
+  );
+
   //스크랩
   const { mutate: toggleScrap } = useMutation(
     async () => {
       return await fetchScrap(Number(id), token as string);
     },
     {
-      onSuccess: data => {
-        // 서버 응답으로 상태 강제 동기화
-        setScrapCountState(data.scrapCount);
-        setIsScrapped(data.isScraped);
-      },
-      onError: err => {
-        console.error('스크랩 요청 실패:', err);
-      },
-      onSettled: () => {
+      onSuccess: () => {
         queryClient.invalidateQueries(['popupStoreDetail', id]);
       },
     },
   );
 
   const handleScrap = () => {
-    toggleScrap(); // 스크랩 요청 실행
+    toggleScrap();
   };
 
   const userNickname = useUserInfo(state => {
@@ -217,13 +186,13 @@ export default function Page() {
     const contentHeight = textRef.current?.scrollHeight || 0;
     const visibleHeight = textRef.current?.clientHeight || 0;
 
-    console.log('전체 텍스트 높이 (scrollHeight):', contentHeight);
-    console.log('제한된 텍스트 높이 (clientHeight):', visibleHeight);
+    // console.log('전체 텍스트 높이 (scrollHeight):', contentHeight);
+    // console.log('제한된 텍스트 높이 (clientHeight):', visibleHeight);
 
     // 제한된 높이보다 전체 텍스트 높이가 크면 "더보기" 버튼 표시
     if (contentHeight > visibleHeight) {
       setIsMoreView(true);
-      console.log('더보기 버튼 표시: true');
+      // console.log('더보기 버튼 표시: true');
     } else {
       setIsMoreView(false);
     }
@@ -271,9 +240,7 @@ export default function Page() {
               </>
             ) : (
               <>
-                <div className="flex items-center my-[12px] w-[64px] h-[24px] rounded-4 ">
-                  <p className="text-blue-500 text-c1">종료 D-{daysLeft}</p>
-                </div>
+                <DateLabel className="my-[12px] w-[64px] h-[24px]" status="operational" daysLeft={daysLeft ?? 0} />
 
                 <div className="flex flex-col gap-y-[8px]">
                   <p className="text-black text-h1">{data?.name}</p>
@@ -462,8 +429,7 @@ export default function Page() {
                                 {/* Comment */}
                                 <div className="text-b3 px-[16px]">
                                   <span className="inline text-gray-900">{review.userName}&nbsp;</span>
-                                  {/* 텍스트 내용 */}
-                                  {/* 텍스트 내용 */}
+
                                   <span
                                     ref={textRef}
                                     className={`text-gray-800 block transition-all duration-300 ${
@@ -475,7 +441,7 @@ export default function Page() {
                                   {/* 더보기 버튼 */}
                                   {isMoreView && !isExpanded && (
                                     <button
-                                      onClick={() => setIsExpanded(true)} // "더보기" 버튼 클릭 시 전체 텍스트 보기
+                                      onClick={() => setIsExpanded(true)}
                                       className="block mt-2 text-left text-blue-500 cursor-pointer">
                                       더보기
                                     </button>
@@ -485,8 +451,8 @@ export default function Page() {
                                 {/* Like Button */}
                                 <div className="flex w-full justify-end mt-[24px] px-[16px]">
                                   <LikeIconButton
-                                    variant={likedState[review.id] ? 'active' : 'inactive'}
-                                    value={likesState[review.id]}
+                                    variant={review.isLiked ? 'active' : 'inactive'}
+                                    value={review.likes}
                                     onClick={() => handleLike(review.id)}
                                   />
                                 </div>
@@ -513,16 +479,16 @@ export default function Page() {
           <div className="flex items-center flex-col gap-x-[4px]">
             <IconButton
               className={``}
-              icon={isScrapped ? 'ic-bookmark-active' : 'ic-bookmark'}
+              icon={data?.isScraped ? 'ic-bookmark-active' : 'ic-bookmark'}
               size={'md'}
               onClick={handleScrap}
             />
-            <p className="text-gray-400 text-c1">{scrapCountState}</p>
+            <p className="text-gray-400 text-c1">{data?.scrapCount}</p>
           </div>
           <PrimaryButton
             variant={selectedTab === 'a' || !isReviewWritten ? 'enabled' : 'disabled'}
             onClick={() => {
-              if (!isReviewWritten) buttonHandle;
+              if (!isReviewWritten) buttonHandle();
             }}>
             {selectedTab === 'a' ? '예약하기' : isReviewWritten ? '작성 완료' : '리뷰 남기기'}
           </PrimaryButton>

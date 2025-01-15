@@ -1,5 +1,5 @@
 interface ReviewLikeResponse {
-  success: boolean; // 요청 성공 여부
+  code: number; // 요청 성공 여부
   message: string; // 성공 또는 실패 메시지
   data: {
     likeCount: number; // 좋아요 개수
@@ -28,10 +28,15 @@ export const reviewLike = async (
     const result = await response.json();
 
     // API 응답 형식이 예상과 다르면 오류 처리
-    if (!result || typeof result.success !== 'boolean' || typeof result.data !== 'object') {
+    if (
+      !result ||
+      typeof result.code !== 'number' ||
+      typeof result.data !== 'object' ||
+      typeof result.data.liked !== 'boolean' ||
+      typeof result.data.likeCount !== 'number'
+    ) {
       throw new Error('응답 데이터 형식이 잘못되었습니다.');
     }
-
     return result;
   } catch (e) {
     throw new Error('좋아요 요청 실패: ' + (e instanceof Error ? e.message : 'Unknown error'));

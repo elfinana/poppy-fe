@@ -46,7 +46,6 @@ export default function Page() {
 
   const { id } = useParams();
   const { token } = useLoginStore();
-  console.log('토큰1', token);
 
   const handleSubmit = async () => {
     if (!isButtonEnabled || textareaValue.length > 300) return;
