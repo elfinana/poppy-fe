@@ -87,6 +87,7 @@ export default function Page() {
     () => fetchReviews(Number(id), sortType, token as string, page, size),
     {
       keepPreviousData: true,
+      enabled: !!id && !!token,
     },
   );
 
@@ -347,7 +348,7 @@ export default function Page() {
                       <div className="flex flex-col gap-y-[12px]">
                         {/* 지도 api 수정 */}
 
-                        <AddressMap address={data?.address || ''} />
+                        {data?.address ? <AddressMap address={data.address} /> : <div>로딩중...</div>}
                         <div className="flex gap-x-[4px]">
                           <p ref={addressRef} className="text-gray-900 text-b3_com">
                             {data?.address}
@@ -380,16 +381,17 @@ export default function Page() {
                     </div>
 
                     {selectedValue === 'visit' && (
-                      <div className="flex flex-col gap-y-[20px] mt-20">
+                      <div className="flex flex-col gap-y-[20px]">
                         {reviewData?.content && reviewData.content.length > 0 ? (
-                          <div className="flex flex-col gap-y-[52px]">
+                          <div className="flex flex-col">
                             {reviewData?.content?.map(review => (
                               <div key={review.id}>
                                 {/* Rating and Date */}
-                                <div className="flex items-center justify-between mb-[8px] px-[16px]">
+                                <div className="flex items-center justify-between mb-[8px] px-[16px] mt-20">
                                   <div className="flex items-center">
                                     <IconButton className="mr-[4px]" icon="ic-star-active" size="sm" />
                                     <p className="text-gray-900 text-h1">{review.rating.toFixed(1)}</p>
+                                    {/* 얘윗줄은머야??=!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
                                   </div>
                                   <p className="text-gray-300 text-b5">{review.date}</p>
                                 </div>

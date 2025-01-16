@@ -81,24 +81,6 @@ export default function Page() {
 
       {/* Content Area */}
       <div className="flex flex-col w-full h-full pt-[64px]">
-        {/* Card Area */}
-        <div className="flex gap-x-[12px]">
-          <Image width={64} height={64} src="/images/img-info-1.png" alt="info-img" />
-          <div className="flex flex-col gap-y-[8px]">
-            <span className="text-gray-900 text-h4">오둥이의22 아르바이트</span>
-            <div className="flex flex-col text-b5">
-              <span className="text-gray-400">
-                일정 <span className="text-gray-700 ml-[6px]">2024. 11. 18(월) 오후 1:30</span>
-              </span>
-              <span className="text-gray-400">
-                인원 <span className="text-gray-700 ml-[6px]">2명</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <hr className="mt-[16px] mb-[20px]" />
-
         {/* Star Area */}
         <div className="flex flex-col gap-y-[8px] mb-[32px]">
           <span className="text-gray-900 text-h4">방문하신 팝업스토어, 어떠셨나요?</span>
