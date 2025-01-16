@@ -32,12 +32,15 @@ export const fetchReviews = async (
 ): Promise<ReviewData> => {
   const url = `https://pop-py.duckdns.org/reviews/store/${id}?sortType=${sortType}&page=${page}&size=${size}`;
 
-  const options = {
+  const options: RequestInit = {
     method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    headers: accessToken
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      : undefined,
   };
+
   const response = await fetch(url, options);
   if (!response.ok) {
     throw new Error('리뷰 데이터를 가져오는 데 실패했습니다.');

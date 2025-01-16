@@ -41,12 +41,14 @@ export interface PopupStoreDetail {
   isScraped: boolean;
 }
 
-export const fetchPopupStoreDetail = async (id: number, accessToken: string): Promise<PopupStoreDetail> => {
-  const options = {
+export const fetchPopupStoreDetail = async (id: number, accessToken?: string): Promise<PopupStoreDetail> => {
+  const options: RequestInit = {
     method: 'GET',
-    headers: {
-      Authorization: 'Bearer ' + accessToken,
-    },
+    headers: accessToken
+      ? {
+          Authorization: 'Bearer ' + accessToken,
+        }
+      : undefined,
   };
   const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${id}`, options);
   if (!response.ok) {
