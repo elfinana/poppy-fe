@@ -493,7 +493,7 @@ export default function Page() {
                   ? '작성 완료'
                   : '리뷰 남기기'}
           </PrimaryButton>
-          <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
+          {/* <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} /> */}
         </footer>
       </div>
 
