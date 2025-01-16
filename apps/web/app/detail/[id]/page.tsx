@@ -91,7 +91,7 @@ export default function Page() {
     },
   );
 
-  //리뷰좋아요요
+  //리뷰좋아요
   const { mutate: likeReview } = useMutation(
     ({ reviewId, token }: { reviewId: number; token: string }) => reviewLike(reviewId, token),
     {
@@ -135,9 +135,17 @@ export default function Page() {
   };
 
   const userNickname = useUserInfo(state => {
-    const nickname = state.userInfoData.length > 0 ? state.userInfoData[0].userNickname : undefined;
-    return nickname;
+    if (state.userInfoData.length > 0) {
+      console.log('User Info Data:', state.userInfoData); // 데이터 확인
+      return state.userInfoData[0].userNickname || 'Guest';
+    }
+    // console.log('No user info data available');
+    return 'Guest';
   });
+
+  useEffect(() => {
+    console.log('Current user nickname:', userNickname); // 최종 닉네임 출력
+  }, [userNickname]);
 
   const isReviewWritten = useMemo(() => {
     if (!reviewData?.content || !userNickname) return false;
@@ -189,6 +197,26 @@ export default function Page() {
     { value: 'a', label: '정보' },
     { value: 'b', label: `리뷰 ${reviewData?.content.length}` },
   ];
+
+  //더보기 ㅅㅂ
+  const [showMoreButton, setShowMoreButton] = useState(false);
+  useEffect(() => {
+    if (textRef.current) {
+      const { scrollHeight, clientHeight, offsetHeight } = textRef.current;
+      console.log('Text Metrics:', { scrollHeight, clientHeight, offsetHeight });
+
+      const lineHeight = parseFloat(window.getComputedStyle(textRef.current).lineHeight || '0');
+      const lines = Math.round(scrollHeight / lineHeight);
+
+      console.log('Calculated lines:', lines);
+
+      if (lines > 3) {
+        setShowMoreButton(true);
+      } else {
+        setShowMoreButton(false);
+      }
+    }
+  }, [reviewData?.content]);
 
   return (
     <div className="flex flex-col items-center justify-between w-full h-full">
@@ -391,7 +419,6 @@ export default function Page() {
                                   <div className="flex items-center">
                                     <IconButton className="mr-[4px]" icon="ic-star-active" size="sm" />
                                     <p className="text-gray-900 text-h1">{review.rating.toFixed(1)}</p>
-                                    {/* 얘윗줄은머야??=!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
                                   </div>
                                   <p className="text-gray-300 text-b5">{review.date}</p>
                                 </div>
@@ -418,25 +445,10 @@ export default function Page() {
                                 <div className="text-b3 px-[16px]">
                                   <span className="inline text-gray-900">{review.userName}&nbsp;</span>
 
-                                  <p
-                                    ref={textRef}
-                                    className={`text-gray-800 block transition-all duration-300 ${
-                                      isExpanded
-                                        ? 'line-clamp-none'
-                                        : 'overflow-hidden text-ellipsis display-webkit-box webkit-line-clamp-3 webkit-box-orient-vertical'
-                                    }`}
-                                    style={{
-                                      display: '-webkit-box',
-                                      WebkitBoxOrient: 'vertical',
-                                      WebkitLineClamp: isExpanded ? 'none' : 3, // 원하는 줄 수
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                    }}>
-                                    {review.content}
-                                  </p>
+                                  <span>{review.content}</span>
 
                                   {/* 더보기 버튼 */}
-                                  {!isExpanded && (
+                                  {showMoreButton && !isExpanded && (
                                     <button
                                       onClick={() => setIsExpanded(true)}
                                       className="block mt-2 text-blue-500 cursor-pointer">

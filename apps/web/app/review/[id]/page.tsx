@@ -69,11 +69,6 @@ export default function Page() {
 
   const isButtonEnabled = textareaValue.length > 0 && star > 0;
 
-  const { data, isLoading: isBookDetailLoading } = useQuery(['bookDetail', id], () =>
-    fetchBookDetail(Number(id), token as string),
-  );
-  console.log('데이터확인', data);
-
   return (
     <div className="flex flex-col items-center w-full h-full px-[16px]">
       {/* Header */}

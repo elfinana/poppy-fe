@@ -42,8 +42,6 @@ const AddressMap = ({ address }: AddressMapProps) => {
           return;
         }
 
-        console.log('Geocoding Service is available');
-
         const searchAddressToCoordinate = (
           address: string,
           callback: (lat: number | null, lng: number | null) => void,
