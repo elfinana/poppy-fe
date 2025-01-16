@@ -134,7 +134,8 @@ export default function Page() {
   };
 
   const userNickname = useUserInfo(state => {
-    return state.userInfoData.length > 0 ? state.userInfoData[0].userNickname : undefined;
+    const nickname = state.userInfoData.length > 0 ? state.userInfoData[0].userNickname : undefined;
+    return nickname;
   });
 
   const isReviewWritten = useMemo(() => {
@@ -182,22 +183,7 @@ export default function Page() {
     },
   );
 
-  useEffect(() => {
-    const contentHeight = textRef.current?.scrollHeight || 0;
-    const visibleHeight = textRef.current?.clientHeight || 0;
-
-    // console.log('전체 텍스트 높이 (scrollHeight):', contentHeight);
-    // console.log('제한된 텍스트 높이 (clientHeight):', visibleHeight);
-
-    // 제한된 높이보다 전체 텍스트 높이가 크면 "더보기" 버튼 표시
-    if (contentHeight > visibleHeight) {
-      setIsMoreView(true);
-      // console.log('더보기 버튼 표시: true');
-    } else {
-      setIsMoreView(false);
-    }
-  }, []);
-
+  const MAX_LINES = 4;
   const tabsA = [
     { value: 'a', label: '정보' },
     { value: 'b', label: `리뷰 ${reviewData?.content.length}` },
@@ -430,19 +416,28 @@ export default function Page() {
                                 <div className="text-b3 px-[16px]">
                                   <span className="inline text-gray-900">{review.userName}&nbsp;</span>
 
-                                  <span
+                                  <p
                                     ref={textRef}
                                     className={`text-gray-800 block transition-all duration-300 ${
-                                      isExpanded ? 'max-h-full' : 'max-h-[60px] overflow-hidden'
-                                    }`}>
+                                      isExpanded
+                                        ? 'line-clamp-none'
+                                        : 'overflow-hidden text-ellipsis display-webkit-box webkit-line-clamp-3 webkit-box-orient-vertical'
+                                    }`}
+                                    style={{
+                                      display: '-webkit-box',
+                                      WebkitBoxOrient: 'vertical',
+                                      WebkitLineClamp: isExpanded ? 'none' : 3, // 원하는 줄 수
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}>
                                     {review.content}
-                                  </span>
+                                  </p>
 
                                   {/* 더보기 버튼 */}
-                                  {isMoreView && !isExpanded && (
+                                  {!isExpanded && (
                                     <button
                                       onClick={() => setIsExpanded(true)}
-                                      className="block mt-2 text-left text-blue-500 cursor-pointer">
+                                      className="block mt-2 text-blue-500 cursor-pointer">
                                       더보기
                                     </button>
                                   )}
@@ -490,7 +485,13 @@ export default function Page() {
             onClick={() => {
               if (!isReviewWritten) buttonHandle();
             }}>
-            {selectedTab === 'a' ? '예약하기' : isReviewWritten ? '작성 완료' : '리뷰 남기기'}
+            {selectedTab === 'a' && data?.reservationType === 'OFFLINE'
+              ? '대기하기'
+              : selectedTab === 'a' && data?.reservationType === 'ONLINE'
+                ? '예약하기'
+                : selectedTab === 'b' && isReviewWritten
+                  ? '작성 완료'
+                  : '리뷰 남기기'}
           </PrimaryButton>
           <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} />
         </footer>

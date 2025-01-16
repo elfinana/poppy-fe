@@ -73,6 +73,8 @@ const Page = (props: Props) => {
   React.useEffect(() => {
     const script = document.createElement('script');
     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr&submodules=geocoder&callback=initMap`;
+    // script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=BQWHygOSqhKLtydUBlEJ&submodules=geocoder&callback=initMap`;
+
     script.async = true;
 
     window.initMap = () => {

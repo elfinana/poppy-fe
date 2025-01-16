@@ -7,6 +7,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Camera, ImageDelete } from '@/public';
 import { createReview } from '@/src/widgets/review/api/reviewCreateApi';
 import { useLoginStore, useUserInfo } from 'store/login/loginStore';
+import { useQuery } from 'react-query';
+import { fetchBookDetail } from '@/src/widgets/book/api/bookDetailApi';
 
 export default function Page() {
   const [textareaValue, setTextareaValue] = useState('');
@@ -66,6 +68,11 @@ export default function Page() {
   };
 
   const isButtonEnabled = textareaValue.length > 0 && star > 0;
+
+  const { data, isLoading: isBookDetailLoading } = useQuery(['bookDetail', id], () =>
+    fetchBookDetail(Number(id), token as string),
+  );
+  console.log('데이터확인', data);
 
   return (
     <div className="flex flex-col items-center w-full h-full px-[16px]">

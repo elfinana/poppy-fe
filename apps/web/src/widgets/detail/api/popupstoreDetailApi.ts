@@ -48,7 +48,7 @@ export const fetchPopupStoreDetail = async (id: number, accessToken: string): Pr
       Authorization: 'Bearer ' + accessToken,
     },
   };
-  const response = await fetch(`https://pop-py.duckdns.org/popup-stores/detail/${id}`, options);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${id}`, options);
   if (!response.ok) {
     throw new Error('팝업스토어를 찾을 수 없습니다.');
   }
