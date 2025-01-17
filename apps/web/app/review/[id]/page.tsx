@@ -7,8 +7,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Camera, ImageDelete } from '@/public';
 import { createReview } from '@/src/widgets/review/api/reviewCreateApi';
 import { useLoginStore, useUserInfo } from 'store/login/loginStore';
-import { useQuery } from 'react-query';
-import { fetchBookDetail } from '@/src/widgets/book/api/bookDetailApi';
 
 export default function Page() {
   const [textareaValue, setTextareaValue] = useState('');
@@ -83,9 +81,9 @@ export default function Page() {
             {Array.from({ length: 5 }, (_, index) => (
               <IconButton
                 key={index}
-                icon={index < star ? 'ic-star-active' : 'ic-star'} // 선택된 별은 'active', 나머지는 'inactive'
+                icon={index < star ? 'ic-star-active' : 'ic-star'}
                 size="xlg"
-                onClick={() => handleStarClick(index + 1)} // 별을 클릭하면 해당 index + 1로 설정
+                onClick={() => handleStarClick(index + 1)}
               />
             ))}
           </div>

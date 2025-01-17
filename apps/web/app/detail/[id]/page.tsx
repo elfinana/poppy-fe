@@ -30,6 +30,9 @@ import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 import { reviewLike } from '@/src/widgets/review/api/reviewLikeApi';
 import { fetchScrap } from '@/src/widgets/detail/api/popupstroeScrapApi';
 import { operations } from '@/src/shared/lib/operations';
+import { fetchPopupStoreSimilar } from '@/src/widgets/detail/api/popupstoreSimilarApi';
+import { PopupSlider } from '@/src/widgets';
+import { Title } from '@/src/shared';
 
 export default function Page() {
   const router = useRouter();
@@ -56,13 +59,9 @@ export default function Page() {
     setIsBottomSheetOpen(prev => !prev);
   };
 
-  const toggleExpand = () => {
-    setIsExpanded(prev => !prev);
-  };
-
   const handleSortChange = (value: string) => {
     setSortType(value);
-    setPage(0); // 정렬 기준 변경 시 페이지를 초기화
+    setPage(0);
   };
 
   const handleCopy = () => {
@@ -127,16 +126,10 @@ export default function Page() {
 
   const userNickname = useUserInfo(state => {
     if (state.userInfoData.length > 0) {
-      console.log('User Info Data:', state.userInfoData); // 데이터 확인
       return state.userInfoData[0].userNickname || 'Guest';
     }
-    // console.log('No user info data available');
     return 'Guest';
   });
-
-  useEffect(() => {
-    console.log('Current user nickname:', userNickname); // 최종 닉네임 출력
-  }, [userNickname]);
 
   const isReviewWritten = useMemo(() => {
     if (!reviewData?.content || !userNickname) return false;
@@ -191,23 +184,6 @@ export default function Page() {
   const textRef = useRef<HTMLParagraphElement>(null);
   const [showMoreButton, setShowMoreButton] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  useEffect(() => {
-    if (textRef.current) {
-      const { scrollHeight } = textRef.current; // 실제 높이
-      const computedStyles = window.getComputedStyle(textRef.current); // 스타일 가져오기
-      const lineHeight = parseFloat(computedStyles.lineHeight || '0'); // 줄 높이 계산
-      const lines = Math.round(scrollHeight / lineHeight); // 총 줄 수 계산
-
-      console.log('Text Metrics:', { scrollHeight, lineHeight, lines }); // 디버깅용 로그
-
-      if (lines > 4) {
-        setShowMoreButton(true); // 4줄 초과 시 더보기 버튼 표시
-      } else {
-        setShowMoreButton(false); // 4줄 이하일 경우 더보기 버튼 숨김
-      }
-    }
-  }, [reviewData]);
 
   return (
     <>
@@ -376,9 +352,15 @@ export default function Page() {
                           </div>
                         </div>
                       </div>
-
                       {/* pop list */}
-                      {/* <PopupSlider variant="list" text2={`${title}`} text3={'와 유사한 팝업'} data={recommandData} /> */}
+                      <div className="flex flex-col w-full gap-y-12">
+                        <Title text1="지금 많이 찾는 팝업" showArrow={false} />
+                        <PopupSlider
+                          variant="list"
+                          queryKey={`similarPopup-${id}`}
+                          queryFn={() => fetchPopupStoreSimilar(Number(id), token)}
+                        />
+                      </div>
                     </div>
                   )}
 
