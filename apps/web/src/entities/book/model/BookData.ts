@@ -1,14 +1,11 @@
 export interface BookListItem {
   thumbnail: string;
-  userId: number;
-  storeId: number;
   popupStoreName: string;
-  reservationStatus: number;
   reservationDate: string;
   reservationTime: string;
   location: string;
   person: number;
-  status: string;
+  status: 'CHECKED' | 'VISITED' | 'CANCELED';
 }
 
 export interface ChipItem {

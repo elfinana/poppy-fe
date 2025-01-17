@@ -35,22 +35,13 @@ export default function Page() {
   const router = useRouter();
   const { id } = useParams();
 
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const [sortType, setSortType] = useState<string>('RECENT');
   const [page, setPage] = useState<number>(0);
   const size = 10;
-  const [isScrapped, setIsScrapped] = useState(false);
-  const [scrapCountState, setScrapCountState] = useState(0);
   const { token } = useLoginStore();
   const queryClient = useQueryClient();
-  const [likedState, setLikedState] = useState<{ [key: number]: boolean }>({});
-  const [likesState, setLikesState] = useState<{ [key: number]: number }>({});
-  const textRef = useRef<HTMLDivElement>(null);
-  const [isMoreView, setIsMoreView] = useState(false);
-  const originalTextRef = useRef<HTMLDivElement>(null);
-  const [isEllipsed, setIsEllipsed] = useState(false);
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
@@ -192,26 +183,29 @@ export default function Page() {
     },
   );
 
-  const MAX_LINES = 4;
   const tabsA = [
     { value: 'a', label: '정보' },
     { value: 'b', label: `리뷰 ${reviewData?.content.length}` },
   ];
 
-  //더보기 ㅅㅂ
+  const textRef = useRef<HTMLParagraphElement>(null);
   const [showMoreButton, setShowMoreButton] = useState(false);
-  const [calculatedLines, setCalculatedLines] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+
   useEffect(() => {
     if (textRef.current) {
-      const { scrollHeight } = textRef.current;
-      const computedStyles = window.getComputedStyle(textRef.current);
-      const lineHeight = parseFloat(computedStyles.lineHeight || '0');
-      const lines = Math.round(scrollHeight / lineHeight);
+      const { scrollHeight } = textRef.current; // 실제 높이
+      const computedStyles = window.getComputedStyle(textRef.current); // 스타일 가져오기
+      const lineHeight = parseFloat(computedStyles.lineHeight || '0'); // 줄 높이 계산
+      const lines = Math.round(scrollHeight / lineHeight); // 총 줄 수 계산
 
-      console.log('Text Metrics:', { scrollHeight, lineHeight });
-      console.log('Calculated lines:', lines);
+      console.log('Text Metrics:', { scrollHeight, lineHeight, lines }); // 디버깅용 로그
 
-      setCalculatedLines(lines);
+      if (lines > 4) {
+        setShowMoreButton(true); // 4줄 초과 시 더보기 버튼 표시
+      } else {
+        setShowMoreButton(false); // 4줄 이하일 경우 더보기 버튼 숨김
+      }
     }
   }, [reviewData]);
 
@@ -442,16 +436,22 @@ export default function Page() {
                                   <div className="text-b3 px-[16px]">
                                     <span className="inline text-gray-900">{review.userName}&nbsp;</span>
 
-                                    <div
+                                    <p
                                       ref={textRef}
+                                      className={`text-gray-800 block transition-all duration-300 ${
+                                        isExpanded
+                                          ? 'line-clamp-none' // 전체 내용 표시
+                                          : 'overflow-hidden text-ellipsis display-webkit-box webkit-line-clamp-4 webkit-box-orient-vertical'
+                                      }`}
                                       style={{
                                         display: '-webkit-box',
                                         WebkitBoxOrient: 'vertical',
-                                        // WebkitLineClamp: 3, // 3줄까지만 표시
-                                        // overflow: 'hidden',
+                                        WebkitLineClamp: isExpanded ? 'none' : 4,
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
                                       }}>
                                       {review.content}
-                                    </div>
+                                    </p>
 
                                     {/* 더보기 버튼 */}
                                     {showMoreButton && !isExpanded && (
@@ -490,31 +490,42 @@ export default function Page() {
             </Tabs>
           </section>
 
-          <footer className="sticky w-full bottom-0 py-[8px] bg-white flex px-[8px] h-[64px] gap-x-[12px] items-center ">
-            <div className="flex items-center flex-col gap-x-[4px]">
-              <IconButton
-                className={``}
-                icon={data?.isScraped ? 'ic-bookmark-active' : 'ic-bookmark'}
-                size={'md'}
-                onClick={handleScrap}
+          {data && (
+            <footer className="sticky w-full bottom-0 py-[8px] bg-white flex px-[8px] h-[64px] gap-x-[12px] items-center ">
+              <div className="flex items-center flex-col gap-x-[4px]">
+                <IconButton
+                  className={``}
+                  icon={data.isScraped ? 'ic-bookmark-active' : 'ic-bookmark'}
+                  size={'md'}
+                  onClick={handleScrap}
+                />
+                <p className="text-gray-400 text-c1">{data.scrapCount}</p>
+              </div>
+              <PrimaryButton
+                variant={selectedTab === 'a' || !isReviewWritten ? 'enabled' : 'disabled'}
+                onClick={() => {
+                  if (!isReviewWritten) buttonHandle();
+                }}>
+                {selectedTab === 'a' && data.reservationType === 'OFFLINE'
+                  ? '대기하기'
+                  : selectedTab === 'a' && data.reservationType === 'ONLINE'
+                    ? '예약하기'
+                    : selectedTab === 'b' && isReviewWritten
+                      ? '작성 완료'
+                      : '리뷰 남기기'}
+              </PrimaryButton>
+              <BookSheet
+                isBottomSheetOpen={isBottomSheetOpen}
+                setIsBottomSheetOpen={setIsBottomSheetOpen}
+                popupId={data.id}
+                openingTime={data.openingTime}
+                closingTime={data.closingTime}
+                price={data.price}
+                storeName={data.name}
+                address={data.address}
               />
-              <p className="text-gray-400 text-c1">{data?.scrapCount}</p>
-            </div>
-            <PrimaryButton
-              variant={selectedTab === 'a' || !isReviewWritten ? 'enabled' : 'disabled'}
-              onClick={() => {
-                if (!isReviewWritten) buttonHandle();
-              }}>
-              {selectedTab === 'a' && data?.reservationType === 'OFFLINE'
-                ? '대기하기'
-                : selectedTab === 'a' && data?.reservationType === 'ONLINE'
-                  ? '예약하기'
-                  : selectedTab === 'b' && isReviewWritten
-                    ? '작성 완료'
-                    : '리뷰 남기기'}
-            </PrimaryButton>
-            {/* <BookSheet isBottomSheetOpen={isBottomSheetOpen} setIsBottomSheetOpen={setIsBottomSheetOpen} /> */}
-          </footer>
+            </footer>
+          )}
         </div>
 
         <SortSheet
