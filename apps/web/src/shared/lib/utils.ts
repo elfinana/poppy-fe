@@ -21,3 +21,12 @@ export function formatWithThousandsSeparator(number: number) {
   // 숫자를 문자열로 변환하고 정규식을 사용해 3자리마다 점 추가
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+export const formatDateDotFormat = (date: Date | string): string => {
+  const formattedDate = new Date(date);
+  const year = formattedDate.getFullYear();
+  const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+  const day = String(formattedDate.getDate()).padStart(2, '0');
+
+  return `${year}.${month}.${day}`;
+};

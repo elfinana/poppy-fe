@@ -13,7 +13,6 @@ import {
   getVisitedList,
   getPlannedList,
 } from '@/src/widgets';
-import { ItemCardData } from '@/src/widgets/slider/model';
 import React from 'react';
 import { useLoginStore } from 'store/login/loginStore';
 

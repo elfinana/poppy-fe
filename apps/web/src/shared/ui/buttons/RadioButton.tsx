@@ -42,7 +42,7 @@ const RadioGroupItem = React.forwardRef<React.ElementRef<typeof RadioGroupPrimit
     const itemId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-8">
         <RadioGroupPrimitive.Item
           ref={ref}
           className={cn(radioVariants({ size, className }))}
@@ -54,7 +54,7 @@ const RadioGroupItem = React.forwardRef<React.ElementRef<typeof RadioGroupPrimit
           </RadioGroupPrimitive.Indicator>
         </RadioGroupPrimitive.Item>
         {label && (
-          <label htmlFor={itemId} className="text-sm text-gray-800 cursor-pointer">
+          <label htmlFor={itemId} className="text-sm text-gray-800 cursor-pointer ">
             {label}
           </label>
         )}

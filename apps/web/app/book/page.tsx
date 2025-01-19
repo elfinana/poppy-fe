@@ -10,7 +10,7 @@ import {
   TabsTrigger,
 } from '@/src/shared';
 import { BottomNavigation, NoChevronHeader } from '@/src/widgets';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useRouter } from 'next/navigation';
 import { BookListItem } from '@/src/entities/book';
 type Props = {};

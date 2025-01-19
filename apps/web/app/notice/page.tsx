@@ -1,24 +1,27 @@
 'use client';
 
-import { ActivityListItem, NoticeListItem } from '@/src/entities';
-import { IconButton, Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared';
+import { ActivityListItem, getNotices, NoticeListItem } from '@/src/entities';
+import { IconButton, Skeleton, Tabs, TabsContent, TabsList, TabsTrigger } from '@/src/shared';
 import { ChevronHeader, SubHeader } from '@/src/widgets';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQuery } from 'react-query';
 
 type Props = {};
 
 const Page = (props: Props) => {
   const router = useRouter();
 
+  const { data, error, isLoading } = useQuery(['getNotices'], getNotices);
+
   const NoticeItem = (item: NoticeListItem) => (
     <div
       className="p-12 mb-8 bg-white border border-gray-100 rounded"
       onClick={() => router.push(`/notice/${item.id}/`)}>
       <div>
-        <div className="text-blue-600 text-h4">{`[${item.type}]`}</div>
+        <div className="text-blue-600 text-h4">{`[공지사항]`}</div>
         <div className="text-gray-800 text-b1">{item.title}</div>
-        <div className="mt-16 text-gray-300 text-c2">{`${item.date} ${item.time}`}</div>
+        <div className="mt-16 text-gray-300 text-c2">{`${item.createdDate} ${item.createdTime}`}</div>
       </div>
     </div>
   );
@@ -78,16 +81,25 @@ const Page = (props: Props) => {
         </div>
         <TabsContent value="notifications" className="h-full my-0 overflow-y-scroll">
           <div className="px-16 py-12 bg-gray-50">
-            {notificationsData.map((item, idx) => (
-              <NoticeItem
-                key={`ITEM_${idx}`}
-                id={item.id}
-                type={item.type}
-                title={item.title}
-                date={item.date}
-                time={item.time}
-              />
-            ))}
+            {isLoading
+              ? Array.from({ length: 8 }, (_, idx) => (
+                  <div key={`SKEL_${idx}`} className="p-12 mb-8 bg-white border border-gray-100 rounded">
+                    <div>
+                      <Skeleton className="h-40 w-[300px]" />
+                      <Skeleton className="h-16 mt-16 w-[100px]" />
+                    </div>
+                  </div>
+                ))
+              : data?.map((item, idx) => (
+                  <NoticeItem
+                    key={`ITEM_${idx}`}
+                    id={item.id}
+                    title={item.title}
+                    content={item.content}
+                    createdDate={item.createdDate}
+                    createdTime={item.createdTime}
+                  />
+                ))}
           </div>
         </TabsContent>
         <TabsContent value="activities" className="h-full my-0 overflow-y-scroll">
@@ -115,21 +127,6 @@ const Page = (props: Props) => {
 };
 
 export default Page;
-
-const notificationsData: Array<NoticeListItem> = [
-  { id: 0, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 1, type: '이벤트', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 2, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 3, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 4, type: '이벤트', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 5, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 6, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 7, type: '이벤트', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 8, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 9, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 10, type: '이벤트', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-  { id: 11, type: '공지사항', title: '개인정보 처리방침', date: '2024. 11. 10', time: '22:03' },
-];
 
 const activitiesData: Array<ActivityListItem> = [
   {

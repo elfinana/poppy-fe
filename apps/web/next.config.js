@@ -2,7 +2,7 @@ import withSvgr from 'next-svgr';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   webpack: config => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
@@ -26,6 +26,16 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'placehold.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'd1jch5cr8xrdjz.cloudfront.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'd1jch5cr8xrdjz.cloudfront.net',
       },
     ],
   },

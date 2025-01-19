@@ -2,17 +2,17 @@ import { create } from 'zustand';
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
 
 interface LoginState {
-  token: string | null;
-  refreshToken: string | null;
-  setToken: (token: string | null) => void;
-  setRefreshToken: (refreshToken: string | null) => void;
+  token: string | undefined;
+  refreshToken: string | undefined;
+  setToken: (token: string) => void;
+  setRefreshToken: (refreshToken: string) => void;
   clearToken: () => void;
 }
 
 export const useLoginStore = create<LoginState>(set => ({
   // 초기 값은 쿠키에서 가져옴
-  token: typeof window !== 'undefined' ? (getCookie('token') as string | null) : null,
-  refreshToken: typeof window !== 'undefined' ? (getCookie('refreshToken') as string | null) : null,
+  token: typeof window !== 'undefined' ? (getCookie('token') as string) : undefined,
+  refreshToken: typeof window !== 'undefined' ? (getCookie('refreshToken') as string) : undefined,
   // 토큰 저장
   setToken: token => {
     setCookie('token', token, { maxAge: 60 * 30 }); // 30 동안 유효
@@ -26,7 +26,7 @@ export const useLoginStore = create<LoginState>(set => ({
   // 토큰 삭제
   clearToken: () => {
     deleteCookie('token'); // 쿠키 삭제
-    set({ token: null });
+    set({ token: undefined });
   },
 }));
 

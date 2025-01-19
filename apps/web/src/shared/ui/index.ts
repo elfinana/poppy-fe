@@ -23,6 +23,7 @@ export { StatusLabel } from './labels/StatusLabel';
 export { ChoiceChipGroup, ChoiceChipGroupItem } from './chips/ChoiceChip';
 export { FilterChipGroup, FilterChipGroupItem } from './chips/FilterChip';
 export { InputChip } from './chips/InputChip';
+export { ToggleChipGroup, ToggleChipItem } from './chips/ToggleChip';
 
 // Dialog
 export {
@@ -45,7 +46,14 @@ export { Textarea } from './textArea';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Input } from './input';
 
-export { BottomSheet, BottomSheetHeader, BottomSheetTrigger, BottomSheetContent } from './bottomsheet/bottomsheet';
+export {
+  BottomSheet,
+  BottomSheetHeader,
+  BottomSheetTrigger,
+  BottomSheetContent,
+  BottomSheetTitle,
+  BottomSheetDescription,
+} from './bottomsheet/bottomsheet';
 
 // Hr
 export { Hr } from './hr/Hr';

@@ -2,7 +2,7 @@
 
 import { ArrowRightSmall } from '@/public';
 import { Hr, SecondaryButton, Title } from '@/src/shared';
-import { BottomNavigation, ItemCardData, MypageHeader, PopupSlider } from '@/src/widgets';
+import { BottomNavigation, getNewList, ItemCardData, MypageHeader, PopupListItem, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useUserInfo } from 'store/login/loginStore';
@@ -58,15 +58,15 @@ const Page = (props: Props) => {
       </div>
       <div className="mt-16">
         <div className="flex flex-col w-full gap-y-12">
-          {/* <Title category="saves" text1="저장한 팝업" count={recommandData.length} typography="h3" />
-          <PopupSlider variant="smlist" data={recommandData} /> */}
+          <Title category={101} text1="저장한 팝업" count={recommandData.length} typography="h3" />
+          <PopupSlider variant="smlist" queryKey="getSaveList" queryFn={getNewList} />
         </div>
       </div>
       <div className="px-16 mt-20">
         <Hr variant="hairline" />
       </div>
       <div className="mt-20">
-        {/* <Title category="reviews" text1="작성한 리뷰" count={reviewsCount} typography="h3" /> */}
+        <Title category={102} text1="작성한 리뷰" count={reviewsCount} typography="h3" />
       </div>
       <div
         className="flex items-center justify-between w-full px-16 mt-20"
