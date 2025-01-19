@@ -27,12 +27,10 @@ export default function Page() {
     onSuccess: res => {
       setToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
-      setUserInfo([
-        {
-          userEmail: res.data.userEmail,
-          userNickname: res.data.nickname,
-        },
-      ]);
+      setUserInfo({
+        userEmail: res.data.userEmail,
+        userNickname: res.data.nickname,
+      });
 
       router.push('/home');
     },
@@ -40,8 +38,6 @@ export default function Page() {
       console.error('Failed to fetch login token:', error.message);
     },
   });
-
-  console.log(userInfoData);
 
   return (
     <div className="flex flex-col items-center w-full h-full">

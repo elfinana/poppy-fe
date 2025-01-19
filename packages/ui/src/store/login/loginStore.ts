@@ -31,19 +31,22 @@ export const useLoginStore = create<LoginState>(set => ({
 }));
 
 // user 정보
-interface userInfoData {
+interface UserInfoData {
   userEmail: string;
   userNickname?: string;
 }
 
-interface useUserInfoStore {
-  userInfoData: Array<userInfoData>;
-  setUserInfo: (data: Array<userInfoData>) => void;
+interface UseUserInfoStore {
+  userInfoData: UserInfoData; // 단일 객체로 수정
+  setUserInfo: (data: UserInfoData) => void; // 데이터 업데이트 함수
 }
 
-export const useUserInfo = create<useUserInfoStore>(set => ({
-  userInfoData: [],
-  setUserInfo: data => set({ userInfoData: data }),
+export const useUserInfo = create<UseUserInfoStore>(set => ({
+  userInfoData: {
+    userEmail: '',
+    userNickname: '',
+  },
+  setUserInfo: (data: UserInfoData) => set({ userInfoData: data }), // 데이터 설정
 }));
 
 // nickName check
