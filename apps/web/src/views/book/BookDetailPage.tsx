@@ -2,7 +2,7 @@
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 import { ChevronHeader } from '@/src/widgets';
 import Image from 'next/legacy/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { cancelReservation, getPopupDetail, getReservationDetail } from '@/src/widgets/book/api/bookApi';
 import { useQueries } from 'react-query';
@@ -34,8 +34,6 @@ const BookDetailPage = () => {
   if (!token) throw new Error('token is empty');
   const showFooterParam = searchParams.get('showFooterParam') === 'true';
 
-  const [isCanceled, setIsCanceled] = useState(false);
-
   // 0번 = 예약 데이터
   // 1번 = 팝업스토어 데이터
   const queries = useQueries([
@@ -49,14 +47,29 @@ const BookDetailPage = () => {
     },
   ]);
 
+  const [isCanceled, setIsCanceled] = useState(false);
+
+  useEffect(() => {
+    if (queries[0]?.data?.status === 'CANCELED') {
+      setIsCanceled(true);
+    }
+  }, [queries]);
+
   //예약취소
   const handleCancel = async (): Promise<void> => {
     try {
       const result = await cancelReservation(reservationId, token);
 
       if (result.success) {
-        alert(result.message); // 서버에서 전달된 성공 메시지 표시
-        setIsCanceled(true); // 상태 업데이트
+        alert(result.message);
+
+        // 예약 상세 조회
+        const updatedReservation = await getReservationDetail(reservationId, token);
+
+        // 상태가 CANCELED이면 업데이트
+        if (updatedReservation?.status === 'CANCELED') {
+          setIsCanceled(true); // 상태 업데이트
+        }
       }
     } catch (e: any) {
       alert(e.message || '예약 취소에 실패했습니다.');
@@ -164,7 +177,7 @@ const BookDetailPage = () => {
 
       <hr className="w-full h-2 border-0 bg-gray-50" />
 
-      <div className="pt-[24px] px-16 pb-[150px] w-full flex flex-col gap-[20px]">
+      <div className="pt-[24px] px-16 pb-[100px] w-full flex flex-col gap-[20px]">
         <span className="text-gray-900 text-h2">결제 정보</span>
         <div className="">
           <div className="flex items-center justify-between mb-4">
@@ -214,7 +227,7 @@ const BookDetailPage = () => {
         <footer className="absolute w-full bottom-0 py-[8px] bg-white flex px-[16px] h-[64px] gap-x-[12px] items-center border border-t-gray-100">
           <AlertDialog>
             <AlertDialogTrigger
-              className={`w-full inline-flex items-center justify-center h-48 px-10 rounded-12 py-14 text-h3 ${
+              className={`w-full inline-flex items-center justify-center h-48 px-10 text-white rounded-12 py-14 text-h3 ${
                 isCanceled ? 'bg-gray-200' : 'bg-blue-500'
               }`}
               variant="enabled"
