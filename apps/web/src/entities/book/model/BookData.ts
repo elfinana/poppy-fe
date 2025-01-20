@@ -6,6 +6,8 @@ export interface BookListItem {
   location: string;
   person: number;
   status: 'CHECKED' | 'VISITED' | 'CANCELED';
+  reservationId: number;
+  popupStoreId: number;
 }
 
 export interface ChipItem {

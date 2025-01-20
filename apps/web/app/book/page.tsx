@@ -35,10 +35,11 @@ const BookItem = (item: BookListItem) => {
   };
 
   const handleClick = () => {
-    console.log('다시');
-    // router.push(`/book/${item.storeId}`);
+    const showFooterParam = true;
+    router.push(
+      `/detail/${item.popupStoreId}/book/completed/detail?reservationId=${item.reservationId}&popupId=${item.popupStoreId}&showFooterParam=${showFooterParam}`,
+    );
   };
-
   const currentStyle = statusStyle[item.status as 'CHECKED' | 'VISITED' | 'CANCELED'] || '';
   const currentText = statusText[item.status as 'CHECKED' | 'VISITED' | 'CANCELED'] || '상태 없음';
 
@@ -58,7 +59,7 @@ const BookItem = (item: BookListItem) => {
           <span className="text-gray-900 text-h4">{item.popupStoreName}</span>
           <div className=" text-b5">
             <div className="flex gap-x-[8px]">
-              <p className="text-gray-400 min-w-[23px] ">일정1</p>
+              <p className="text-gray-400 min-w-[23px] ">일정</p>
               <p className="text-gray-700">{item.reservationDate}</p>
             </div>
             <div className="flex gap-x-[8px]">
@@ -184,6 +185,8 @@ const Page = (props: Props) => {
                   location={item.location}
                   person={item.person}
                   status={item.status as 'CHECKED' | 'VISITED' | 'CANCELED'}
+                  reservationId={item.reservationId}
+                  popupStoreId={item.popupStoreId}
                 />
               ))}
             </div>

@@ -41,4 +41,5 @@ export interface ReservationTotalData {
   status: string;
   thumbnail: string;
   person: number;
+  reservationId: number;
 }

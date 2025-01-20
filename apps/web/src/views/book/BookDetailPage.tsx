@@ -2,12 +2,24 @@
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 import { ChevronHeader } from '@/src/widgets';
 import Image from 'next/legacy/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getPopupDetail, getReservationDetail } from '@/src/widgets/book/api/bookApi';
+import { cancelReservation, getPopupDetail, getReservationDetail } from '@/src/widgets/book/api/bookApi';
 import { useQueries } from 'react-query';
 import { useLoginStore } from 'store/login/loginStore';
-import { Skeleton } from '@/src/shared';
+import {
+  PrimaryButton,
+  Skeleton,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/src/shared';
 
 const BookDetailPage = () => {
   const searchParams = useSearchParams();
@@ -20,6 +32,9 @@ const BookDetailPage = () => {
 
   const { token } = useLoginStore();
   if (!token) throw new Error('token is empty');
+  const showFooterParam = searchParams.get('showFooterParam') === 'true';
+
+  const [isCanceled, setIsCanceled] = useState(false);
 
   // 0번 = 예약 데이터
   // 1번 = 팝업스토어 데이터
@@ -33,6 +48,20 @@ const BookDetailPage = () => {
       queryFn: () => getPopupDetail(Number(popupId)),
     },
   ]);
+
+  //예약취소
+  const handleCancel = async (): Promise<void> => {
+    try {
+      const result = await cancelReservation(reservationId, token);
+
+      if (result.success) {
+        alert(result.message); // 서버에서 전달된 성공 메시지 표시
+        setIsCanceled(true); // 상태 업데이트
+      }
+    } catch (e: any) {
+      alert(e.message || '예약 취소에 실패했습니다.');
+    }
+  };
 
   return (
     <div className="flex flex-col items-center h-full">
@@ -180,6 +209,33 @@ const BookDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {showFooterParam && (
+        <footer className="absolute w-full bottom-0 py-[8px] bg-white flex px-[16px] h-[64px] gap-x-[12px] items-center border border-t-gray-100">
+          <AlertDialog>
+            <AlertDialogTrigger
+              className={`w-full inline-flex items-center justify-center h-48 px-10 rounded-12 py-14 text-h3 ${
+                isCanceled ? 'bg-gray-200' : 'bg-blue-500'
+              }`}
+              variant="enabled"
+              disabled={isCanceled}>
+              {isCanceled ? '예약 취소' : '예약 취소하기'}
+            </AlertDialogTrigger>
+            {!isCanceled && (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>예약 취소</AlertDialogTitle>
+                  <AlertDialogDescription>예약을 취소하시겠습니까?</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel />
+                  <AlertDialogAction variant="warning" onClick={handleCancel} />
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            )}
+          </AlertDialog>
+        </footer>
+      )}
     </div>
   );
 };

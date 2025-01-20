@@ -189,3 +189,42 @@ export const getReservation = async (accessToken: string): Promise<ReservationTo
     throw new Error('Failed to fetch data');
   }
 };
+
+//예약취소
+export const cancelReservation = async (
+  reservationId: string,
+  accessToken: string,
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    if (!reservationId) throw new Error('Reservation ID is empty');
+    if (!accessToken) throw new Error('AccessToken is empty');
+
+    // 예약 취소 요청
+    const reservationResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/users/reservations/${reservationId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    if (!reservationResponse.ok) {
+      const errorData = await reservationResponse.json();
+      throw new Error(`Failed to cancel reservation: ${errorData.message || 'Unknown error'}`);
+    }
+
+    const responseData = await reservationResponse.json();
+
+    if (responseData.code === 200) {
+      console.log(`Reservation ${reservationId} successfully canceled`);
+      return { success: true, message: responseData.message };
+    }
+
+    throw new Error(`Unexpected response: ${responseData.message || 'Unknown error'}`);
+  } catch (e) {
+    console.error('Cancel Reservation Error:', e);
+    throw new Error('Failed to cancel reservation');
+  }
+};
