@@ -37,10 +37,20 @@ export interface PopupStoreDetail {
   scrapCount: number;
   isAlmostFull: boolean;
   viewCount: number;
+  reviewCnt: number;
+  isScraped: boolean;
 }
 
-export const fetchPopupStoreDetail = async (id: number): Promise<PopupStoreDetail> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${id}`);
+export const fetchPopupStoreDetail = async (id: number, accessToken?: string): Promise<PopupStoreDetail> => {
+  const options: RequestInit = {
+    method: 'GET',
+    headers: accessToken
+      ? {
+          Authorization: 'Bearer ' + accessToken,
+        }
+      : undefined,
+  };
+  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${id}`, options);
   if (!response.ok) {
     throw new Error('팝업스토어를 찾을 수 없습니다.');
   }

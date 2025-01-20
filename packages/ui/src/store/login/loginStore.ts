@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { useEffect } from 'react';
 
 interface LoginState {
   token: string | undefined;
@@ -43,7 +44,10 @@ interface useUserInfoStore {
 
 export const useUserInfo = create<useUserInfoStore>(set => ({
   userInfoData: [],
-  setUserInfo: data => set({ userInfoData: data }),
+  setUserInfo: data => {
+    console.log('Setting user info data:', data); // 데이터 설정 시 콘솔
+    set({ userInfoData: data });
+  },
 }));
 
 // nickName check

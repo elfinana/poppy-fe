@@ -7,6 +7,7 @@ export interface Review {
   popupStoreName: string;
   rating: number;
   userName: string;
+  isLiked: boolean;
 }
 
 // 리뷰 데이터 타입 정의
@@ -22,10 +23,25 @@ export interface ReviewData {
   };
 }
 
-export const fetchReviews = async (id: number, sortType: string, page?: number, size?: number): Promise<ReviewData> => {
+export const fetchReviews = async (
+  id: number,
+  sortType: string,
+  accessToken: string,
+  page?: number,
+  size?: number,
+): Promise<ReviewData> => {
   const url = `${process.env.NEXT_PUBLIC_CLIENT_URL}/reviews/store/${id}?sortType=${sortType}&page=${page}&size=${size}`;
 
-  const response = await fetch(url);
+  const options: RequestInit = {
+    method: 'GET',
+    headers: accessToken
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      : undefined,
+  };
+
+  const response = await fetch(url, options);
   if (!response.ok) {
     throw new Error('리뷰 데이터를 가져오는 데 실패했습니다.');
   }

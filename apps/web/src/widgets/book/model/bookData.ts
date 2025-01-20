@@ -30,3 +30,15 @@ export interface ReservationData {
   paidAmount: number;
   person: number;
 }
+
+export interface ReservationTotalData {
+  userId: string;
+  popupStoreId: number;
+  popupStoreName: string;
+  reservationDate: string;
+  reservationTime: string;
+  location: string;
+  status: string;
+  thumbnail: string;
+  person: number;
+}
