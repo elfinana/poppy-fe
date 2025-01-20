@@ -1,5 +1,5 @@
 'use client';
-import { fetchReviews } from '@/app/detail/api/reviewApi';
+import { fetchReviews } from '@/src/widgets/detail/api/reviewApi';
 import { BottomSheet, BottomSheetContent, BottomSheetTitle, RadioGroupItem, RadioGroup } from '@/src/shared';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
