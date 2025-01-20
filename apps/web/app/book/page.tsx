@@ -11,7 +11,7 @@ import {
 } from '@/src/shared';
 import { BottomNavigation, NoChevronHeader } from '@/src/widgets';
 import Image from 'next/legacy/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BookListItem } from '@/src/entities/book';
 import { getReservation } from '@/src/widgets/book/api/bookApi';
 import { useQuery } from 'react-query';
@@ -20,6 +20,10 @@ import { ReservationData, ReservationTotalData } from '@/src/widgets/book/model/
 type Props = {};
 
 const BookItem = (item: BookListItem) => {
+  const searchParams = useSearchParams();
+
+  const reservationId = searchParams.get('reservationId');
+  console.log('아이디', reservationId);
   const router = useRouter();
 
   const statusStyle: Record<'CHECKED' | 'VISITED' | 'CANCELED', string> = {
@@ -35,8 +39,7 @@ const BookItem = (item: BookListItem) => {
   };
 
   const handleClick = () => {
-    console.log('다시');
-    // router.push(`/book/${item.storeId}`);
+    router.push(`/detail/${item.popupStoreId}/book/completed/detail?reservationId=${reservationId}`);
   };
 
   const currentStyle = statusStyle[item.status as 'CHECKED' | 'VISITED' | 'CANCELED'] || '';
@@ -58,7 +61,7 @@ const BookItem = (item: BookListItem) => {
           <span className="text-gray-900 text-h4">{item.popupStoreName}</span>
           <div className=" text-b5">
             <div className="flex gap-x-[8px]">
-              <p className="text-gray-400 min-w-[23px] ">일정1</p>
+              <p className="text-gray-400 min-w-[23px] ">일정</p>
               <p className="text-gray-700">{item.reservationDate}</p>
             </div>
             <div className="flex gap-x-[8px]">
@@ -176,6 +179,7 @@ const Page = (props: Props) => {
             <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
               {filteredData.map((item, idx) => (
                 <BookItem
+                  popupStoreId={item.popupStoreId}
                   key={`ITEM_${idx}`}
                   thumbnail={item.thumbnail}
                   popupStoreName={item.popupStoreName}

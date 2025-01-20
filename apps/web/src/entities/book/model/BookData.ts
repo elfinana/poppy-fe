@@ -1,4 +1,5 @@
 export interface BookListItem {
+  popupStoreId: number;
   thumbnail: string;
   popupStoreName: string;
   reservationDate: string;
