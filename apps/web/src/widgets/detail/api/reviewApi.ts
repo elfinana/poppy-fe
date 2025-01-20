@@ -30,7 +30,7 @@ export const fetchReviews = async (
   page?: number,
   size?: number,
 ): Promise<ReviewData> => {
-  const url = `https://pop-py.duckdns.org/reviews/store/${id}?sortType=${sortType}&page=${page}&size=${size}`;
+  const url = `${process.env.NEXT_PUBLIC_CLIENT_URL}/reviews/store/${id}?sortType=${sortType}&page=${page}&size=${size}`;
 
   const options: RequestInit = {
     method: 'GET',

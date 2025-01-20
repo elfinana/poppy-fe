@@ -3,6 +3,14 @@
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   DateLabel,
   getDateDifference,
   Hr,
@@ -33,6 +41,9 @@ import { operations } from '@/src/shared/lib/operations';
 import { fetchPopupStoreSimilar } from '@/src/widgets/detail/api/popupstoreSimilarApi';
 import { PopupSlider } from '@/src/widgets';
 import { Title } from '@/src/shared';
+import { toast } from '@/src/shared/hooks/use-toast';
+import { registerUserWaiting } from '@/src/widgets';
+import { bell } from '@/public';
 
 export default function Page() {
   const router = useRouter();
@@ -45,6 +56,7 @@ export default function Page() {
   const size = 10;
   const { token } = useLoginStore();
   const queryClient = useQueryClient();
+  const [waitingDialogOpen, setWaitingDialogOpen] = useState(false);
 
   const { recommandData, setRecommandData, selectedTab, setSelectedTab, selectedValue, setSelectedValue } =
     useDetailStore();
@@ -181,9 +193,32 @@ export default function Page() {
     { value: 'b', label: `리뷰 ${reviewData?.content.length}` },
   ];
 
-  const textRef = useRef<HTMLParagraphElement>(null);
-  const [showMoreButton, setShowMoreButton] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  // 더보기 기능을 위한 boolean 배열
+  const [lineClamp, setLineClamp] = useState<Array<boolean>>([]);
+
+  useLayoutEffect(() => {
+    if (reviewData) {
+      setLineClamp(new Array(reviewData.content.length).fill(true));
+    }
+  }, [reviewData]);
+
+  const handleWaitingButton = () => {
+    if (token) {
+      registerUserWaiting(+id, token)
+        .then(result => {
+          setWaitingDialogOpen(true);
+        })
+        .catch(err => {
+          console.log('err:' + err);
+        });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: '대기 등록 불가',
+        description: '로그인 세션이 만료되었습니다.',
+      });
+    }
+  };
 
   return (
     <>
@@ -266,8 +301,9 @@ export default function Page() {
                       <IconButton icon={'ic-info-time'} size={'sm'} />
                       <p className="text-gray-800 text-b3_com">
                         {`${status === 'operational' ? '영업 중' : '영업 종료'} · 매일 `}
-                        {data?.openingTime?.hour?.toString().padStart(2, '0')}:
-                        {data?.openingTime?.minute?.toString().padStart(2, '0')} -
+                        {data?.openingTime?.hour
+                          ?.toString()
+                          .padStart(2, '0')}:{data?.openingTime?.minute?.toString().padStart(2, '0')} -
                         {data?.closingTime?.hour?.toString().padStart(2, '0')}:
                         {data?.closingTime?.minute?.toString().padStart(2, '0')}
                       </p>
@@ -385,13 +421,16 @@ export default function Page() {
                         <div className="flex flex-col gap-y-[20px]">
                           {reviewData?.content && reviewData.content.length > 0 ? (
                             <div className="flex flex-col">
-                              {reviewData?.content?.map(review => (
+                              {reviewData?.content?.map((review, idx) => (
                                 <div key={review.id}>
                                   {/* Rating and Date */}
                                   <div className="flex items-center justify-between mb-[8px] px-[16px] mt-20">
-                                    <div className="flex items-center">
-                                      <IconButton className="mr-[4px]" icon="ic-star-active" size="sm" />
-                                      <p className="text-gray-900 text-h1">{review.rating.toFixed(1)}</p>
+                                    <div className="flex items-center gap-x-8">
+                                      <div className="flex items-center">
+                                        <IconButton className="mr-[4px]" icon="ic-star-active" size="sm" />
+                                        <p className="text-gray-900 text-h1">{review.rating.toFixed(1)}</p>
+                                      </div>
+                                      <span className="text-gray-600 text-h4">{review.userName}&nbsp;</span>
                                     </div>
                                     <p className="text-gray-300 text-b5">{review.date}</p>
                                   </div>
@@ -416,31 +455,31 @@ export default function Page() {
 
                                   {/* Comment */}
                                   <div className="text-b3 px-[16px]">
-                                    <span className="inline text-gray-900">{review.userName}&nbsp;</span>
-
-                                    <p
-                                      ref={textRef}
-                                      className={`text-gray-800 block transition-all duration-300 ${
-                                        isExpanded
-                                          ? 'line-clamp-none' // 전체 내용 표시
-                                          : 'overflow-hidden text-ellipsis display-webkit-box webkit-line-clamp-4 webkit-box-orient-vertical'
-                                      }`}
-                                      style={{
-                                        display: '-webkit-box',
-                                        WebkitBoxOrient: 'vertical',
-                                        WebkitLineClamp: isExpanded ? 'none' : 4,
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                      }}>
-                                      {review.content}
-                                    </p>
-
-                                    {/* 더보기 버튼 */}
-                                    {showMoreButton && !isExpanded && (
+                                    <span className={lineClamp[idx] ? 'line-clamp-3' : ''}>{review.content}</span>
+                                    {/* 더보기 버튼(line-height를 기준으로 혹은 줄 수를 기준으로 3줄이 넘으면 clamp?) */}
+                                    {lineClamp[idx] ? (
                                       <button
-                                        onClick={() => setIsExpanded(true)}
-                                        className="block mt-2 text-blue-500 cursor-pointer">
+                                        onClick={() =>
+                                          setLineClamp(prev => {
+                                            const arr = [...prev];
+                                            arr[idx] = false;
+                                            return arr;
+                                          })
+                                        }
+                                        className="block mt-2 text-gray-400 cursor-pointer">
                                         더보기
+                                      </button>
+                                    ) : (
+                                      <button
+                                        onClick={() =>
+                                          setLineClamp(prev => {
+                                            const arr = [...prev];
+                                            arr[idx] = true;
+                                            return arr;
+                                          })
+                                        }
+                                        className="block mt-2 text-gray-400 cursor-pointer">
+                                        간략히
                                       </button>
                                     )}
                                   </div>
@@ -483,19 +522,25 @@ export default function Page() {
                 />
                 <p className="text-gray-400 text-c1">{data.scrapCount}</p>
               </div>
-              <PrimaryButton
-                variant={selectedTab === 'a' || !isReviewWritten ? 'enabled' : 'disabled'}
-                onClick={() => {
-                  if (!isReviewWritten) buttonHandle();
-                }}>
-                {selectedTab === 'a' && data.reservationType === 'OFFLINE'
-                  ? '대기하기'
-                  : selectedTab === 'a' && data.reservationType === 'ONLINE'
-                    ? '예약하기'
-                    : selectedTab === 'b' && isReviewWritten
-                      ? '작성 완료'
-                      : '리뷰 남기기'}
-              </PrimaryButton>
+              {selectedTab === 'a' && data.reservationType === 'OFFLINE' ? (
+                <PrimaryButton variant="enabled" onClick={handleWaitingButton}>
+                  대기하기
+                </PrimaryButton>
+              ) : selectedTab === 'a' && data.reservationType === 'ONLINE' ? (
+                <PrimaryButton variant="enabled" onClick={toggleBottomSheet}>
+                  예약하기
+                </PrimaryButton>
+              ) : selectedTab === 'b' && isReviewWritten ? (
+                <PrimaryButton variant="disabled">작성 완료</PrimaryButton>
+              ) : (
+                <PrimaryButton
+                  variant="enabled"
+                  onClick={() => {
+                    router.push(`/review/${id}`);
+                  }}>
+                  리뷰 남기기
+                </PrimaryButton>
+              )}
               <BookSheet
                 isBottomSheetOpen={isBottomSheetOpen}
                 setIsBottomSheetOpen={setIsBottomSheetOpen}
@@ -516,6 +561,25 @@ export default function Page() {
           sortType={sortType}
           onSortChange={handleSortChange}
         />
+        <AlertDialog open={waitingDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>등록 완료</AlertDialogTitle>
+              <AlertDialogDescription className="flex flex-col items-center gap-x-8">
+                <Image src={bell} width={120} height={120} alt="registration complete" />
+                <span className="text-gray-700 text-b3">대기 등록이 완료되었습니다.</span>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel text="확인" onClick={() => setWaitingDialogOpen(false)} />
+              <AlertDialogAction
+                variant="informative"
+                text="내역으로 이동"
+                onClick={() => setWaitingDialogOpen(false)}
+              />
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </>
   );

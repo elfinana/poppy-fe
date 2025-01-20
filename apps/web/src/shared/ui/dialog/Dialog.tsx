@@ -20,7 +20,7 @@ export interface DialogTriggerProps
 const AlertDialogTrigger = React.forwardRef<React.ElementRef<typeof AlertDialogPrimitive.Trigger>, DialogTriggerProps>(
   ({ className, variant, ...props }, ref) => (
     // <AlertDialogPrimitive.Trigger className={cn(primaryButtonVariants({ variant, className }))} ref={ref} {...props} />
-    (<AlertDialogPrimitive.Trigger ref={ref} className={className} {...props} />)
+    <AlertDialogPrimitive.Trigger ref={ref} className={className} {...props} />
   ),
 );
 AlertDialogTrigger.displayName = AlertDialogPrimitive.Trigger.displayName;
@@ -100,15 +100,16 @@ export interface AlertDialogActionProps
     VariantProps<typeof actionButtonVariants> {
   asChild?: boolean;
   variant: 'informative' | 'warning';
+  text?: string;
 }
 
 const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
   AlertDialogActionProps
->(({ className, variant, ...props }, ref) => (
+>(({ className, variant, text, ...props }, ref) => (
   <div className="w-full text-center border-l border-gray-200">
     <AlertDialogPrimitive.Action ref={ref} className={cn(actionButtonVariants({ variant }), className)} {...props}>
-      확인
+      {text ? text : '확인'}
     </AlertDialogPrimitive.Action>
   </div>
 ));
@@ -126,18 +127,19 @@ export interface CancelDialogActionProps
   extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>,
     VariantProps<typeof cancelButtonVariants> {
   asChild?: boolean;
+  text?: string;
 }
 
 const AlertDialogCancel = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
   CancelDialogActionProps
->(({ className, ...props }, ref) => (
+>(({ className, text, ...props }, ref) => (
   <div className="w-full text-center">
     <AlertDialogPrimitive.Cancel
       ref={ref}
       className={cn(cancelButtonVariants({ variant: 'ghost' }), className)}
       {...props}>
-      취소
+      {text ? text : '취소'}
     </AlertDialogPrimitive.Cancel>
   </div>
 ));

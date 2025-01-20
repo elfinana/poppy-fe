@@ -12,7 +12,7 @@ import {
 } from '@/src/shared';
 import { BottomNavigation, NoChevronHeader } from '@/src/widgets';
 import Image from 'next/legacy/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BookListItem } from '@/src/entities/book';
 import { getReservation, getWaiting } from '@/src/widgets/book/api/bookApi';
 import { useQuery } from 'react-query';
@@ -22,6 +22,10 @@ import { Item } from '@radix-ui/react-radio-group';
 type Props = {};
 
 const BookItem = (item: BookListItem) => {
+  const searchParams = useSearchParams();
+
+  const reservationId = searchParams.get('reservationId');
+  console.log('아이디', reservationId);
   const router = useRouter();
 
   const statusStyle: Record<'CHECKED' | 'VISITED' | 'CANCELED', string> = {
