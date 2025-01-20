@@ -354,7 +354,7 @@ export default function Page() {
                       </div>
                       {/* pop list */}
                       <div className="flex flex-col w-full gap-y-12">
-                        <Title text1="지금 많이 찾는 팝업" showArrow={false} disableOnClick={false} />
+                        <Title text1="지금 많이 찾는 팝업" showArrow={false} />
                         <PopupSlider
                           variant="list"
                           queryKey={`similarPopup-${id}`}

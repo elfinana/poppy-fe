@@ -32,14 +32,13 @@ type Props = {
    */
   category?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 101 | 102;
   showArrow?: boolean;
-  disableOnClick?: boolean;
 };
 
-export const Title = ({ count = 0, typography = 'h2', showArrow = true, disableOnClick = true, ...props }: Props) => {
+export const Title = ({ count = 0, typography = 'h2', showArrow = true, ...props }: Props) => {
   const router = useRouter();
 
   const moreClickHandler = () => {
-    if (!disableOnClick) return;
+    if (!showArrow) return;
     if (props.category === 102) {
       router.push('/mypage/reviews');
     } else if (props.category === 101) {
@@ -50,9 +49,7 @@ export const Title = ({ count = 0, typography = 'h2', showArrow = true, disableO
   };
 
   return (
-    <div
-      className="flex items-center justify-between w-full px-16"
-      onClick={disableOnClick ? moreClickHandler : undefined}>
+    <div className="flex items-center justify-between w-full px-16" onClick={moreClickHandler}>
       <div className="flex items-center gap-4">
         {props.text1 ? <span className={`text-${typography} text-gray-900`}>{props.text1}</span> : null}
         {props.text2 ? <span className={`text-${typography} text-blue-700`}>{props.text2}</span> : null}
