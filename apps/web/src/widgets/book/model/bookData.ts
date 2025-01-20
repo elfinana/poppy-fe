@@ -43,3 +43,14 @@ export interface ReservationTotalData {
   person: number;
   reservationId: number;
 }
+
+export interface WaitingData {
+  waitingId: number;
+  waitingNumber: number;
+  storeName: string;
+  location: string;
+  phoneNumber: string;
+  status: string;
+  date: string;
+  time: string;
+}

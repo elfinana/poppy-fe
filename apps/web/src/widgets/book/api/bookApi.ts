@@ -1,5 +1,5 @@
 import { PopupListItem } from '../../home';
-import { BookData, ReservationData, ReservationTotalData } from '../model/bookData';
+import { BookData, ReservationData, ReservationTotalData, WaitingData } from '../model/bookData';
 
 const BASE_URL = 'http://pop-py.duckdns.org';
 type UserData = {
@@ -199,7 +199,6 @@ export const cancelReservation = async (
     if (!reservationId) throw new Error('Reservation ID is empty');
     if (!accessToken) throw new Error('AccessToken is empty');
 
-    // 예약 취소 요청
     const reservationResponse = await fetch(
       `${process.env.NEXT_PUBLIC_CLIENT_URL}/users/reservations/${reservationId}`,
       {
@@ -226,5 +225,33 @@ export const cancelReservation = async (
   } catch (e) {
     console.error('Cancel Reservation Error:', e);
     throw new Error('Failed to cancel reservation');
+  }
+};
+
+//대기 조회
+export const getWaiting = async (id: number, accessToken: string): Promise<WaitingData[]> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  try {
+    if (!accessToken) throw new Error('AccessToken is empty');
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/${id}/waiting`, options);
+    const result = await response.json();
+
+    console.log('API Response:', result);
+
+    if (result && Array.isArray(result.data)) {
+      return result.data; // 배열로 반환
+    }
+
+    throw new Error('Response does not contain a valid data array');
+  } catch (e) {
+    console.error('Fetch Error:', e);
+    throw new Error('Failed to fetch data');
   }
 };

@@ -8,15 +8,17 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  SecondaryButton,
 } from '@/src/shared';
 import { BottomNavigation, NoChevronHeader } from '@/src/widgets';
 import Image from 'next/legacy/image';
 import { useRouter } from 'next/navigation';
 import { BookListItem } from '@/src/entities/book';
-import { getReservation } from '@/src/widgets/book/api/bookApi';
+import { getReservation, getWaiting } from '@/src/widgets/book/api/bookApi';
 import { useQuery } from 'react-query';
 import { useLoginStore } from 'store/login/loginStore';
-import { ReservationData, ReservationTotalData } from '@/src/widgets/book/model/bookData';
+import { ReservationData, ReservationTotalData, WaitingData } from '@/src/widgets/book/model/bookData';
+import { Item } from '@radix-ui/react-radio-group';
 type Props = {};
 
 const BookItem = (item: BookListItem) => {
@@ -134,8 +136,18 @@ const Page = (props: Props) => {
     enabled: !!token, // 토큰이 존재할 때만 활성화
     keepPreviousData: true, // 이전 데이터를 유지
   });
+  const userId = reservationData.length > 0 ? reservationData[0].userId : null;
 
-  console.log('확', reservationData);
+  const { data: waitingData = [] } = useQuery<WaitingData[]>(
+    ['reservations'],
+    () => getWaiting(Number(token), userId as string),
+    {
+      enabled: !!token, // 토큰이 존재할 때만 활성화
+      keepPreviousData: true, // 이전 데이터를 유지
+    },
+  );
+
+  console.log('확', waitingData);
   // 상태별로 필터링
   const statusMap = {
     예약완료: 'CHECKED',
@@ -174,22 +186,30 @@ const Page = (props: Props) => {
               ))}
             </ChoiceChipGroup>
             {/* 예약 항목들 필터링 후 표시 */}
-            <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
-              {filteredData.map((item, idx) => (
-                <BookItem
-                  key={`ITEM_${idx}`}
-                  thumbnail={item.thumbnail}
-                  popupStoreName={item.popupStoreName}
-                  reservationDate={item.reservationDate}
-                  reservationTime={item.reservationTime}
-                  location={item.location}
-                  person={item.person}
-                  status={item.status as 'CHECKED' | 'VISITED' | 'CANCELED'}
-                  reservationId={item.reservationId}
-                  popupStoreId={item.popupStoreId}
-                />
-              ))}
-            </div>
+            {reservationData.length > 0 ? (
+              <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
+                {filteredData.map((item, idx) => (
+                  <BookItem
+                    key={`ITEM_${idx}`}
+                    thumbnail={item.thumbnail}
+                    popupStoreName={item.popupStoreName}
+                    reservationDate={item.reservationDate}
+                    reservationTime={item.reservationTime}
+                    location={item.location}
+                    person={item.person}
+                    status={item.status as 'CHECKED' | 'VISITED' | 'CANCELED'}
+                    reservationId={item.reservationId}
+                    popupStoreId={item.popupStoreId}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center mt-32 h-[380px]">
+                <Image src="/empty/emptystore.webp" alt="Empty Store" width={200} height={200} />
+                <span className="text-gray-900 text-b1">예약한 스토어가 없어요.</span>
+                <span className="mt-4 text-gray-500 text-b3">관심 있는 팝업스토어를 예약해 보세요.</span>
+              </div>
+            )}
           </div>
         </TabsContent>
         <TabsContent value="waitings" className="my-0 ">
@@ -207,7 +227,7 @@ const Page = (props: Props) => {
             </ChoiceChipGroup>
             {/* 예약 항목들 필터링 후 표시 */}
             {/* <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
-              {filteredData.map((item, idx) => (
+              {waitingData.map((item, idx) => (
                 <WaitItem
                   key={`ITEM_${idx}`}
                   thumbnail={item.thumbnail}

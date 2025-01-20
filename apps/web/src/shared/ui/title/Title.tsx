@@ -38,6 +38,7 @@ export const Title = ({ count = 0, typography = 'h2', showArrow = true, ...props
   const router = useRouter();
 
   const moreClickHandler = () => {
+    if (!showArrow) return;
     if (props.category === 102) {
       router.push('/mypage/reviews');
     } else if (props.category === 101) {
