@@ -9,7 +9,7 @@ import { TossIcon } from '@/public';
 import { useSearchParams } from 'next/navigation';
 import { formatWithThousandsSeparator } from '@/src/shared/lib/utils';
 import { useQuery } from 'react-query';
-import { fetchPopupStoreDetail } from '@/app/detail/api/popupstoreDetailApi';
+import { fetchPopupStoreDetail } from '@/src/widgets/detail/api/popupstoreDetailApi';
 import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { toast } from '@/src/shared/hooks/use-toast';
@@ -44,7 +44,7 @@ const CheckoutPage = () => {
   });
 
   const { data, error, isLoading } = useQuery(['book_fetchPopupStoreDetail', popupId], () =>
-    fetchPopupStoreDetail(Number(popupId)),
+    fetchPopupStoreDetail(Number(popupId), token),
   );
 
   const checkboxButtonClickHandler = (index: number) => {

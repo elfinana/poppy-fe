@@ -32,3 +32,6 @@ export type { PopupListItem } from './home';
 // slider
 export { PopupSlider } from './slider';
 export type { ItemCardData } from './slider';
+
+// waiting
+export { registerUserWaiting } from './detail/api/waitingApi';
