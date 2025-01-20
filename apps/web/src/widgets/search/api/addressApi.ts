@@ -1,10 +1,7 @@
 export const fetchAddress = async (address: string) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/address/${encodeURIComponent(address)}`,
-    {
-      method: 'GET',
-    },
-  );
+  const response = await fetch(`http://pop-py.duckdns.org/popup-stores/address/${encodeURIComponent(address)}`, {
+    method: 'GET',
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch filtered popup stores: ${response.statusText}`);

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/legacy/image';
+import Image from "next/legacy/image";
 
 type ImageSliderProps = {
   images: string[]; // 슬라이더에 표시할 이미지들의 URL 배열
@@ -23,9 +23,9 @@ export const ImageSlider = ({ images, height = '168px', width = '144px' }: Image
           <Image
             src={img}
             alt={`Slider Image ${idx}`}
-            width={144}
-            height={168}
-            className="object-cover w-full h-full "
+            width={150}
+            height={150}
+            className="object-cover w-full h-full rounded-lg"
           />
         </div>
       ))}

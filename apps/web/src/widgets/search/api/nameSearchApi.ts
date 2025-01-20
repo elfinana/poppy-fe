@@ -1,5 +1,5 @@
 export const fetchNamePopupStores = async (name: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/${name}`, {
+  const response = await fetch(`http://pop-py.duckdns.org/popup-stores/${name}`, {
     method: 'GET',
   });
 

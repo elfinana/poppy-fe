@@ -89,6 +89,7 @@ const FilterSheet = ({ isOpen, onClose, activeTab, filters, onApplyFilter, onRes
   });
 
   React.useEffect(() => {
+    console.log('Filters prop received:', filters);
     setFilterState(filters || { date: null, location: ['전체'], rating: '전체', category: ['전체'] });
   }, [filters]);
 

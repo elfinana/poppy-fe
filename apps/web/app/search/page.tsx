@@ -73,8 +73,6 @@ const Page = (props: Props) => {
   React.useEffect(() => {
     const script = document.createElement('script');
     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr&submodules=geocoder&callback=initMap`;
-    // script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=BQWHygOSqhKLtydUBlEJ&submodules=geocoder&callback=initMap`;
-
     script.async = true;
 
     window.initMap = () => {
@@ -126,12 +124,14 @@ const Page = (props: Props) => {
       },
       (status, response) => {
         if (status !== naver.maps.Service.Status.OK) {
+          console.error('Geocoding 오류:', status);
           callback(null, null);
           return;
         }
 
         const result = response.v2.addresses[0]; // 첫 번째 결과
         if (!result) {
+          console.error('주소 결과를 찾을 수 없습니다.');
           callback(null, null);
           return;
         }
@@ -140,6 +140,7 @@ const Page = (props: Props) => {
         const lat = parseFloat(y); // 문자열을 숫자로 변환
         const lng = parseFloat(x); // 문자열을 숫자로 변환
 
+        console.log('주소 변환 결과 - 위도:', lat, '경도:', lng);
         callback(lat, lng);
       },
     );
@@ -189,6 +190,7 @@ const Page = (props: Props) => {
   //이 지역에서 검색
   const handleMapSearch = async () => {
     if (!mapInstance.current) {
+      console.error('지도 인스턴스가 초기화되지 않았습니다.');
       return;
     }
 
@@ -199,6 +201,7 @@ const Page = (props: Props) => {
       if (jibunAddress) {
         try {
           const popupStores = await fetchAddress(jibunAddress); // API 호출
+          console.log('팝업스토어 데이터:', popupStores);
 
           const categoryMapping: { [key: string]: string } = {
             '패션/뷰티': 'fashion',
