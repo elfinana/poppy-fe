@@ -20,6 +20,8 @@ import Setting from './icons/setting.svg';
 import ArrowRight from './icons/arrow_r_sm.svg';
 import Kebab from './icons/kebab.svg';
 import Camera from './icons/ic-camera.svg';
+import ImageDelete from './icons/ic-delete.svg';
+
 export {
   MyPage,
   Home,
@@ -42,6 +44,7 @@ export {
   ArrowRight,
   Kebab,
   Camera,
+  ImageDelete,
 };
 
 import ChevronLeft from './datePicker/chevronLeft.svg';

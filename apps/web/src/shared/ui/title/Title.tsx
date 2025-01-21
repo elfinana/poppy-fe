@@ -30,13 +30,15 @@ type Props = {
    * 101 = 저장한 팝업\
    * 102 = 작성한 리뷰
    */
-  category: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 101 | 102;
+  category?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 101 | 102;
+  showArrow?: boolean;
 };
 
-export const Title = ({ count = 0, typography = 'h2', ...props }: Props) => {
+export const Title = ({ count = 0, typography = 'h2', showArrow = true, ...props }: Props) => {
   const router = useRouter();
 
   const moreClickHandler = () => {
+    if (!showArrow) return;
     if (props.category === 102) {
       router.push('/mypage/reviews');
     } else if (props.category === 101) {
@@ -54,9 +56,11 @@ export const Title = ({ count = 0, typography = 'h2', ...props }: Props) => {
         {props.text3 ? <span className={`text-${typography} text-gray-900`}>{props.text3}</span> : null}
         {count > 0 ? <span className="text-gray-300 text-h4">{count}</span> : null}
       </div>
-      <div>
-        <ArrowRightSmall />
-      </div>
+      {showArrow && (
+        <div>
+          <ArrowRightSmall />
+        </div>
+      )}
     </div>
   );
 };

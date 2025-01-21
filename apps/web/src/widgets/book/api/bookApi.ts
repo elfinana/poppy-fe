@@ -1,5 +1,5 @@
 import { PopupListItem } from '../../home';
-import { BookData, ReservationData } from '../model/bookData';
+import { BookData, ReservationData, ReservationTotalData } from '../model/bookData';
 
 const BASE_URL = 'http://pop-py.duckdns.org';
 type UserData = {
@@ -159,6 +159,33 @@ export const getReservationDetail = async (reservationId: string, accessToken: s
 
     throw new Error('Response does not contain a data field');
   } catch (e) {
+    throw new Error('Failed to fetch data');
+  }
+};
+
+export const getReservation = async (accessToken: string): Promise<ReservationTotalData[]> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  try {
+    if (!accessToken) throw new Error('AccessToken is empty');
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/reservations`, options);
+    const result = await response.json();
+
+    console.log('API Response:', result);
+
+    if (result && Array.isArray(result.data)) {
+      return result.data; // 배열로 반환
+    }
+
+    throw new Error('Response does not contain a valid data array');
+  } catch (e) {
+    console.error('Fetch Error:', e);
     throw new Error('Failed to fetch data');
   }
 };

@@ -10,7 +10,7 @@ export const fetchFilteredPopupStores = async (filters: FilterParams) => {
     categoryIds: categoryIds?.join(',') || '',
   }).toString();
 
-  const response = await fetch(`http://pop-py.duckdns.org/popup-stores/search?${queryParams}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/search?${queryParams}`, {
     method: 'GET',
   });
 
