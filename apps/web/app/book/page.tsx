@@ -18,7 +18,6 @@ import { getReservation, getWaiting } from '@/src/widgets/book/api/bookApi';
 import { useQuery } from 'react-query';
 import { useLoginStore } from 'store/login/loginStore';
 import { ReservationData, ReservationTotalData, WaitingData } from '@/src/widgets/book/model/bookData';
-import { Item } from '@radix-ui/react-radio-group';
 type Props = {};
 
 const BookItem = (item: BookListItem) => {
@@ -144,12 +143,11 @@ const Page = (props: Props) => {
     ['waitingData'],
     () => getWaiting(userId as string, token as string),
     {
-      enabled: !!token && userId !== null, // userId가 null이면 실행되지 않음
+      enabled: !!token && userId !== null,
       keepPreviousData: true,
     },
   );
 
-  // console.log('Reservation Data:', reservationData);
   console.log('Waiting Data:', waitingData);
 
   // 상태별로 필터링

@@ -246,7 +246,7 @@ export const getWaiting = async (userId: string, accessToken: string): Promise<W
     const result = await response.json();
 
     if (result && Array.isArray(result.data)) {
-      return result.data; // 배열로 반환
+      return result.data;
     }
 
     throw new Error('Response does not contain a valid data array');
@@ -279,7 +279,7 @@ export const getWaitingDetail = async (
     console.log('API Response:', result);
 
     if (result && result.data) {
-      return result.data as WaitingData; // 단일 객체 반환
+      return result.data as WaitingData;
     }
 
     throw new Error('Response does not contain valid data');
