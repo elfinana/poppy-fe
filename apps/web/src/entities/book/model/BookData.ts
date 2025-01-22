@@ -1,14 +1,15 @@
+import { Interface } from 'readline/promises';
+
 export interface BookListItem {
   popupStoreId: number;
   thumbnail: string;
   popupStoreName: string;
   reservationDate: string;
   reservationTime: string;
-  location: string;
+  address: string;
   person: number;
   status: 'CHECKED' | 'VISITED' | 'CANCELED';
   reservationId: number;
-  popupStoreId: number;
 }
 
 export interface ChipItem {

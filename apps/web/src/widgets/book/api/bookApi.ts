@@ -229,7 +229,7 @@ export const cancelReservation = async (
 };
 
 //대기 조회
-export const getWaiting = async (id: number, accessToken: string): Promise<WaitingData[]> => {
+export const getWaiting = async (userId: string, accessToken: string): Promise<WaitingData[]> => {
   const options = {
     method: 'GET',
     headers: {
@@ -239,11 +239,11 @@ export const getWaiting = async (id: number, accessToken: string): Promise<Waiti
 
   try {
     if (!accessToken) throw new Error('AccessToken is empty');
+    if (!userId) throw new Error('UserId is empty');
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/${id}/waiting`, options);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/${userId}/waiting`, options);
+
     const result = await response.json();
-
-    console.log('API Response:', result);
 
     if (result && Array.isArray(result.data)) {
       return result.data; // 배열로 반환
@@ -251,7 +251,80 @@ export const getWaiting = async (id: number, accessToken: string): Promise<Waiti
 
     throw new Error('Response does not contain a valid data array');
   } catch (e) {
+    throw new Error('Failed to fetch waiting list');
+  }
+};
+
+//대기 상세 조회
+export const getWaitingDetail = async (
+  userId: string,
+  waitingId: string,
+  accessToken: string,
+): Promise<WaitingData> => {
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  try {
+    if (!accessToken) throw new Error('AccessToken is empty');
+    if (!userId || !waitingId) throw new Error('Missing userId or waitingId');
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/${userId}/waiting/${waitingId}`, options);
+
+    const result = await response.json();
+
+    console.log('API Response:', result);
+
+    if (result && result.data) {
+      return result.data as WaitingData; // 단일 객체 반환
+    }
+
+    throw new Error('Response does not contain valid data');
+  } catch (e) {
     console.error('Fetch Error:', e);
-    throw new Error('Failed to fetch data');
+    throw new Error('Failed to fetch waiting detail');
+  }
+};
+
+//대기 취소
+export const cancelWaiting = async (
+  userId: string,
+  waitingId: string,
+  storeId: string,
+  accessToken: string,
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    if (!userId) throw new Error('userId is empty');
+    if (!accessToken) throw new Error('AccessToken is empty');
+
+    const reservationResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/users/${userId}/waiting/${waitingId}?storeId=${storeId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    if (!reservationResponse.ok) {
+      const errorData = await reservationResponse.json();
+      throw new Error(`Failed to cancel reservation: ${errorData.message || 'Unknown error'}`);
+    }
+
+    const responseData = await reservationResponse.json();
+
+    if (responseData.code === 200) {
+      console.log(`Reservation ${userId} successfully canceled`);
+      return { success: true, message: responseData.message };
+    }
+
+    throw new Error(`Unexpected response: ${responseData.message || 'Unknown error'}`);
+  } catch (e) {
+    console.error('Cancel Reservation Error:', e);
+    throw new Error('Failed to cancel reservation');
   }
 };
