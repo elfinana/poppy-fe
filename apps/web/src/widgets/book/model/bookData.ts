@@ -37,8 +37,25 @@ export interface ReservationTotalData {
   popupStoreName: string;
   reservationDate: string;
   reservationTime: string;
-  location: string;
+  address: string;
   status: string;
   thumbnail: string;
   person: number;
+  reservationId: number;
+}
+
+export interface WaitingData {
+  userId: string;
+  nickname: string;
+  waitingId: number;
+  waitingNumber: number;
+  storeId: number;
+  storeName: string;
+  location: string;
+  phoneNumber: string;
+  status: string;
+  date: string;
+  time: string;
+  thumbnailUrl: string;
+  address: string;
 }

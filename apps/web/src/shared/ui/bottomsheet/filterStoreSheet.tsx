@@ -26,7 +26,6 @@ import { Sort } from '@/public';
 import { formatDay } from '../../lib/dateUtils';
 import Image from 'next/image';
 import FilterSheet from './filterSheet';
-import MarkerInfoSheet from './markerInfoSheet';
 import { useRouter } from 'next/navigation';
 import { BottomSheetTitle } from './bottomsheet';
 import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
