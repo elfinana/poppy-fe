@@ -1,12 +1,13 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Button } from '@repo/ui';
-import WebView from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 export default function Native() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <WebView source={{ uri: 'http://10.0.2.2:3000/' }} />
+      <WebView style={styles.container} source={{ uri: 'https://poppy-il8yopml6-poppy-ca4d5978.vercel.app/home' }} />
+      {/* <Text>hello world</Text> */}
     </SafeAreaView>
   );
 }
