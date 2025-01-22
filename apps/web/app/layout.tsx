@@ -18,8 +18,14 @@ const pretendard = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const onMessageFCM = async () => {
     // 브라우저에 알림 권한 요청
+    alert('before Nofitication');
+    console.log('before Nofitication');
     const permission = await Notification.requestPermission();
+    alert('after Nofitication');
+    console.log('before Nofitication');
     if (permission !== 'granted') return;
+    alert('after permission');
+    console.log('before Nofitication');
 
     const firebaseApp = initializeApp({
       apiKey: 'AIzaSyBGXNBcviukgio0Njtui32shfJwYi2ps2A',
