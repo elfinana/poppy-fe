@@ -61,14 +61,12 @@ const BookDetailPage = () => {
       const result = await cancelReservation(reservationId, token);
 
       if (result.success) {
-        alert(result.message);
-
         // 예약 상세 조회
         const updatedReservation = await getReservationDetail(reservationId, token);
 
         // 상태가 CANCELED이면 업데이트
         if (updatedReservation?.status === 'CANCELED') {
-          setIsCanceled(true); // 상태 업데이트
+          setIsCanceled(true);
         }
       }
     } catch (e: any) {
