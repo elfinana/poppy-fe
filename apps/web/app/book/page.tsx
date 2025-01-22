@@ -42,9 +42,7 @@ const BookItem = (item: BookListItem) => {
 
   const handleClick = () => {
     const showFooterParam = true;
-    // router.push(
-    //   `/detail/${item.popupStoreId}/book/completed/detail?reservationId=${item.reservationId}&popupId=${item.popupStoreId}&showFooterParam=${showFooterParam}`,
-    // );
+
     router.push(
       `/book/${item.popupStoreId}?reservationId=${item.reservationId}&popupId=${item.popupStoreId}&showFooterParam=${showFooterParam}`,
     );
@@ -88,10 +86,6 @@ const BookItem = (item: BookListItem) => {
 
 const WaitItem = (item: WaitingData) => {
   const router = useRouter();
-  // const userId = 6;
-  // const handleClick = () => {
-  //   router.push(`/book/wait/${item.userId}?WaitingId=${item.waitingId}&userId=${item.userId}`);
-  // };
 
   const handleClick = () => {
     router.push(`/book/wait/${item.userId}?WaitingId=${item.waitingId}&userId=${item.userId}`);
@@ -224,7 +218,7 @@ const Page = (props: Props) => {
         </TabsContent>
         <TabsContent value="waitings" className="my-0">
           <div className="px-16 py-12 bg-gray-50">
-            <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
+            <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px] mb-[34px]">
               {waitingData.filter(item => item.status === 'WAITING').length > 0 ? (
                 waitingData
                   .filter(item => item.status === 'WAITING')

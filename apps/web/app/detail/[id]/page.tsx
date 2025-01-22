@@ -301,9 +301,8 @@ export default function Page() {
                       <IconButton icon={'ic-info-time'} size={'sm'} />
                       <p className="text-gray-800 text-b3_com">
                         {`${status === 'operational' ? '영업 중' : '영업 종료'} · 매일 `}
-                        {data?.openingTime?.hour
-                          ?.toString()
-                          .padStart(2, '0')}:{data?.openingTime?.minute?.toString().padStart(2, '0')} -
+                        {data?.openingTime?.hour?.toString().padStart(2, '0')}:
+                        {data?.openingTime?.minute?.toString().padStart(2, '0')} -
                         {data?.closingTime?.hour?.toString().padStart(2, '0')}:
                         {data?.closingTime?.minute?.toString().padStart(2, '0')}
                       </p>
@@ -575,7 +574,10 @@ export default function Page() {
               <AlertDialogAction
                 variant="informative"
                 text="내역으로 이동"
-                onClick={() => setWaitingDialogOpen(false)}
+                onClick={() => {
+                  setWaitingDialogOpen(false);
+                  router.push('/book');
+                }}
               />
             </AlertDialogFooter>
           </AlertDialogContent>
