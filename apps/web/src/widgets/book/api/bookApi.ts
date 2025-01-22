@@ -1,45 +1,6 @@
 import { PopupListItem } from '../../home';
 import { BookData, ReservationData, ReservationTotalData, WaitingData } from '../model/bookData';
 
-const BASE_URL = 'http://pop-py.duckdns.org';
-type UserData = {
-  id: number;
-  name: string;
-  phoneNumber: string;
-};
-
-export const getToken = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/test/token/4`, {
-      method: 'GET',
-      headers: {},
-    });
-    return response.text();
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
-};
-
-export const getUserData = async (): Promise<UserData> => {
-  try {
-    const response = await fetch(`${BASE_URL}/user`);
-    const result = await response.json();
-
-    console.log(result.data);
-
-    // 'data' 필드가 있는 경우 반환
-    if (result && result.data) {
-      return result.data;
-    }
-
-    // 'data' 필드가 없으면 예외 처리
-    throw new Error('Response does not contain a data field');
-  } catch (e) {
-    throw new Error('Failed to fetch data');
-  }
-};
-
 export const getPopupDetail = async (id: number): Promise<PopupListItem> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/detail/${id}`);
@@ -177,10 +138,8 @@ export const getReservation = async (accessToken: string): Promise<ReservationTo
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/reservations`, options);
     const result = await response.json();
 
-    console.log('API Response:', result);
-
     if (result && Array.isArray(result.data)) {
-      return result.data; // 배열로 반환
+      return result.data;
     }
 
     throw new Error('Response does not contain a valid data array');
@@ -273,8 +232,6 @@ export const getWaitingDetail = async (
     const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/${userId}/waiting/${waitingId}`, options);
 
     const result = await response.json();
-
-    console.log('API Response:', result);
 
     if (result && result.data) {
       return result.data as WaitingData;

@@ -39,7 +39,7 @@ const WaitDetailPage = () => {
   const { token } = useLoginStore();
   if (!token) throw new Error('token is empty');
 
-  //대기상세조회회
+  //대기상세조회
   const { data, isLoading, isError } = useQuery(
     ['getWaitingDetail', userId, WaitingId],
     () => getWaitingDetail(userId, WaitingId, token),
@@ -54,7 +54,6 @@ const WaitDetailPage = () => {
   const handleCancel = async (): Promise<void> => {
     try {
       if (!data) {
-        console.log('대기 상세 데이터가 없습니다:', data);
         throw new Error('대기 상세 데이터를 가져오지 못했습니다.');
       }
       if (!data?.storeId) {
@@ -62,16 +61,12 @@ const WaitDetailPage = () => {
       }
 
       const storeId = data.storeId.toString();
-      console.log('아이디', storeId);
       const result = await cancelWaiting(userId, WaitingId, storeId, token);
 
       if (result.success) {
         setIsCanceled(true);
       }
-    } catch (e: any) {
-      // 에러 처리
-      alert(e.message || '대기 취소에 실패했습니다.');
-    }
+    } catch (e: any) {}
   };
 
   return (

@@ -79,11 +79,10 @@ export default function Page() {
   const handleCopy = () => {
     if (addressRef.current) {
       navigator.clipboard.writeText(addressRef.current.textContent || '');
-      alert('주소가 복사되었습니다!');
     }
   };
 
-  //리뷰조회데이터터
+  //리뷰조회데이터
   const { data: reviewData, isLoading: isReviewLoading } = useQuery(
     ['reviews', id, sortType],
     () => fetchReviews(Number(id), sortType, token as string, page, size),
@@ -147,16 +146,6 @@ export default function Page() {
     if (!reviewData?.content || !userNickname) return false;
     return reviewData.content.some((review: any) => review.userName === userNickname);
   }, [reviewData, userNickname]);
-
-  const title = recommandData.length > 0 ? recommandData[0].title : '유사한 팝업';
-
-  const buttonHandle = () => {
-    if (selectedTab === 'a') {
-      toggleBottomSheet();
-    } else {
-      router.push(`/review/${id}`);
-    }
-  };
 
   const today = new Date();
   const todayDate = {
@@ -299,18 +288,22 @@ export default function Page() {
                     </div>
                     <div className="flex gap-x-[8px] h-[24px] items-center">
                       <IconButton icon={'ic-info-time'} size={'sm'} />
-                      <p className="text-gray-800 text-b3_com">
-                        {`${status === 'operational' ? '영업 중' : '영업 종료'} · 매일 `}
-                        {data?.openingTime?.hour?.toString().padStart(2, '0')}:
-                        {data?.openingTime?.minute?.toString().padStart(2, '0')} -
-                        {data?.closingTime?.hour?.toString().padStart(2, '0')}:
-                        {data?.closingTime?.minute?.toString().padStart(2, '0')}
+                      <p className="text-gray-800 ">
+                        <span className="text-b2">{status === 'operational' ? '영업 중' : '영업 종료'}</span>
+                        <span className="text-b3_com">
+                          {` · 매일 `}
+                          {data?.openingTime?.hour?.toString().padStart(2, '0')}:
+                          {data?.openingTime?.minute?.toString().padStart(2, '0')} -
+                          {data?.closingTime?.hour?.toString().padStart(2, '0')}:
+                          {data?.closingTime?.minute?.toString().padStart(2, '0')}
+                        </span>
                       </p>
                     </div>
                     <div className="flex gap-x-[8px] h-[24px] items-center">
                       <IconButton icon={'ic-info-location'} size={'sm'} />
                       <p className="text-gray-800 text-b3_com">{data?.address}</p>
                     </div>
+
                     <div className="flex gap-x-[8px] h-[24px] items-center">
                       <IconButton icon={'ic-info-ticket'} size={'sm'} />
                       <p className="text-gray-800 text-b3_com"> {data?.price?.toLocaleString()} </p>

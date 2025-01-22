@@ -11,7 +11,7 @@ const AddressMap = ({ address }: AddressMapProps) => {
   const loadNaverMapScript = (): Promise<void> => {
     return new Promise((resolve, reject) => {
       if (typeof naver !== 'undefined' && naver.maps) {
-        resolve(); // 네이버 지도 API가 이미 로드된 경우
+        resolve();
         return;
       }
 
@@ -19,7 +19,6 @@ const AddressMap = ({ address }: AddressMapProps) => {
       script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=tiv3ffuyzr&submodules=geocoder`;
       script.async = true;
       script.onload = () => {
-        console.log('Naver Map Script loaded successfully');
         resolve();
       };
       script.onerror = () => reject(new Error('네이버 지도 API 로드 실패'));

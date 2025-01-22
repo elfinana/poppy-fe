@@ -21,10 +21,6 @@ import { ReservationData, ReservationTotalData, WaitingData } from '@/src/widget
 type Props = {};
 
 const BookItem = (item: BookListItem) => {
-  const searchParams = useSearchParams();
-
-  const reservationId = searchParams.get('reservationId');
-  console.log('아이디', reservationId);
   const router = useRouter();
 
   const statusStyle: Record<'CHECKED' | 'VISITED' | 'CANCELED', string> = {
@@ -148,8 +144,6 @@ const Page = (props: Props) => {
     },
   );
 
-  console.log('Waiting Data:', waitingData);
-
   // 상태별로 필터링
   const statusMap = {
     예약완료: 'CHECKED',
@@ -188,7 +182,7 @@ const Page = (props: Props) => {
               ))}
             </ChoiceChipGroup>
             {/* 예약 항목들 필터링 후 표시 */}
-            {reservationData.length > 0 ? (
+            {filteredData.length > 0 ? (
               <div className="overflow-y-scroll h-[calc(100vh-218px)] mt-[12px]">
                 {filteredData.map((item, idx) => (
                   <BookItem
@@ -208,8 +202,15 @@ const Page = (props: Props) => {
             ) : (
               <div className="flex flex-col items-center justify-center mt-32 h-[380px]">
                 <Image src="/empty/emptystore.webp" alt="Empty Store" width={200} height={200} />
-                <span className="text-gray-900 text-b1">예약한 스토어가 없어요.</span>
-                <span className="mt-4 text-gray-500 text-b3">관심 있는 팝업스토어를 예약해 보세요.</span>
+                <span className="text-gray-900 text-b1">
+                  {selectedStatus === '전체' && '예약한 스토어가 없어요.'}
+                  {selectedStatus === '예약완료' && '예약한 스토어가 없어요.'}
+                  {selectedStatus === '방문완료' && '방문한 스토어가 없어요.'}
+                  {selectedStatus === '예약취소' && '취소한 스토어가 없어요.'}
+                </span>
+                {selectedStatus === '전체' && (
+                  <span className="mt-4 text-gray-500 text-b3">관심 있는 팝업스토어를 예약해 보세요.</span>
+                )}
               </div>
             )}
           </div>

@@ -14,6 +14,7 @@ import { ImageSlider } from '@/src/widgets/slider/ui/ImageSlider';
 import { formatDay } from '../../lib/dateUtils';
 import { ImageSliderSkeleton } from '../skeletons/ImageSliderSkeleton';
 import { operations } from '../../lib/operations';
+import { useRouter } from 'next/navigation';
 
 type MarkerInfoSheetProps = {
   isOpen: boolean;
@@ -35,6 +36,11 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
     { hour: markerData.openingTime?.hour ?? 0, minute: markerData.openingTime?.minute ?? 0 },
     { hour: markerData.closingTime?.hour ?? 0, minute: markerData.closingTime?.minute ?? 0 },
   );
+  const router = useRouter();
+
+  const handleItemClick = (id: number) => {
+    router.push(`/detail/${id}`);
+  };
 
   if (isLoading) {
     return (
@@ -62,13 +68,14 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
           <BottomSheetDescription className="invisible" />
           <BottomSheetTitle className="invisible" />
         </BottomSheetHeader>
-        <div className="flex flex-row justify-between items-center mt-[32px]">
-          <span className="text-h2">{markerData.name}</span>
-          <StatusLabel status={status} />
-        </div>
+        <div onClick={() => handleItemClick(markerData.id)}>
+          <div className="flex flex-row justify-between items-center mt-[32px]">
+            <span className="text-h2">{markerData.name}</span>
+            <StatusLabel status={status} />
+          </div>
 
-        <span className="text-gray-500 text-b3_com">
-          {`
+          <span className="text-gray-500 text-b3_com">
+            {`
              ${formatDay({
                year: markerData.startDate.year,
                month: markerData.startDate.month,
@@ -81,15 +88,16 @@ const MarkerInfoSheet = ({ isOpen, onClose, markerData }: MarkerInfoSheetProps) 
             day: markerData.endDate.day,
           })}
           `}
-        </span>
-        <div className="flex items-center mt-4 mb-8">
-          <IconButton icon={'ic-star-active'} size={'smmd'} />
-          <span className="ml-2 text-gray-900 text-b2">{markerData.rating}</span>
-          <span className="ml-8 text-gray-400 text-b5">방문자 리뷰 {markerData.reviewCnt}</span>
-        </div>
+          </span>
+          <div className="flex items-center mt-4 mb-8">
+            <IconButton icon={'ic-star-active'} size={'smmd'} />
+            <span className="ml-2 text-gray-900 text-b2">{markerData.rating}</span>
+            <span className="ml-8 text-gray-400 text-b5">방문자 리뷰 {markerData.reviewCnt}</span>
+          </div>
 
-        <div className="mb-[14px]">
-          <ImageSlider images={markerData.imageUrls} />
+          <div className="mb-[14px]">
+            <ImageSlider images={markerData.imageUrls} />
+          </div>
         </div>
       </BottomSheetContent>
     </BottomSheet>

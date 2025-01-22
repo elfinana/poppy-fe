@@ -159,7 +159,6 @@ const FilterSheet = ({ isOpen, onClose, activeTab, filters, onApplyFilter, onRes
                     <DatePicker
                       selectedDate={filterState.date || undefined}
                       onDateChange={(date: Date | undefined) => {
-                        console.log('Date selected:', date);
                         updateFilterState('date', date || null);
                       }}
                     />
