@@ -62,7 +62,7 @@ const Page = (props: Props) => {
   const applyFilters = (
     filters: React.SetStateAction<{ date: Date | null; location: string[]; rating: string; category: string[] }>,
   ) => {
-    setSelectedFilters(filters); // Filtersheet에서 적용된 필터 반영
+    setSelectedFilters(filters);
   };
 
   const toggleFilterSheet = (tab: string) => {
@@ -180,7 +180,6 @@ const Page = (props: Props) => {
         }
 
         const fullAddress = `${area1} ${area2}`.trim(); // '서울특별시 중구' 형식으로 조합
-        console.log('지역', fullAddress);
         callback(fullAddress);
       },
     );
@@ -223,7 +222,7 @@ const Page = (props: Props) => {
                   lat,
                   lng,
                   category,
-                  name: store.name, // 팝업스토어 이름
+                  name: store.name,
                   onMarkerClick: () => handleMarkerClick(store),
                 });
               }
@@ -288,15 +287,15 @@ const Page = (props: Props) => {
   };
 
   const handleResetFilter = () => {
-    setIsFilterStoreOpen(false); // FilterStoreSheet 닫기
+    setIsFilterStoreOpen(false);
     setSelectedFilters({
       date: null,
       location: [],
       rating: '',
       category: [],
-    }); // 필터 초기화
-    setActiveTab('c'); // 기본 탭 설정
-    setIsFilterSheetOpen(true); // FilterSheet 열기
+    });
+    setActiveTab('c');
+    setIsFilterSheetOpen(true);
   };
 
   return (
