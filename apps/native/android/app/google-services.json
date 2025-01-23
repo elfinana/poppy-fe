@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "558673858968",
+    "project_id": "poppy-fe",
+    "storage_bucket": "poppy-fe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558673858968:android:4265f18379c03c1dc6dbed",
+        "android_client_info": {
+          "package_name": "com.gunyange.xnative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAApjH8dew6fJxy9wNaojgp0uRopSqwNZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558673858968:android:9e9a2cc20e8f2f1dc6dbed",
+        "android_client_info": {
+          "package_name": "com.poppy.poppyfe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAApjH8dew6fJxy9wNaojgp0uRopSqwNZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
