@@ -1,3 +1,5 @@
+'use client';
+
 import { Input } from '@/src/shared';
 import { ChevronHeader } from '@/src/widgets';
 import React from 'react';
