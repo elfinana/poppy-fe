@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // 보호된 경로 정의
-const protectedRoutes = ['/book', '/mypage'];
+const protectedRoutes = ['/book'];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value; // 쿠키에서 토큰 가져오기
@@ -20,5 +20,5 @@ export function middleware(request: NextRequest) {
 
 // Middleware가 적용될 경로
 export const config = {
-  matcher: ['/book/:path*', '/mypage/:path*'], // 보호된 경로에만 middleware 적용
+  matcher: ['/book/:path*'], // book 경로만 middleware 적용
 };

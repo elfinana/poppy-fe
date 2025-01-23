@@ -43,13 +43,25 @@ const Page = (props: Props) => {
       <div className="px-16 mt-12">
         <div className="flex items-center justify-between pl-16 pr-8 border border-gray-100 bg-gray-50 rounded-12 py-18">
           <div className="flex flex-col gap-2">
-            <div className="text-black text-h2">{userInfoData.userNickname}</div>
-            <div className="text-gray-600 text-b3_com">{userInfoData.userEmail}</div>
+            {userInfoData.userEmail === '' ? (
+              <div className="text-black text-h2">로그인 해주세요</div>
+            ) : (
+              <>
+                <div className="text-black text-h2">{userInfoData.userNickname}</div>
+                <div className="text-gray-600 text-b3_com">{userInfoData.userEmail}</div>
+              </>
+            )}
           </div>
           <div>
-            <SecondaryButton size="sm" onClick={editClickHandler}>
-              프로필 수정
-            </SecondaryButton>
+            {userInfoData.userEmail === '' ? (
+              <SecondaryButton size="sm" onClick={editClickHandler}>
+                로그인 하기
+              </SecondaryButton>
+            ) : (
+              <SecondaryButton size="sm" onClick={editClickHandler}>
+                프로필 수정
+              </SecondaryButton>
+            )}
           </div>
         </div>
       </div>
