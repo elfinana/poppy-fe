@@ -19,12 +19,10 @@ const Page = (props: Props) => {
 
   const handleClick = () => {
     clearToken();
-    setUserInfo([
-      {
-        userEmail: '',
-        userNickname: '',
-      },
-    ]);
+    setUserInfo({
+      userEmail: '',
+      userNickname: '',
+    });
     router.push('/');
   };
 

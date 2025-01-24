@@ -41,7 +41,6 @@ const navArr = [
     image: MyPage,
     activeImg: AcMyPage,
     action: '/mypage',
-    requiresAuth: true,
   },
 ];
 

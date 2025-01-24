@@ -2,10 +2,7 @@
 
 export const getOnetimeToken = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/oauth2/authorization/naver`, {
-      method: 'GET',
-      mode: 'no-cors',
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/oauth2/authorization/naver`);
     const result = await res.json();
 
     if (result && result.data) {
