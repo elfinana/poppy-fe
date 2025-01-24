@@ -63,6 +63,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         onClick();
       }
     };
+    // TODO : debouncing 적용 필요
     React.useEffect(() => {
       if (nickNameCheck) {
         setMessage('이미 사용 중인 닉네임입니다.');

@@ -137,8 +137,8 @@ export default function Page() {
   };
 
   const userNickname = useUserInfo(state => {
-    if (state.userInfoData.length > 0) {
-      return state.userInfoData[0].userNickname || 'Guest';
+    if (state.userInfoData) {
+      return state.userInfoData.userNickname || 'Guest';
     }
     return 'Guest';
   });

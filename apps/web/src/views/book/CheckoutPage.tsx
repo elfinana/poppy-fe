@@ -34,7 +34,7 @@ const CheckoutPage = () => {
   const { token } = useLoginStore();
 
   const { userInfoData } = useUserInfo();
-  if (!userInfoData || !userInfoData[0]) throw Error('userInfo is empty');
+  if (!userInfoData) throw Error('userInfo is empty');
 
   const [paymentMethod, setPaymentMethod] = React.useState<string>('토스페이');
   const [checked, setChecked] = React.useState<{ [key: number]: boolean }>({
@@ -88,8 +88,8 @@ const CheckoutPage = () => {
             currency: 'KRW',
             orderId: orderId,
             orderName: 'POPPY 테스트',
-            customerName: userInfoData[0].userNickname,
-            customerEmail: userInfoData[0].userEmail,
+            customerName: userInfoData.userNickname,
+            customerEmail: userInfoData.userEmail,
             successUrl: `${window.location.origin}/detail/${popupId}/book/paymentProcess/`,
             failUrl: `${window.location.origin}/detail/${popupId}/book/failed`,
           });
@@ -121,8 +121,8 @@ const CheckoutPage = () => {
         <span className="block mb-20 text-gray-900 text-h2">예약자 정보</span>
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-gray-900 text-h3">{userInfoData[0].userNickname}</span>
-            <span className="text-gray-600 text-b3">{userInfoData[0].userEmail}</span>
+            <span className="text-gray-900 text-h3">{userInfoData.userNickname}</span>
+            <span className="text-gray-600 text-b3">{userInfoData.userEmail}</span>
           </div>
           <SecondaryButton variant="default" size={'sm'}>
             수정하기
