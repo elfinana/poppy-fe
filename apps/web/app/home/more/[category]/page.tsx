@@ -2,6 +2,7 @@
 
 import { getRecent10Popups } from '@/src/entities';
 import { formatToMD, ItemCard, ItemCardSkeleton } from '@/src/shared';
+import { formatDay } from '@/src/shared/lib/dateUtils';
 import {
   ChevronHeader,
   ItemCardData,
@@ -96,7 +97,7 @@ const Page = ({ params }: { params: { category: string } }) => {
                   img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                   location={item.location}
                   title={item.name}
-                  day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
+                  day={`${formatDay({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatDay({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
                   deadLine={0}
                   rank={idx + 1}
                   isCount={item.isAlmostFull}

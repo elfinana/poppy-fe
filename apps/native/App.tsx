@@ -6,7 +6,7 @@ import WebView from 'react-native-webview';
 export default function Native() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <WebView source={{ uri: 'http://10.0.2.2:3000/' }} />
+      <WebView source={{ uri: 'https://poppy-il8yopml6-poppy-ca4d5978.vercel.app/home' }} />
     </SafeAreaView>
   );
 }

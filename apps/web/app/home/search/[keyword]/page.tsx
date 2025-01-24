@@ -27,6 +27,7 @@ import {
   ToggleChipGroup,
   ToggleChipItem,
 } from '@/src/shared';
+import { formatDay } from '@/src/shared/lib/dateUtils';
 import { BottomSheetDescription, BottomSheetFooter, BottomSheetTitle } from '@/src/shared/ui/bottomsheet/bottomsheet';
 import { getNewList, InputHeader, ItemCardData, PopupListItem } from '@/src/widgets';
 import { getListByName, getPopularList } from '@/src/widgets';
@@ -309,7 +310,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
                   img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                   location={item.location}
                   title={item.name}
-                  day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
+                  day={`${formatDay({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatDay({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
                   deadLine={0}
                   rank={idx + 1}
                   isCount={item.isAlmostFull}
@@ -345,7 +346,7 @@ const Page = ({ params }: { params: { keyword: string } }) => {
                         img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
                         location={item.location}
                         title={item.name}
-                        day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
+                        day={`${formatDay({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatDay({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
                         deadLine={0}
                         rank={idx + 1}
                         isCount={item.isAlmostFull}

@@ -3,6 +3,7 @@ import React from 'react';
 import { ItemCardData } from '../model';
 import { useQuery } from 'react-query';
 import { PopupCarouselItem, PopupListItem } from '../../home';
+import { formatDay } from '@/src/shared/lib/dateUtils';
 
 type Props = {
   /**@description 슬라이더 아이템의 크기 및 종류 설정 */
@@ -45,7 +46,7 @@ export const PopupSlider = ({ ...props }: Props) => {
             img={item.thumbnailUrl ? item.thumbnailUrl : 'https://placehold.co/500/webp'}
             location={item.location}
             title={item.name}
-            day={`${formatToMD({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatToMD({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
+            day={`${formatDay({ year: item.startDate.year, month: item.startDate.month, day: item.startDate.day })} - ${formatDay({ year: item.endDate.year, month: item.endDate.month, day: item.endDate.day })}`}
             deadLine={0}
             rank={idx + 1}
             isCount={item.isAlmostFull}

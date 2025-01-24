@@ -44,6 +44,7 @@ import { Title } from '@/src/shared';
 import { toast } from '@/src/shared/hooks/use-toast';
 import { registerUserWaiting } from '@/src/widgets';
 import { bell } from '@/public';
+import { calculateDaysLeft } from '@/src/shared/lib/calculateDaysLeft';
 
 export default function Page() {
   const router = useRouter();
@@ -147,35 +148,7 @@ export default function Page() {
     return reviewData.content.some((review: any) => review.userName === userNickname);
   }, [reviewData, userNickname]);
 
-  const today = new Date();
-  const todayDate = {
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    day: today.getDate(),
-  };
-
-  const formatDateToString = (date: { year: number; month: number; day: number }): string => {
-    const year = date.year.toString();
-    const month = date.month.toString().padStart(2, '0');
-    const day = date.day.toString().padStart(2, '0');
-
-    return `${year}${month}${day}`;
-  };
-
-  const daysLeft = data?.endDate
-    ? getDateDifference(formatDateToString(data.endDate), formatDateToString(todayDate))
-    : null;
-
-  const status = operations(
-    {
-      hour: data?.openingTime?.hour ?? 0,
-      minute: data?.openingTime?.minute ?? 0,
-    },
-    {
-      hour: data?.closingTime?.hour ?? 0,
-      minute: data?.closingTime?.minute ?? 0,
-    },
-  );
+  const daysLeft = calculateDaysLeft(data?.endDate);
 
   const tabsA = [
     { value: 'a', label: '정보' },
@@ -274,15 +247,21 @@ export default function Page() {
                       <IconButton icon={'ic-info-date'} size={'sm'} />
                       {data && (
                         <p className="text-gray-800 text-b3_com">
-                          {`${formatDay({
-                            year: data.startDate.year,
-                            month: data.startDate.month,
-                            day: data.startDate.day,
-                          })} ~ ${formatDay({
-                            year: data.endDate.year,
-                            month: data.endDate.month,
-                            day: data.endDate.day,
-                          })}`}
+                          {`${formatDay(
+                            {
+                              year: data.startDate.year,
+                              month: data.startDate.month,
+                              day: data.startDate.day,
+                            },
+                            true,
+                          )} ~ ${formatDay(
+                            {
+                              year: data.endDate.year,
+                              month: data.endDate.month,
+                              day: data.endDate.day,
+                            },
+                            true,
+                          )}`}
                         </p>
                       )}
                     </div>

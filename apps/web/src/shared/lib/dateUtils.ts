@@ -11,6 +11,9 @@ export const getDayOfWeek = (dateObj: DateObject): string => {
   return daysOfWeek[date.getDay()];
 };
 
-export const formatDay = (dateObj: DateObject): string => {
-  return `${dateObj.year}.${dateObj.month}.${dateObj.day} (${getDayOfWeek(dateObj)})`;
+export const formatDay = (dateObj: DateObject, includeYear: boolean = false): string => {
+  if (includeYear) {
+    return `${dateObj.year}.${dateObj.month}.${dateObj.day} (${getDayOfWeek(dateObj)})`;
+  }
+  return `${dateObj.month}.${dateObj.day} (${getDayOfWeek(dateObj)})`;
 };
