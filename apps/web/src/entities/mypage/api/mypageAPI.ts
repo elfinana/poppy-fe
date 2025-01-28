@@ -32,19 +32,20 @@ export const getScrapList = async (
 };
 
 // 닉네임 변경
-export const changeNickName = async (id: string, newNickname: string) => {
+export const changeNickName = async (id: string, newNickname: string, token: string): Promise<boolean> => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ nickname: newNickname }),
     });
 
     const result = await res.json();
 
-    if (res.ok && result.code === 200) {
-      return result;
+    if (result.code === 200) {
+      return true;
     }
 
     // Handle API error case

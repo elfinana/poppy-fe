@@ -26,6 +26,7 @@ export {
   getPlannedList,
   getListByCategory,
   getListByName,
+  getScrapList,
 } from './home';
 export type { PopupListItem } from './home';
 
