@@ -14,14 +14,10 @@ import {
   getPlannedList,
 } from '@/src/widgets';
 import React from 'react';
-import { useLoginStore } from 'store/login/loginStore';
 
 type Props = {};
 
 const Page = (props: Props) => {
-  const { token, refreshToken } = useLoginStore();
-  console.log(token);
-
   return (
     <div>
       <div className="sticky top-0 z-50 w-full">

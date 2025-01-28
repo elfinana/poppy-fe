@@ -2,7 +2,7 @@ import { PopupCarouselItem, PopupCarouselResponse, PopupListItem, ScrapListItem 
 
 export const getClosingSoonList = async (): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/popup-stores/deadline`);
     const result = await response.json();
 
     if (result && result.data) {

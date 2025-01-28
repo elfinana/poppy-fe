@@ -3,14 +3,12 @@
 import React from 'react';
 import { type CarouselApi, Carousel, CarouselContent, CarouselItem } from '@/src/shared/ui/carousel';
 import { getClosingSoonList } from '..';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import Autoplay from 'embla-carousel-autoplay';
 import { useQuery } from 'react-query';
 import { CarouselSkeleton } from '@/src/shared';
 
-type Props = {};
-
-const PopupCarouselL = (props: Props) => {
+const PopupCarouselL = () => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
 
@@ -31,6 +29,17 @@ const PopupCarouselL = (props: Props) => {
       <CarouselContent>
         {isLoading ? (
           <CarouselSkeleton variant="L" />
+        ) : data?.length === 0 ? (
+          <CarouselItem className="px-0">
+            <div className="relative flex items-center justify-center bg-gray-100 h-264">
+              <Image
+                src="https://placehold.co/500/webp"
+                alt="no popup stores closing soon"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </CarouselItem>
         ) : (
           data?.map((item, idx) => (
             <CarouselItem key={`CAROUSEL_ITEM_${idx}`} className="px-0">

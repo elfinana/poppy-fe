@@ -6,10 +6,12 @@ import { CheckboxButton, formatToMD, ItemCard, ItemCardSkeleton, PrimaryButton }
 import { ChevronHeader, ItemCardData } from '@/src/widgets';
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useLoginStore } from 'store/login/loginStore';
 
-type Props = {};
+const Page = () => {
+  const { token } = useLoginStore();
+  if (!token) throw new Error('token is empty');
 
-const Page = (props: Props) => {
   const deleteList = React.useRef<Array<number>>([]);
   const [editMode, setEditMode] = React.useState(false);
   const [count, setCount] = React.useState(deleteList.current.length);
@@ -26,7 +28,7 @@ const Page = (props: Props) => {
     }
   };
 
-  const { data, error, isLoading } = useQuery(['getScrapList'], () => getScrapList('RECENT_SAVED'));
+  const { data, error, isLoading } = useQuery(['getScrapList'], () => getScrapList(token));
 
   return (
     <div className="flex flex-col h-full">

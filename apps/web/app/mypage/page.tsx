@@ -5,6 +5,7 @@ import { Hr, SecondaryButton, Title } from '@/src/shared';
 import { BottomNavigation, getNewList, getScrapList, MypageHeader, PopupListItem, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 
 type Props = {};
@@ -16,21 +17,9 @@ const Page = (props: Props) => {
   const { userInfoData } = useUserInfo();
   const { token } = useLoginStore();
 
-  const [newListData, setNewListData] = useState<Array<PopupListItem>>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getNewList();
-        setNewListData(data);
-        console.log(data); // 여기서 데이터 확인 가능
-      } catch (error) {
-        console.error('Failed to fetch new list:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data, error, isLoading } = useQuery(['getScrapListCount'], () => getScrapList(token!), {
+    enabled: !!token,
+  });
 
   const reviewsClickHandler = () => {
     router.push('/mypage/reviews');
@@ -90,9 +79,9 @@ const Page = (props: Props) => {
       </div>
       <div className="mt-16">
         <div className="flex flex-col w-full gap-y-12">
-          <Title category={101} text1="저장한 팝업" count={!token ? 0 : newListData.length} typography="h3" />
           {!token ? (
             <>
+              <Title category={101} text1="저장한 팝업" count={0} typography="h3" showArrow={false} />
               <div className="flex justify-center items-center h-[64px] mx-[16px] bg-gray-50 rounded-8">
                 <div className="text-center text-gray-600 text-b3">
                   로그인한 뒤 마음에 드는
@@ -103,6 +92,13 @@ const Page = (props: Props) => {
             </>
           ) : (
             <>
+              <Title
+                category={101}
+                text1="저장한 팝업"
+                count={isLoading ? 0 : data?.length}
+                typography="h3"
+                showArrow={false}
+              />
               <PopupSlider variant="smlist" queryKey="getSaveList" queryFn={() => getScrapList(token)} />
             </>
           )}

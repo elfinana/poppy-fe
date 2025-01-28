@@ -1,24 +1,15 @@
 import { PopupListItem } from '@/src/widgets';
 
-const options = {
-  method: 'POST',
-  headers: {
-    Authorization: `${process.env.TEST_ACCESS_TOKEN}`,
-  },
-};
+export const getScrapList = async (token: string): Promise<Array<PopupListItem>> => {
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  };
 
-const deleteOptions = {
-  method: 'DELETE',
-  headers: {
-    Authorization: `${process.env.TEST_ACCESS_TOKEN}`,
-  },
-};
-
-export const getScrapList = async (
-  sortType: 'RECENT_SAVED' | 'OPEN_DATE' | 'END_DATE',
-): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/scraps?sortType=${sortType}`, options);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/scraps?sortType=RECENT_SAVED`, options);
     const result = await response.json();
 
     if (result && result.data) {
@@ -38,6 +29,7 @@ export const changeNickName = async (id: string, newNickname: string, token: str
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
       },
       body: JSON.stringify({ nickname: newNickname }),
     });
@@ -57,9 +49,16 @@ export const changeNickName = async (id: string, newNickname: string, token: str
 };
 
 // 회원탈퇴
-export const deleteUser = async () => {
+export const deleteUser = async (token: string) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  };
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/bye`, deleteOptions);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/bye`, options);
     const result = await response.json();
 
     if (result && result.data) {
