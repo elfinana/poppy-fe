@@ -12,7 +12,6 @@ const Page = () => {
   const router = useRouter();
 
   const { token } = useLoginStore();
-  if (!token) throw new Error('token is empty');
 
   const [active, setActive] = React.useState(false);
   const userData = useUserInfo();
@@ -20,23 +19,27 @@ const Page = () => {
   const nickname = React.useRef<string>('');
 
   const handleOnClick = async () => {
-    await changeNickName(userData.userInfoData.userId, nickname.current, token).then(res => {
-      if (res && res.code === 200) {
-        alert(res.message);
-        router.push('/mypage');
-      } else {
-        // 중복된 닉네임
-        if (res && res.code === 500) {
-          toast({
-            variant: 'destructive',
-            title: '닉네임 변경 실패',
-            description: `${nickname.current}은 이미 사용중인 닉네임입니다.`,
-          });
+    if (token) {
+      await changeNickName(userData.userInfoData.userId, nickname.current, token).then(res => {
+        if (res && res.code === 200) {
+          alert(res.message);
+          router.push('/mypage');
         } else {
-          alert('닉네임 변경에 실패했습니다.');
+          // 중복된 닉네임
+          if (res && res.code === 500) {
+            toast({
+              variant: 'destructive',
+              title: '닉네임 변경 실패',
+              description: `${nickname.current}은 이미 사용중인 닉네임입니다.`,
+            });
+          } else {
+            alert('닉네임 변경에 실패했습니다.');
+          }
         }
-      }
-    });
+      });
+    } else {
+      alert('로그인이 필요합니다.');
+    }
   };
 
   return (

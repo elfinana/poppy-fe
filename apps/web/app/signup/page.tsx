@@ -32,6 +32,7 @@ export default function Page() {
         setToken(res.result.data.accessToken);
         setRefreshToken(res.result.data.refreshToken);
         setUserInfo({
+          userId: res.data.userId,
           userEmail: res.data.userEmail,
           userNickname: res.data.nickname,
         });

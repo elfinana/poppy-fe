@@ -10,7 +10,6 @@ import { useLoginStore } from 'store/login/loginStore';
 
 const Page = () => {
   const { token } = useLoginStore();
-  if (!token) throw new Error('token is empty');
 
   const deleteList = React.useRef<Array<number>>([]);
   const [editMode, setEditMode] = React.useState(false);
@@ -28,7 +27,9 @@ const Page = () => {
     }
   };
 
-  const { data, error, isLoading } = useQuery(['getScrapList'], () => getScrapList(token));
+  const { data, error, isLoading } = useQuery(['getScrapList'], () => getScrapList(token!), {
+    enabled: !!token,
+  });
 
   return (
     <div className="flex flex-col h-full">
