@@ -4,6 +4,7 @@ import Image from 'next/legacy/image';
 import { DateLabel } from '../..';
 import { useRouter } from 'next/navigation';
 import { memo } from 'react';
+import { calculateDaysLeft } from '../../lib/calculateDaysLeft';
 
 type VariantType = 'list' | 'gallery' | 'rank' | 'smlist';
 

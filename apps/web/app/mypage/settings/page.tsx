@@ -20,6 +20,7 @@ const Page = (props: Props) => {
   const handleClick = () => {
     clearToken();
     setUserInfo({
+      userId: 0,
       userEmail: '',
       userNickname: '',
     });

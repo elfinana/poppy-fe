@@ -1,24 +1,15 @@
 import { PopupListItem } from '@/src/widgets';
 
-const options = {
-  method: 'POST',
-  headers: {
-    Authorization: `${process.env.TEST_ACCESS_TOKEN}`,
-  },
-};
+export const getScrapList = async (token: string): Promise<Array<PopupListItem>> => {
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  };
 
-const deleteOptions = {
-  method: 'DELETE',
-  headers: {
-    Authorization: `${process.env.TEST_ACCESS_TOKEN}`,
-  },
-};
-
-export const getScrapList = async (
-  sortType: 'RECENT_SAVED' | 'OPEN_DATE' | 'END_DATE',
-): Promise<Array<PopupListItem>> => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/scraps?sortType=${sortType}`, options);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/scraps?sortType=RECENT_SAVED`, options);
     const result = await response.json();
 
     if (result && result.data) {
@@ -32,23 +23,18 @@ export const getScrapList = async (
 };
 
 // 닉네임 변경
-export const changeNickName = async (id: string, newNickname: string) => {
+export const changeNickName = async (id: number, newNickname: string, token: string) => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
       },
+      body: JSON.stringify({ nickname: newNickname }),
     });
 
-    const result = await res.json();
-
-    if (res.ok && result.code === 200) {
-      return result;
-    }
-
-    // Handle API error case
-    throw new Error(result.errorMessage || 'An unknown error occurred.');
+    return await res.json();
   } catch (error) {
     console.error('Error:', error);
     throw error;
@@ -56,9 +42,16 @@ export const changeNickName = async (id: string, newNickname: string) => {
 };
 
 // 회원탈퇴
-export const deleteUser = async () => {
+export const deleteUser = async (token: string) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
+  };
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/bye`, deleteOptions);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/users/bye`, options);
     const result = await response.json();
 
     if (result && result.data) {

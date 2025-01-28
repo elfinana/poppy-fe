@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { cn } from '@/src/shared/lib/utils';
 import { IconButton } from './buttons/IconButton';
-import { useNickNameCheck } from 'store/login/loginStore';
 
 type InputProps = React.ComponentProps<'input'> & {
   label?: string;
@@ -14,6 +13,8 @@ type InputProps = React.ComponentProps<'input'> & {
   /**@description placeholder 대신 기본적으로 입력될 텍스트 */
   /**@description ex) 검색 후 이동된 화면에서 keyword를 유지하고 싶을 경우 */
   defaultText?: string;
+  /**@description 유효한 닉네임인가에 따라 버튼을 활성화 및 비활성화 할 경우 사용*/
+  setValidName?: (valid: boolean) => void;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -27,17 +28,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onChange,
       existingName,
       defaultText = '',
+      setValidName,
       ...props
     },
     ref,
   ) => {
-    const { nickNameCheck } = useNickNameCheck();
     const [inputValue, setInputValue] = React.useState<string>(defaultText);
     const [charCount, setCharCount] = React.useState<number>(0);
     const [message, setMessage] = React.useState<string>('');
     const [messageColor, setMessageColor] = React.useState<string>('text-warning');
 
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const validName = React.useRef<boolean>(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -48,28 +50,30 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       if (value.length > 10) {
         setMessage('10자 이내로 입력해 주세요.');
         setMessageColor('text-warning');
-      } else {
-        setMessage('');
+        validName.current = false;
+      } else if (value.length === 0) {
+        setMessage('닉네임을 입력해주세요.');
         setMessageColor('text-warning');
+        validName.current = false;
+      } else {
+        setMessage('사용 가능한 닉네임입니다.');
+        setMessageColor('text-informative');
+        validName.current = true;
       }
+
+      setValidName?.(validName.current);
     };
     const handleClear = () => {
       if (variantType === 'default') {
         setInputValue('');
         setCharCount(0);
-        setMessage('');
+        setMessage('닉네임을 입력해주세요.');
+        setMessageColor('text-warning');
         inputRef.current?.focus();
       } else if (onClick) {
         onClick();
       }
     };
-    // TODO : debouncing 적용 필요
-    React.useEffect(() => {
-      if (nickNameCheck) {
-        setMessage('이미 사용 중인 닉네임입니다.');
-        setMessageColor('text-warning');
-      }
-    }, [nickNameCheck, inputValue]);
 
     return (
       <div className="w-full">
@@ -103,7 +107,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div className="flex items-center justify-between mt-[8px]">
             <div className={`text-sm ${messageColor}`}>{message && <span>{message}</span>}</div>
             <div className="text-sm text-gray-300 text-c2">
-              <span className={` ${!charCount ? 'text-gray-300' : charCount <= 10 ? 'text-blue-500' : 'text-warning'}`}>
+              <span className={` ${charCount <= 10 && charCount > 0 ? 'text-blue-500' : 'text-warning'}`}>
                 {charCount}
               </span>
               /10

@@ -2,10 +2,11 @@
 
 import { ArrowRightSmall } from '@/public';
 import { Hr, SecondaryButton, Title } from '@/src/shared';
-import { BottomNavigation, getNewList, ItemCardData, MypageHeader, PopupListItem, PopupSlider } from '@/src/widgets';
+import { BottomNavigation, getNewList, getScrapList, MypageHeader, PopupListItem, PopupSlider } from '@/src/widgets';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { useUserInfo } from 'store/login/loginStore';
+import { useQuery } from 'react-query';
+import { useLoginStore, useUserInfo } from 'store/login/loginStore';
 
 type Props = {};
 
@@ -14,23 +15,11 @@ type PopUpStoreState = 'offline' | 'online';
 const Page = (props: Props) => {
   const router = useRouter();
   const { userInfoData } = useUserInfo();
-  console.log(userInfoData);
+  const { token } = useLoginStore();
 
-  const [newListData, setNewListData] = useState<Array<PopupListItem>>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getNewList();
-        setNewListData(data);
-        console.log(data); // 여기서 데이터 확인 가능
-      } catch (error) {
-        console.error('Failed to fetch new list:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data, error, isLoading } = useQuery(['getScrapListCount'], () => getScrapList(token!), {
+    enabled: !!token,
+  });
 
   const reviewsClickHandler = () => {
     router.push('/mypage/reviews');
@@ -43,8 +32,6 @@ const Page = (props: Props) => {
   const loginClickHandler = () => {
     router.push('/login');
   };
-
-  console.log(newListData);
 
   // online, offline 유저 개시 팝업스토어 상태에 따라 페이지 이동
   const myPopUpStoreClickHandler = (userState: PopUpStoreState) => {
@@ -65,7 +52,7 @@ const Page = (props: Props) => {
       <div className="px-16 mt-12">
         <div className="flex items-center justify-between pl-16 pr-8 border border-gray-100 bg-gray-50 rounded-12 py-18">
           <div className="flex flex-col gap-2">
-            {userInfoData.userEmail === '' ? (
+            {!token ? (
               <div className="text-black text-h2">로그인 해주세요</div>
             ) : (
               <>
@@ -75,7 +62,7 @@ const Page = (props: Props) => {
             )}
           </div>
           <div>
-            {userInfoData.userEmail === '' ? (
+            {!token ? (
               <SecondaryButton size="sm" onClick={loginClickHandler}>
                 로그인 하기
               </SecondaryButton>
@@ -92,14 +79,9 @@ const Page = (props: Props) => {
       </div>
       <div className="mt-16">
         <div className="flex flex-col w-full gap-y-12">
-          <Title
-            category={101}
-            text1="저장한 팝업"
-            count={userInfoData.userEmail === '' ? 0 : newListData.length}
-            typography="h3"
-          />
-          {userInfoData.userEmail === '' ? (
+          {!token ? (
             <>
+              <Title category={101} text1="저장한 팝업" count={0} typography="h3" showArrow={false} />
               <div className="flex justify-center items-center h-[64px] mx-[16px] bg-gray-50 rounded-8">
                 <div className="text-center text-gray-600 text-b3">
                   로그인한 뒤 마음에 드는
@@ -110,7 +92,14 @@ const Page = (props: Props) => {
             </>
           ) : (
             <>
-              <PopupSlider variant="smlist" queryKey="getSaveList" queryFn={getNewList} />
+              <Title
+                category={101}
+                text1="저장한 팝업"
+                count={isLoading ? 0 : data?.length}
+                typography="h3"
+                showArrow={false}
+              />
+              <PopupSlider variant="smlist" queryKey="getSaveList" queryFn={() => getScrapList(token)} />
             </>
           )}
         </div>

@@ -61,6 +61,16 @@ export interface PopupListItem {
   isAlmostFull: boolean;
 }
 
+export interface ScrapListItem {
+  popupStoreId: number;
+  popupStoreName: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  thumbnail: string;
+  isAlmostFull: boolean;
+}
+
 export interface Error {
   code: number;
   httpStatus?: string;
