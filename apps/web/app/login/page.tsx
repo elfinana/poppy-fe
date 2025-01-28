@@ -25,9 +25,11 @@ export default function Page() {
   const { data, error, isLoading } = useQuery(['loginToken', code], () => getLoginToken(code || ''), {
     enabled: !!code, // code가 있을 때만 실행
     onSuccess: res => {
+      console.log(res.data.userId);
       setToken(res.data.accessToken);
       setRefreshToken(res.data.refreshToken);
       setUserInfo({
+        userId: res.data.userId,
         userEmail: res.data.userEmail,
         userNickname: res.data.nickname,
       });

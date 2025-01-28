@@ -23,7 +23,7 @@ export const getScrapList = async (token: string): Promise<Array<PopupListItem>>
 };
 
 // 닉네임 변경
-export const changeNickName = async (id: string, newNickname: string, token: string): Promise<boolean> => {
+export const changeNickName = async (id: number, newNickname: string, token: string) => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/user/${id}`, {
       method: 'PATCH',
@@ -34,14 +34,7 @@ export const changeNickName = async (id: string, newNickname: string, token: str
       body: JSON.stringify({ nickname: newNickname }),
     });
 
-    const result = await res.json();
-
-    if (result.code === 200) {
-      return true;
-    }
-
-    // Handle API error case
-    throw new Error(result.errorMessage || 'An unknown error occurred.');
+    return await res.json();
   } catch (error) {
     console.error('Error:', error);
     throw error;
